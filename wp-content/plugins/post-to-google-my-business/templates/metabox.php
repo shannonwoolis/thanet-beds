@@ -1,4 +1,4 @@
-<?php if($this instanceof MBP_Metabox) : ?>
+<?php if($this instanceof \PGMB\Metabox\Main) : ?>
     <div class='mbp-error-notice'>
 
     </div>
@@ -14,36 +14,42 @@
         <?php endif; ?>
     </div>
 
-    <?php echo $this->post_editor->generate(); ?>
+    <?php echo $this->get_post_editor()->generate(); ?>
 
-    <table class="widefat fixed striped mbp-existing-posts" cellspacing="0">
-        <thead>
-            <tr>
-                <!--<th id="cb" class="manage-column column-cb check-column" scope="col"></th>-->
-                <th class="manage-column column-posttype" scope="col"><?php _e('Post type', 'post-to-google-my-business'); ?></th>
-                <th class="manage-column column-postdate" scope="col"><?php _e('Publish date', 'post-to-google-my-business'); ?></th>
-                <th class="manage-column column-postcreated" scope="col"><?php _e('Created', 'post-to-google-my-business'); ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php $this->get_existing_posts($post->ID); ?>
-        </tbody>
-    </table>
+<?php /**
+<!--    <table class="widefat fixed striped mbp-existing-posts" cellspacing="0">-->
+<!--        <thead>-->
+<!--            <tr>-->
+<!--                <!--<th id="cb" class="manage-column column-cb check-column" scope="col"></th>-->-->
+<!--                <th class="manage-column column-posttype" scope="col">--><?php //_e('Post type', 'post-to-google-my-business'); ?><!--</th>-->
+<!--                <th class="manage-column column-postdate" scope="col">--><?php //_e('Publish date', 'post-to-google-my-business'); ?><!--</th>-->
+<!--                <th class="manage-column column-postcreated" scope="col">--><?php //_e('Created', 'post-to-google-my-business'); ?><!--</th>-->
+<!--            </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--            --><?php //$this->get_existing_posts($post->ID); ?>
+<!--        </tbody>-->
+<!--    </table>-->
+
+ */
+?>
+
+<!--    <input type="hidden" name="page" value="--><?php //echo $_REQUEST['page']; ?><!--" />-->
+<!--    <input type="hidden" name="order" value="--><?php //echo $_REQUEST['order']; ?><!--" />-->
+<!--    <input type="hidden" name="orderby" value="--><?php //echo $_REQUEST['orderby']; ?><!--" />-->
+
+    <div id="pgmb-subpost-table-container" style="">
+        <?php
+        wp_nonce_field( 'pgmb_subpost_table_fetch', 'pgmb_subpost_table_nonce'  );
+        ?>
+    </div>
+
+
     <br />
 
     <div id="mbp-created-post-dialog" class="hidden">
-        <table class="wp-list-table widefat fixed striped posts">
-            <thead>
-            <tr>
-                <th scope="col" class="manage-column column-primary">
-                    <span><?php _e('Location', 'post-to-google-my-business'); ?></span>
-                </th>
-                <th scope="col" class="manage-column"><?php _e('Status', 'post-to-google-my-business'); ?></th>
-            </tr>
-            </thead>
-            <tbody id="mbp-created-post-table">
+        <div id="pgmb-entity-table-container" style="">
 
-            </tbody>
-        </table>
+        </div>
     </div>
 <?php endif; ?>

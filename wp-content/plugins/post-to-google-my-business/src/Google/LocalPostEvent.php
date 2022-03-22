@@ -17,6 +17,9 @@ class LocalPostEvent extends AbstractGoogleJsonObject {
 		if(empty($title)){
 			throw new InvalidArgumentException(__('Event/offer title is required', 'post-to-google-my-business'));
 		}
+//		if(function_exists('mb_strlen') && mb_strlen($title) >= 80 || strlen($title) >= 80){
+//			throw new InvalidArgumentException(__('Event/offer title is too long, max 80 characters', 'post-to-google-my-business'));
+//		}
 		$this->jsonOutput['title'] = $title;
 	}
 

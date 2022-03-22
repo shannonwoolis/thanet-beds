@@ -1,5 +1,4 @@
 <?php
-
 /**
  * TVC Taxonomies Class.
  *

@@ -35,7 +35,8 @@ class FormFields
     ) ;
     public static function default_autopost_fields()
     {
-        return self::$fields;
+        $fields = self::$fields;
+        return $fields;
     }
     
     public static function default_post_fields()
@@ -43,6 +44,20 @@ class FormFields
         //placeholder for future development
         $fields = self::$fields;
         $fields['mbp_post_text'] = '';
+        return $fields;
+    }
+    
+    /**
+     * Return the fields array with all checkboxes disabled,
+     * for storing checkbox state with default featured image
+     * checkbox turned off.
+     *
+     * @return array
+     */
+    public static function empty_post_fields()
+    {
+        $fields = self::default_autopost_fields();
+        $fields['mbp_featured_image'] = false;
         return $fields;
     }
 

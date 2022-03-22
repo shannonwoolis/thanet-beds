@@ -4,15 +4,17 @@ namespace PGMB;
 
 use  Exception ;
 use  InvalidArgumentException ;
-use  PGMB\API\APIInterface ;
+use  PGMB\API\CachedGoogleMyBusiness ;
 use  PGMB\Google\LocalPost ;
 use  PGMB\Google\MediaItem ;
+use  PGMB\Google\NormalizeLocationName ;
 use  PGMB\Placeholders\PostPermalink ;
 use  PGMB\Placeholders\PostVariables ;
 use  PGMB\Placeholders\SiteVariables ;
 use  PGMB\Placeholders\UserVariables ;
 use  PGMB\Placeholders\LocationVariables ;
 use  PGMB\Placeholders\VariableInterface ;
+use  PGMB\Placeholders\WooCommerceVariables ;
 use  PGMB\Vendor\Cron\CronExpression ;
 use  PGMB\Vendor\Rarst\WordPress\DateTime\WpDateTimeImmutable ;
 use  PGMB\Vendor\Rarst\WordPress\DateTime\WpDateTimeInterface ;
@@ -40,28 +42,92 @@ class ParseFormFields
         return false;
     }
     
+    public function sanitize()
+    {
+        foreach ( $this->form_fields as $name => &$value ) {
+            switch ( $name ) {
+                case 'mbp_post_text':
+                    $value = sanitize_textarea_field( $value );
+                    break;
+                case 'mbp_selected_location':
+                    $this->sanitize_location( $value );
+                    break;
+                    //				case 'mbp_post_attachment':
+                    //				case 'mbp_button_url':
+                    //				case 'mbp_offer_redeemlink':
+                    //					$value = esc_url_raw($value);
+                    //					break;
+                //				case 'mbp_post_attachment':
+                //				case 'mbp_button_url':
+                //				case 'mbp_offer_redeemlink':
+                //					$value = esc_url_raw($value);
+                //					break;
+                default:
+                    $value = sanitize_text_field( $value );
+            }
+        }
+        return $this->form_fields;
+    }
+    
+    protected function sanitize_location( &$users )
+    {
+        
+        if ( !is_array( $users ) ) {
+            $users = [];
+            return;
+        }
+        
+        foreach ( $users as $user_id => $location ) {
+            if ( !is_numeric( $user_id ) ) {
+                unset( $users[$user_id] );
+            }
+            
+            if ( is_array( $location ) ) {
+                $users[$user_id] = array_map( 'sanitize_text_field', $location );
+                continue;
+            }
+            
+            $users[$user_id] = sanitize_text_field( $location );
+        }
+    }
+    
+    /**
+     * @param false $autopost Validate autopost template
+     */
+    public function validate( $autopost = false )
+    {
+    }
+    
+    public function is_repost()
+    {
+        return isset( $this->form_fields['mbp_repost'] ) && $this->form_fields['mbp_repost'];
+    }
+    
     /**
      * Parse the form fields and return a LocalPost object
      *
-     * @param APIInterface $api
+     * @param CachedGoogleMyBusiness $api
      * @param $parent_post_id
-     *
+     * @param $user_key
      * @param $location_name
      *
      * @return LocalPost
      * @throws Exception
      */
-    public function getLocalPost( APIInterface $api, $parent_post_id, $location_name )
+    public function getLocalPost(
+        CachedGoogleMyBusiness $api,
+        $parent_post_id,
+        $user_key,
+        $location_name
+    )
     {
         if ( !is_numeric( $parent_post_id ) ) {
             throw new InvalidArgumentException( 'Parent Post ID required for placeholder parsing' );
         }
-        $location = $api->get_location( $location_name, false );
+        $api->set_user_id( $user_key );
+        $location = $api->get_location( NormalizeLocationName::from_with_account( $location_name )->without_account_id(), 'title,phoneNumbers,storefrontAddress,websiteUri,regularHours,specialHours,labels', false );
         $placeholder_variables = $this->generate_placeholder_variables( $parent_post_id, $location );
         $summary = stripslashes( $this->form_fields['mbp_post_text'] );
-        if ( mbp_fs()->is_plan_or_trial( 'business' ) ) {
-            $summary = \MBP_Spintax::Parse( $summary );
-        }
         $summary = $this->parse_placeholder_variables( $placeholder_variables, $summary );
         $summary = mb_strimwidth(
             $summary,
@@ -72,7 +138,7 @@ class ParseFormFields
         $topicType = $this->form_fields['mbp_topic_type'];
         //Throw an error when the PRODUCT type is chosen
         if ( $topicType == 'PRODUCT' ) {
-            throw new InvalidArgumentException( __( 'Product posts are no longer supported by the Google My Business API. Please choose a different GMB post type.', 'post-to-google-my-business' ) );
+            throw new InvalidArgumentException( __( 'Products are not supported in the free version of the plugin. Please choose a different post type in your template.', 'post-to-google-my-business' ) );
         }
         $localPost = new LocalPost( $location->languageCode, $summary, $topicType );
         //Set alert type
@@ -105,6 +171,7 @@ class ParseFormFields
         if ( $topicType == 'OFFER' || $topicType == 'EVENT' ) {
             $eventTitle = ( $topicType == 'OFFER' ? $this->form_fields['mbp_offer_title'] : $this->form_fields['mbp_event_title'] );
             //get the appropriate event title
+            $eventTitle = $this->parse_placeholder_variables( $placeholder_variables, $eventTitle );
             $startdate = new \DateTime( $this->form_fields['mbp_event_start_date'], WpDateTimeZone::getWpTimezone() );
             $enddate = new \DateTime( $this->form_fields['mbp_event_end_date'], WpDateTimeZone::getWpTimezone() );
             $startDate = new \PGMB\Google\Date( $startdate->format( 'Y' ), $startdate->format( 'm' ), $startdate->format( 'd' ) );
@@ -120,6 +187,7 @@ class ParseFormFields
             if ( isset( $this->form_fields['mbp_event_all_day'] ) && $this->form_fields['mbp_event_all_day'] ) {
                 $timeInterval->setAllDay( true );
             }
+            $eventTitle = mb_strimwidth( $eventTitle, 0, 80 );
             $localPostEvent = new \PGMB\Google\LocalPostEvent( $eventTitle, $timeInterval );
             $localPost->addLocalPostEvent( $localPostEvent );
         }
@@ -143,22 +211,25 @@ class ParseFormFields
     
     public function get_media_item( $parent_post_id )
     {
+        // If the post has a custom image set
         
         if ( !empty($this->form_fields['mbp_post_attachment']) ) {
             $image_id = attachment_url_to_postid( $this->form_fields['mbp_post_attachment'] );
             
             if ( $image_id && wp_attachment_is_image( $image_id ) ) {
-                $this->validate_wp_image_size( $image_id );
+                $url = $this->validate_wp_image_size( $image_id );
             } else {
-                $this->validate_external_image_size( $this->form_fields['mbp_post_attachment'] );
+                $url = $this->validate_external_image_size( $this->form_fields['mbp_post_attachment'] );
             }
             
-            return new \PGMB\Google\MediaItem( $this->form_fields['mbp_attachment_type'], $this->form_fields['mbp_post_attachment'] );
+            return new \PGMB\Google\MediaItem( $this->form_fields['mbp_attachment_type'], $url );
+            // If "Fetch image from content" is enabled
         } elseif ( isset( $this->form_fields['mbp_content_image'] ) && $this->form_fields['mbp_content_image'] && ($image_url = $this->get_content_image( $parent_post_id )) ) {
             return new \PGMB\Google\MediaItem( 'PHOTO', $image_url );
-        } elseif ( isset( $this->form_fields['mbp_featured_image'] ) && $this->form_fields['mbp_featured_image'] && ($image_url = get_the_post_thumbnail_url( $parent_post_id, 'pgmb-post-image' )) ) {
+            // If "Use featured image" is enabled
+        } elseif ( isset( $this->form_fields['mbp_featured_image'] ) && $this->form_fields['mbp_featured_image'] && get_the_post_thumbnail_url( $parent_post_id, 'pgmb-post-image' ) ) {
             $image_id = get_post_thumbnail_id( $parent_post_id );
-            $this->validate_wp_image_size( $image_id );
+            $image_url = $this->validate_wp_image_size( $image_id );
             return new \PGMB\Google\MediaItem( 'PHOTO', $image_url );
         }
         
@@ -171,10 +242,8 @@ class ParseFormFields
         if ( !($image = reset( $images )) ) {
             return false;
         }
-        $image_details = wp_get_attachment_image_src( $image->ID, 'pgmb-post-image' );
-        $this->validate_wp_image_size( $image->ID );
-        return reset( $image_details );
-        //Return the first item in the array (which is the url)
+        //wp_get_attachment_image_src($image->ID, 'pgmb-post-image');
+        return $this->validate_wp_image_size( $image->ID );
     }
     
     /**
@@ -196,11 +265,15 @@ class ParseFormFields
             $height = $intermediate['height'];
         }
         
+        if ( wp_get_image_mime( $path ) == 'image/webp' ) {
+            list( $path, $url ) = $this->convert_webp( $image_id );
+        }
         $image_file_size = $this->get_local_file_size( $path, $url );
         if ( !$image_file_size ) {
             throw new InvalidArgumentException( __( 'Could not detect post image file size. Make sure the image file/url is accessible remotely.', 'post-to-google-my-business' ) );
         }
         $this->validate_image_props( $image_file_size, $width, $height );
+        return $url;
     }
     
     /**
@@ -291,6 +364,7 @@ class ParseFormFields
             throw new InvalidArgumentException( __( 'Could not detect post image file size. Make sure the image file/url is accessible remotely.', 'post-to-google-my-business' ) );
         }
         $this->validate_image_props( $image_file_size, $width, $height );
+        return $url;
     }
     
     public function validate_image_props( $image_file_size, $width, $height )
@@ -307,6 +381,32 @@ class ParseFormFields
     
     }
     
+    public function convert_webp( $image_id )
+    {
+        $path = get_attached_file( $image_id );
+        if ( !function_exists( 'imagecreatefromwebp' ) ) {
+            throw new \RuntimeException( __( 'Tried to convert WebP image but imagecreatefromwebp is not available' ) );
+        }
+        $filename = 'pgmb_' . time() . '.png';
+        $image = imagecreatefromwebp( $path );
+        $wp_upload_dir = wp_upload_dir();
+        $new_path = trailingslashit( $wp_upload_dir['path'] ) . $filename;
+        $url = trailingslashit( $wp_upload_dir['url'] ) . $filename;
+        imagepng( $image, $new_path );
+        imagedestroy( $image );
+        return [ $new_path, $url ];
+    }
+    
+    public function get_topic_type()
+    {
+        return $this->form_fields['mbp_topic_type'];
+    }
+    
+    public function get_summary()
+    {
+        return $this->form_fields['mbp_post_text'];
+    }
+    
     /**
      * Get array of locations to post to. Return default location if nothing is selected
      *
@@ -317,7 +417,7 @@ class ParseFormFields
     public function getLocations( $default_location )
     {
         if ( !isset( $this->form_fields['mbp_selected_location'] ) || empty($this->form_fields['mbp_selected_location']) ) {
-            return [ $default_location ];
+            return $default_location;
         }
         
         if ( !is_array( $this->form_fields['mbp_selected_location'] ) ) {
@@ -346,11 +446,12 @@ class ParseFormFields
     public function generate_placeholder_variables( $parent_post_id, $location )
     {
         $decorators = [
-            'post_permalink'     => new PostPermalink( $parent_post_id ),
-            'post_variables'     => new PostVariables( $parent_post_id, $this->get_link_parsing_mode() ),
-            'user_variables'     => new UserVariables( $parent_post_id ),
-            'site_variables'     => new SiteVariables(),
-            'location_variables' => new LocationVariables( $location ),
+            'post_permalink'        => new PostPermalink( $parent_post_id ),
+            'post_variables'        => new PostVariables( $parent_post_id, $this->get_link_parsing_mode() ),
+            'user_variables'        => new UserVariables( $parent_post_id ),
+            'site_variables'        => new SiteVariables(),
+            'location_variables'    => new LocationVariables( $location ),
+            'woocommerce_variables' => new WooCommerceVariables( $parent_post_id ),
         ];
         $decorators = apply_filters(
             'mbp_placeholder_decorators',
@@ -364,8 +465,7 @@ class ParseFormFields
                 $variables = array_merge( $variables, $decorator->variables() );
             }
         }
-        $variables = apply_filters( 'mbp_placeholder_variables', $variables, $parent_post_id );
-        return $variables;
+        return apply_filters( 'mbp_placeholder_variables', $variables, $parent_post_id );
     }
     
     public function parse_placeholder_variables( $variables, $text )

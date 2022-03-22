@@ -27,16 +27,16 @@ public function html_run(){
 }
 
 public function create_form(){
-  if(isset($_GET['welcome_msg']) && $_GET['welcome_msg'] == true){
+  if(isset($_GET['welcome_msg']) && sanitize_text_field($_GET['welcome_msg']) == true){
     $this->TVC_Admin_Helper->call_domain_claim();
     $class = 'notice notice-success';
-    $message = esc_html__('Everthing is now set up. One more step - Sync your WooCommerce products into your Merchant Center and reach out to millions of shopper across Google.');
+    $message = esc_html__("Everthing is now set up. One more step - Sync your WooCommerce products into your Merchant Center and reach out to millions of shopper across Google.","conversios");
     printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
     ?>
     <script>
-      $(document).ready(function() {
-        var msg="<?php echo $message;?>"
-        tvc_helper.tvc_alert("success","Congratulation..!",msg,true);
+      jQuery(document).ready(function() {
+        var msg="<?php echo esc_attr($message);?>"
+        tvc_helper.tvc_alert("success", "<?php esc_html_e("Congratulation..!","conversios"); ?>", msg, true);
       });
     </script>
     <?php
@@ -77,32 +77,26 @@ public function create_form(){
     <div class="tab-card">
       <div class="row">
         <div class="col-md-6 col-lg-8 edit-section">
-          <div class="edit-header-section">           
-            <script>
-              var back_img = '<img src="<?php echo ENHANCAD_PLUGIN_URL.'/admin/images/icon/left-angle-arrow.svg'; ?>" alt="back"/>';
-              document.write('<a href="' + document.referrer + '" class="back-btn">'+back_img+'<span>Back</span></a>');
-          </script>
-          </div>
           <div class="configuration-section" id="config-pt1">
             <?php if($this->subscriptionId != ""){?>
             <div class="tvc-api-sunc">
               <span>
               <?php if($last_api_sync_up){
-                echo "Details last synced at ".$last_api_sync_up; 
+                echo esc_html__("Merchant center products details last synced at ","conversios").esc_attr($last_api_sync_up); 
               }else{
-                echo "Refresh sync up";
-              }?></span><img id="refresh_api" onclick="call_tvc_api_sync_up();" src="<?php echo ENHANCAD_PLUGIN_URL.'/admin/images/refresh.png'; ?>">
+                echo esc_html__("Refresh sync up","conversios");
+              }?>.</span><span id="products_count"></span><img id="refresh_api" onclick="call_tvc_api_sync_up();" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/images/refresh.png'); ?>">
             </div>
           <?php } ?>
-          <?php echo get_google_shopping_tabs_html($this->site_url,(isset($googleDetail->google_merchant_center_id))?$googleDetail->google_merchant_center_id:""); ?>                          
+          <?php echo get_google_shopping_tabs_html(esc_attr($this->site_url),(isset($googleDetail->google_merchant_center_id))?esc_attr($googleDetail->google_merchant_center_id):""); ?>                          
           </div>
           <div class="mt-3" id="config-pt2">
             <div class="sync-new-product" id="sync-product">
               <div class="row">
                 <div class="col-12">
                   <div class="d-flex justify-content-between ">
-                    <p class="mb-0 align-self-center product-title">Products in your Merchant Center account</p>
-                    <button id="tvc_btn_product_sync" class="btn btn-outline-primary align-self-center" data-toggle="modal" data-target="#syncProduct">Sync New Products</button>
+                    <p class="mb-0 align-self-center product-title"><?php esc_html_e("Products in your Merchant Center account","conversios"); ?></p>
+                    <button id="tvc_btn_product_sync" class="btn btn-outline-primary align-self-center" data-bs-toggle="modal" data-bs-target="#syncProduct"><?php esc_html_e("Sync New Products","conversios"); ?></button>
                   </div>
                 </div>
             	</div>
@@ -116,35 +110,35 @@ public function create_form(){
                   <div class="col">
                     <div class="card">
                       <h3 class="pro-count"><?php 
-                      echo (($woo_product) ? $woo_product : "0"); ?></h3>
-                      <p class="pro-title">Total Products</p>                      
+                      echo ($woo_product) ? esc_attr($woo_product) : "0"; ?></h3>
+                      <p class="pro-title"><?php esc_html_e("Total Products","conversios"); ?></p>                      
                     </div>
                   </div>
                   <div class="col">
                     <div class="card">
                       <h3 class="pro-count"><?php 
-                      echo $sync_product_total ; ?></h3>
-                      <p class="pro-title">Sync Products</p>                      
+                      echo esc_attr($sync_product_total) ; ?></h3>
+                      <p class="pro-title"><?php esc_html_e("Sync Products","conversios"); ?></p>                      
                     </div>
                   </div>
                   <div class="col">
                     <div class="card pending">
                       <h3 class="pro-count">
-                      <?php echo $sync_product_pending;?></h3>
-                      <p class="pro-title">Pending Review</p>                        
+                      <?php echo esc_attr($sync_product_pending);?></h3>
+                      <p class="pro-title"><?php esc_html_e("Pending Review","conversios"); ?></p>                        
                     </div>
                   </div>
                   <div class="col">
                     <div class="card approved">
-                      <h3 class="pro-count"><?php echo $sync_product_approved;?></h3>
-                      <p class="pro-title">Approved</p>                        
+                      <h3 class="pro-count"><?php echo esc_attr($sync_product_approved);?></h3>
+                      <p class="pro-title"><?php esc_html_e("Approved","conversios"); ?></p>                        
                     </div>
                   </div>
                   <div class="col">
                     <div class="card disapproved">
                       <h3 class="pro-count"><?php
-                      echo $sync_product_disapproved; ?></h3>
-                      <p class="pro-title">Disapproved</p>                        
+                      echo esc_attr($sync_product_disapproved); ?></h3>
+                      <p class="pro-title"><?php esc_html_e("Disapproved","conversios"); ?></p>                        
                     </div>
                   </div>
                 </div>
@@ -157,37 +151,40 @@ public function create_form(){
                       	<thead>
                         	<tr>
                           	<th></th>
-                          	<th style="vertical-align: top;">Product</th>
-                          	<th style="vertical-align: top;">Google status</th>
-                          	<th style="vertical-align: top;">Issues</th>
+                          	<th style="vertical-align: top;"><?php esc_html_e("Product","conversios"); ?></th>
+                          	<th style="vertical-align: top;"><?php esc_html_e("Google status","conversios"); ?></th>
+                          	<th style="vertical-align: top;"><?php esc_html_e("Issues","conversios"); ?></th>
                         	</tr>
                       	</thead>
                       	<tbody>
                       	<?php
 	                      if (isset($syncProductList) && count($syncProductList) > 0) {
-                          foreach ($syncProductList as $skey => $sValue) {
-                            echo '<tr><td class="product-image">
-	                            <img src="'.$sValue->image_link.'" alt=""/></td>
-	                            <td>'.$sValue->name.'</td>
-	                            <td>'.$sValue->google_status.'</td>
-	                            <td>';
+                          foreach ($syncProductList as $skey => $sValue) { ?>
+                            <tr><td class="product-image">
+	                            <img src="<?php echo esc_url_raw($sValue->image_link); ?>" alt=""/></td>
+	                            <td><?php echo esc_attr($sValue->name); ?></td>
+	                            <td><?php echo esc_attr($sValue->google_status); ?></td>
+	                            <td>
+                              <?php 
                               $p_issues = json_decode($sValue->issues);
 	                            if (count($p_issues) > 0) {
                                 $str = '';
                                 foreach ($p_issues as $key => $issue) {
                                   if ($key <= 2) {
-                                    ($key <= 1) ? $str .= $issue.", <br>" : "";
+                                    ($key <= 1) ? $str .= html_entity_decode(esc_html($issue)).", " : "";
                                   }
                                     ($key == 3) ? $str .= "..." : "";      			
                                  }
-                                 echo $str;
+                                 echo esc_attr($str);
                               } else {
 	                              echo "---";
-	                            }
-	                            echo '</td></tr>';
+	                            }?>
+	                            </td></tr>
+                            <?php
                           }	
-                        }else{
-                          echo '<tr><td colspan="4">Record not found</td></tr>';
+                        }else{ ?>
+                          <tr><td colspan="4"><?php echo esc_html__("Record not found","conversios"); ?></td></tr>
+                        <?php
                         } ?>
                         </tbody>
                       </table>
@@ -214,49 +211,50 @@ if(isset($googleDetail->google_merchant_center_id) && $googleDetail->google_merc
   $is_need_to_domain_claim = true;
 }?>
 <script type="text/javascript">
-$(document).ready(function() {
+jQuery(document).ready(function() {
   //data table js
-  $('#tvc-sync-product-list').DataTable({
+  jQuery('#tvc-sync-product-list').DataTable({
     "ordering": false,
     "scrollY": "600px",
     "lengthMenu": [ 10, 20, 50, 100, 200 ]
   });
   //auto syncup call
-  var is_need_to_update = "<?php echo $is_need_to_update; ?>";  
+  var is_need_to_update = "<?php echo esc_attr($is_need_to_update); ?>";  
   if(is_need_to_update == 1 || is_need_to_update == true){
     call_tvc_api_sync_up();
-  } 
-  //custom call for domain clain while product sync call
-  $(document).on("click", "#tvc_btn_product_sync", function(event){
-    var is_need_to_domain_claim = "<?php echo $is_need_to_domain_claim; ?>";
-    if(is_need_to_domain_claim == 1 || is_need_to_domain_claim == true){
-      event.preventDefault();
-      jQuery.post(tvc_ajax_url,{
-        action: "tvc_call_domain_claim"
-      },function( response ){
-        
-      });
-    }
-  });
+  }
 });
 //Update syncup detail by ajax call
 function call_tvc_api_sync_up(){
-  var tvs_this = $("#refresh_api");
-  $("#tvc_msg").remove();
-  $("#refresh_api").css("visibility","hidden");
-  $(tvs_this).after('<div class="tvc-nb-spinner" id="tvc-nb-spinner"></div>');
-  tvc_helper.tvc_alert("error","Attention !","Sync up is in the process do not refresh the page. it may take few minutes, if GMC product sync count is large.");
+  var tvs_this = jQuery("#refresh_api");
+  jQuery("#tvc_msg").remove();
+  jQuery("#refresh_api").css("visibility","hidden");
+  jQuery(tvs_this).after('<div class="tvc-nb-spinner" id="tvc-nb-spinner"></div>');
+  tvc_helper.tvc_alert("error","<?php esc_html_e("Attention !","conversios"); ?>", "<?php esc_html_e("Sync up is in the process do not refresh the page. it may take few minutes, if GMC product sync count is large.","conversios"); ?>");
+  ImportGMCProduct();
+}
+var total_import = 0;
+function ImportGMCProduct(next_page_token = null){
   jQuery.post(tvc_ajax_url,{
-    action: "tvc_call_api_sync"
+    action: "tvc_call_import_gmc_product", next_page_token:next_page_token
   },function( response ){
-    var rsp = JSON.parse(response);    
-    if(rsp.error == false){
-      $("#tvc-nb-spinner").remove();
-      tvc_helper.tvc_alert("success","",rsp.message,true,2000);
+    var rsp = JSON.parse(response);
+    //console.log(rsp);   
+    if(rsp.error == false && rsp.api_rs.next_page_token != "" ){
+      total_import = total_import+rsp.api_rs.sync_product;
+      if(rsp.api_rs.next_page_token != null){
+        jQuery("#products_count").html("- "+total_import);
+        ImportGMCProduct(rsp.api_rs.next_page_token);
+      }else{
+        jQuery("#tvc-nb-spinner").remove();
+        tvc_helper.tvc_alert("success","",rsp.message,true,3000);
+        setTimeout(function(){ location.reload();}, 3000); 
+      }
     }else{
-      tvc_helper.tvc_alert("error","",rsp.message,true,2000);
+      tvc_helper.tvc_alert("error","",rsp.message,true,3000);
+      setTimeout(function(){ location.reload();}, 2000); 
     }
-    setTimeout(function(){ location.reload();}, 2000); 
+    
   });
 }
 </script>

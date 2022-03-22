@@ -2,7 +2,6 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 *{
 	box-sizing: border-box;
 	margin:0px;
@@ -362,7 +361,6 @@ button.tvc_animate_btn:hover::after, button.tvc_animate_btn:focus::after {
 #staticBackdrop .modal-body, #tvc_google_connect .modal-body{padding: 2rem;}
 .tvc-nb-spinner {
   display: inline-block;
-  position: absolute;
       top: 3px;
       right: 10px;
   margin-left: 10px;
@@ -411,6 +409,8 @@ button.tvc_animate_btn:hover::after, button.tvc_animate_btn:focus::after {
 #googleShoppingFeed .tvc-api-sunc{
   margin-bottom: 5px;
 } 
+#googleShoppingFeed input[type=text], #googleShoppingFeed input[type=number]{margin-bottom: 10px;}
+#googleShoppingFeed input[type=radio]{margin-right: 4px;}
 .tvc-api-sunc span{
     color: #03a2b7;
     font-weight: 700;
@@ -438,13 +438,13 @@ button.tvc_animate_btn:hover::after, button.tvc_animate_btn:focus::after {
 .popup-modal .modal-dialog .modal-content{
     margin: 20px auto;
 }
-.popup-modal .modal-dialog .modal-content .close{
+.popup-modal .modal-dialog .modal-content .btn-close{
   position: absolute;
     top: 0px;
     right: 10px;
     transition: all 200ms;
     font-size: 30px;
-    
+    background:none;
     text-decoration: none;
 }
 .popup-modal .tvc-text{
@@ -526,8 +526,6 @@ button.tvc_animate_btn:hover::after, button.tvc_animate_btn:focus::after {
     text-decoration: none;
     cursor: pointer;
 }
-#tvc_popup_box .fa-exclamation-circle, #tvc_popup_box .tvc-error{color: #FF0000;}
-#tvc_popup_box .fa-check-circle.tvc-success, #tvc_popup_box .tvc-success{color: #218938;}
 
 /* Popup box BEGIN */
 .tvc-notice-error{position: relative;}
@@ -574,7 +572,8 @@ button.tvc_animate_btn:hover::after, button.tvc_animate_btn:focus::after {
 #productSync .card-wrapper .row .col-6 .gmc-image-heading{padding: 5px 0;}
 
 .tvc_plugin_container .notice, div.error, div.updated {margin: 0;}
-.select2-container--default .select2-selection--single .select2-selection__arrow b{top: 35%; border: solid #2f3d4a !important; border-width: 0 2px 2px 0 !important;}
+.select2-container--default .select2-selection--single .select2-selection__arrow b{top: 35%;}
+.select2-container--default .select2-selection--single .select2-selection__rendered{line-height: 30px;}
 .tvc-notification{position: relative;}
 .tvc-notification-dropdown-menu{
     width: 420px;
@@ -642,7 +641,9 @@ button.tvc_animate_btn:hover::after, button.tvc_animate_btn:focus::after {
 #sync-product .dataTables_length label{margin: 0;}
 #sync-product div.dataTables_filter input{border-radius: 15px;}
 .tvc-licence .input-group .form-control{height: 40px; letter-spacing: 8px; font-size: 18px;}
+
 button#ee_submit_plugin, button#google-add{ min-width: 80px;}
+button#google-add{margin-top: 20px;}
 .ga-text span{font-weight:normal;}
 .tvc-help-slider, .tvc-b-value-slider{
   height: 120px;

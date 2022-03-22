@@ -24,6 +24,8 @@
 	</tr>
 </table>
 
+<?php do_action( 'wpo_wcpdf_before_document_label', $this->get_type(), $this->order ); ?>
+
 <h1 class="document-type-label">
 	<?php if ( $this->has_header_logo() ) echo $this->get_title(); ?>
 </h1>
@@ -50,7 +52,7 @@
 				<?php do_action( 'wpo_wcpdf_before_billing_address', $this->get_type(), $this->order ); ?>
 				<?php $this->billing_address(); ?>
 				<?php do_action( 'wpo_wcpdf_after_billing_address', $this->get_type(), $this->order ); ?>
-				<?php if ( isset( $this->settings['display_phone'] ) && ! empty( $this->get_shipping_phone() ) ) : ?>
+				<?php if ( isset( $this->settings['display_phone'] ) && ! empty( $this->get_billing_phone() ) ) : ?>
 					<div class="billing-phone"><?php $this->billing_phone(); ?></div>
 				<?php endif; ?>
 			<?php endif; ?>

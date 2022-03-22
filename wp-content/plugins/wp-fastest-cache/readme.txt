@@ -3,8 +3,8 @@ Contributors: emrevona
 Donate link: http://profiles.wordpress.org/emrevona/
 Tags: cache, caching, performance, wp-cache, total cache, super cache, cdn
 Requires at least: 3.3
-Tested up to: 5.8
-Stable tag: 0.9.5
+Tested up to: 5.9
+Stable tag: 0.9.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -124,6 +124,23 @@ The free version is enough to speed up your site but in the premium version ther
 18. Database Cleanup
 
 == Changelog ==
+
+= 0.9.9 =
+* to clear cache when regular price of woocommorce is updated
+* refactoring of Automatic Cache
+
+= 0.9.8 =
+* to clear cache after updating Elementor Website Builder plugin
+* to clear cache after theme or plugin update by custom settings [<a target="_blank" href="https://www.wpfastestcache.com/features/clear-cache-after-theme-or-plugin-update/">Details</a>]
+* to enable Auto Cache Panel for the classic editor which is enabled via add_filter()
+
+= 0.9.7 =
+* to clear cache after theme or plugin update by default [<a target="_blank" href="https://www.wpfastestcache.com/features/clear-cache-after-theme-or-plugin-update/">Details</a>]
+
+= 0.9.6 =
+* refactoring of serving non-exists minified files
+* to fix htaccess rule for Polylang plugin
+* to fix condition of clear cache after plugin update
 
 = 0.9.5 =
 * to prevent generating cache when DONOTCACHEPAGE is defined as true for Divi theme

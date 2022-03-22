@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: WooCommerce PDF Invoices & Packing Slips
- * Plugin URI: http://www.wpovernight.com
+ * Plugin URI: https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-bundle/
  * Description: Create, print & email PDF invoices & packing slips for WooCommerce orders.
- * Version: 2.10.3
- * Author: Ewout Fernhout
- * Author URI: http://www.wpovernight.com
+ * Version: 2.14.1
+ * Author: WP Overnight
+ * Author URI: https://www.wpovernight.com
  * License: GPLv2 or later
- * License URI: http://www.opensource.org/licenses/gpl-license.php
+ * License URI: https://opensource.org/licenses/gpl-license.php
  * Text Domain: woocommerce-pdf-invoices-packing-slips
  * WC requires at least: 2.2.0
- * WC tested up to: 5.9.0
+ * WC tested up to: 6.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,7 +21,7 @@ if ( !class_exists( 'WPO_WCPDF' ) ) :
 
 class WPO_WCPDF {
 
-	public $version = '2.10.3';
+	public $version = '2.14.1';
 	public $plugin_basename;
 	public $legacy_mode;
 	public $legacy_textdomain;
@@ -192,13 +192,11 @@ class WPO_WCPDF {
 		include_once( $this->plugin_path() . '/includes/class-wcpdf-admin.php' );
 		include_once( $this->plugin_path() . '/includes/class-wcpdf-frontend.php' );
 		include_once( $this->plugin_path() . '/includes/class-wcpdf-install.php' );
+		include_once( $this->plugin_path() . '/includes/class-wcpdf-font-synchronizer.php' );
 
 		// Backwards compatibility with self
 		include_once( $this->plugin_path() . '/includes/legacy/class-wcpdf-legacy.php' );
 		include_once( $this->plugin_path() . '/includes/legacy/class-wcpdf-legacy-deprecated-hooks.php' );
-
-		// PHP MB String fallback functions
-		include_once( $this->plugin_path() . '/includes/compatibility/mb-string-compatibility.php' );
 	}
 	
 
@@ -268,7 +266,7 @@ class WPO_WCPDF {
 	 */
 	public function need_woocommerce() {
 		/* translators: <a> tags */
-		$error = sprintf( __( 'WooCommerce PDF Invoices & Packing Slips requires %1$sWooCommerce%2$s to be installed & activated!' , 'woocommerce-pdf-invoices-packing-slips' ), '<a href="http://wordpress.org/extend/plugins/woocommerce/">', '</a>' );
+		$error = sprintf( esc_html__( 'WooCommerce PDF Invoices & Packing Slips requires %1$sWooCommerce%2$s to be installed & activated!' , 'woocommerce-pdf-invoices-packing-slips' ), '<a href="http://wordpress.org/extend/plugins/woocommerce/">', '</a>' );
 		
 		$message = '<div class="error"><p>' . $error . '</p></div>';
 	
@@ -293,7 +291,7 @@ class WPO_WCPDF {
 		}
 		$message .= '</div>';
 
-		echo $message;
+		echo wp_kses_post( $message );
 	}
 
 	/**
@@ -377,7 +375,7 @@ class WPO_WCPDF {
 				<p><a href="<?php echo esc_url( add_query_arg( 'wpo_wcpdf_hide_nginx_notice', 'true' ) ); ?>"><?php _e( 'Hide this message', 'woocommerce-pdf-invoices-packing-slips' ); ?></a></p>
 			</div>
 			<?php
-			echo ob_get_clean();
+			echo wp_kses_post( ob_get_clean() );
 		}
 
 		// protect PDF directory
@@ -421,7 +419,7 @@ class WPO_WCPDF {
 					<p><a href="<?php echo esc_url( add_query_arg( 'wpo_wcpdf_hide_mailpoet_notice', 'true' ) ); ?>"><?php _e( 'Hide this message', 'woocommerce-pdf-invoices-packing-slips' ); ?></a></p>
 				</div>
 				<?php
-				echo ob_get_clean();
+				echo wp_kses_post( ob_get_clean() );
 			}
 		}
 

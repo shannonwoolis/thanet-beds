@@ -2,15 +2,13 @@
 
 namespace PGMB\Upgrader;
 
-use  PGMB\BackgroundProcessing\BackgroundProcess ;
 use  PGMB\ParseFormFields ;
 use  PGMB\PostTypes\SubPost ;
 class Upgrade_2_2_3 implements  DistributedUpgrade 
 {
     private  $background_process ;
-    public function task( $item )
+    public function task( $post_id )
     {
-        $post_id = $item['id'];
         $this->update_created_posts( $post_id );
         return false;
     }
@@ -25,18 +23,9 @@ class Upgrade_2_2_3 implements  DistributedUpgrade
             'fields'      => 'ids',
         ] );
         foreach ( $mbp_posts as $mbp_post_id ) {
-            $item = [
-                'version' => '2.2.3',
-                'id'      => $mbp_post_id,
-            ];
-            $this->background_process->push_to_queue( $item );
+            $this->background_process->push_to_queue( $mbp_post_id, [ $this, 'task' ] );
         }
         $this->background_process->save()->dispatch();
-    }
-    
-    public function __construct( BackgroundProcess $background_process )
-    {
-        $this->background_process = $background_process;
     }
     
     private function update_created_posts( $post_id )
@@ -65,6 +54,11 @@ class Upgrade_2_2_3 implements  DistributedUpgrade
             //mbp_errors field is needed for dialog
         }
     
+    }
+    
+    public function set_background_process( UpgradeBackgroundProcess $upgrader )
+    {
+        $this->background_process = $upgrader;
     }
 
 }

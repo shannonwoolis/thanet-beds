@@ -11,8 +11,9 @@ const config = {
         //frontend: './js_src/front/front-index.js',
         settings: './js_src/admin/settings.js',
         metabox: './js_src/admin/metabox.js',
-        gutenberg: './js_src/admin/gutenberg.js',
-        notice: './js_src/admin/notice.js'
+        block_editor: './js_src/admin/block-editor-index.js',
+        notice: './js_src/admin/notice.js',
+        dashboard: './js_src/admin/dashboard.js'
     },
 
     // Create the output files.
@@ -46,7 +47,9 @@ const config = {
         ]
     },
     plugins: [
-        new DependencyExtractionWebpackPlugin(),
+        new DependencyExtractionWebpackPlugin({
+
+        }),
     ]
     // optimization: {
     //     minimizer: [

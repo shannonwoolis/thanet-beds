@@ -1,11 +1,11 @@
 === WooCommerce PDF Invoices & Packing Slips ===
-Contributors: pomegranate
+Contributors: pomegranate, alexmigf, yordansoares, kluver, dpeyou
 Donate link: https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-bundle/
 Tags: woocommerce, pdf, invoices, packing slips, print, delivery notes, invoice, packing slip, export, email, bulk, automatic
 Requires at least: 3.5
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 7.1
-Stable tag: 2.10.3
+Stable tag: 2.14.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ This WooCommerce extension automatically adds a PDF invoice to the order confirm
 In addition to this, we offer several premium extensions:
 
 * Create/email PDF Proforma Invoices, Credit Notes (for Refunds), email Packing Slips, automatic upload to Dropbox & more with [WooCommerce PDF Invoices & Packing Slips Professional](https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-professional/)
-* Automatically send new orders or packing slips to your printer, as soon as the customer orders! [WooCommerce Automatic Order Printing](https://www.simbahosting.co.uk/s3/product/woocommerce-automatic-order-printing/?affiliates=2) (from our partners at Simba Hosting)
+* Automatically send new orders or packing slips to your printer, as soon as the customer orders! [WooCommerce Automatic Order Printing](https://www.simbahosting.co.uk/s3/product/woocommerce-printnode-automatic-order-printing/?affiliates=2) (from our partners at Simba Hosting)
 * More advanced & stylish templates with [WooCommerce PDF Invoices & Packing Slips Premium Templates](https://wpovernight.com/downloads/woocommerce-pdf-invoices-packing-slips-premium-templates/)
 
 = Fully customizable =
@@ -101,6 +101,87 @@ There's a setting on the Status tab of the settings page that allows you to togg
 6. Set shop name, address, header logo, etc.
 
 == Changelog ==
+
+= 2.14.1 =
+* New: Relaunch the Setup Wizard manually from the Status tab
+* Fix: Dynamic `wpo_wcpdf_tmp_path_{$type}` filter hook name parsing
+* Fix: removing inline preview for media upload
+* UI: Show sticky save button on settings change
+* UI: Fill in the document icon sheet with white
+
+= 2.14.0 =
+* New: Live preview of PDF document on the settings page
+* Fix: checks if number store table exists before applying DB migration
+* Tweak: Remove i18n for some log strings
+* Marked tested up to WooCommerce 6.3
+
+= 2.13.1 =
+* Fix: load missing non-historical settings for existing invoices
+* Tweak: print file & line number for exceptions in error logs & output
+* Marked tested up to WooCommerce 6.2
+
+= 2.13.0 =
+* New: include dompdf temporary folder in cleanup procedure
+* New: Add CSS row classes for WPC Product Bundles
+* New: filter to override `wc_display_item_meta` arguments
+* Fix: Prevent errors when server doesn't support `.webp` image rendering
+* Fix: change invalid default date 0000-00-00 00:00:00 on number store tables
+* Tweak: Don't store non-historical document settings in order meta
+* Templates: New action hook before the document label (`wpo_wcpdf_before_document_label`)
+* Libraries: updated dompdf to 1.2.0
+* Marked tested up to WP5.9
+
+= 2.12.1 =
+* Fix: Show a feedback notice after saving settings
+* Fix: images with min-width/min-height styles rendered tables incorrectly (dompdf patch)
+* Tweak: Disable composer platform check
+
+= 2.12.0 =
+* New: Support for webp images
+* Fix: Plugin version for font synchronizer upgrade procedure
+* Fix: force reloading installed template list during template path migration
+* Fix: PHP8.1 incompatible return type notice
+* Fix: WooCommerce 6.1 deprecations notices
+* Dependencies: Updated dompdf to 1.1.1
+* Marked tested up to WooCommerce 6.1
+
+= 2.11.4 =
+* Fix: bundled fonts being deleted during upgrades
+* Fix: dompdf 1.1.0+ font cache data compatibility
+
+= 2.11.3 =
+* Fix: Extended currency symbol support in bulk documents
+* Fix: Prevent copying packing slip and other document data for renewal orders (WooCommerce Subscriptions)
+* Marked tested up to WooCommerce 6.0
+
+= 2.11.2 =
+* New: filter and fallback for the default settings tab
+* Tweak: Improved font synchronization during plugin updates
+* Fix: Allow non-historical text settings
+* Fix: Fail more gracefully during install/upgrade/downgrade
+* Fix: notice on missing setting on fresh install
+* Fix: don't initialize settings when document can't be loaded
+* Fix: Prevent unnecessary database queries when settings API is initiated
+* Fix: Use ISO currency code for RTL currencies when the default PDF library (dompdf) is used
+
+= 2.11.1 =
+* Fix: Errors were incorrectly logged after installation when no invoices had been created yet
+* Fix: Button styles in order backend
+
+= 2.11.0 =
+* New: Use year-based number stores for future and past years to handle yearly resets more reliably
+* Fix: PHP iconv fallback for custom PHP builds without this function
+
+= 2.10.6 =
+* Fix: PHP7.1 compatibility
+
+= 2.10.5 =
+* Security: Apply escaping to translated strings
+
+= 2.10.4 =
+* Fix: Billing phone not displaying in Packing Slip when billing address was enabled
+* Fix: Support for special characters on sites without the PHP MB-string module
+* Fix: Don't alter order object when logging document creation for refunds to order notes
 
 = 2.10.3 =
 * Fix: Secondary address always showed, regardless of setting

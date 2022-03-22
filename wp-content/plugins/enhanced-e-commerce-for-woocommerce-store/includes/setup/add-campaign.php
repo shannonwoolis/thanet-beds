@@ -5,6 +5,7 @@ class AddCampaign {
   protected $merchantId;
   protected $new_campaign;
   protected $TVC_Admin_Helper;
+  protected $site_url;
 
   public function __construct() {
     global $wpdb;
@@ -13,6 +14,7 @@ class AddCampaign {
     $this->post_data = $_POST;    
     $this->merchantId = $this->TVC_Admin_Helper->get_merchantId();
     $this->currentCustomerId = $this->TVC_Admin_Helper->get_currentCustomerId(); 
+    $this->site_url = "admin.php?page=conversios-google-shopping-feed&tab=";
     $this->html_run();      
   }
   public function includes() {
@@ -30,16 +32,17 @@ class AddCampaign {
     $contData = json_decode($getCountris);
     $wooCountry = $this->TVC_Admin_Helper->get_woo_country();
     $is_disabled = ($is_disabled) ? "style='max-width:30rem;height:35px;pointer-events:none;background:#f2f2f2;'" : "style='max-width: 30rem;height: 35px;'";
-    $data = "<select id='sales_country' name='sales_country' class='form-group col-md-6' readonly='true' $is_disabled onchange='selectCountry()'>";
+    $data = "<select id='sales_country' name='sales_country' class='form-group col-md-6' readonly='true' $is_disabled'>";
     foreach ($contData as $key => $value) {
       $selected = ($value->code == $wooCountry) ? "selected='selected'" : "";
-      $data .= "<option value=" . $value->code . " " . $selected . " >" . $value->name . "</option>";
+      $data .= "<option value=" . esc_attr($value->code) . " " . esc_attr($selected) . " >" . esc_attr($value->name) . "</option>";
     }
     $data .= "</select>";
     return $data;
   }
 
   public function create_form() {
+    $message = "";
     $campaigns_list = [];
     $categories = [];
     $campaign_performance = [];
@@ -58,78 +61,65 @@ class AddCampaign {
     }
 
     $defaultCountry = $this->TVC_Admin_Helper->get_woo_country();
-    $category_list = $api_obj->getCategories($defaultCountry);    
-    if(isset($category_list->errors) && !empty($category_list->errors)){        
-    }else{
-      $category_list = isset($category_list->data) ? $category_list->data : [];
-      if (isset($category_list['status']) && $category_list['status'] == 200) {
-        $categories = $category_list['data'];
-      }
-    }
-
     
     if (isset($_POST['create_campaign'])) {
-      $campaign_name = isset($_POST['campaign_name'])?$_POST['campaign_name']:"";
-      $campaign_budget = isset($_POST['campaign_budget'])?$_POST['campaign_budget']:"";
-      $sales_country = isset($_POST['sales_country'])?$_POST['sales_country']:"";
-      $all_products = isset($_POST['all_products'])?$_POST['all_products']:"";
-      $category_id = isset($_POST['dimension'])?$_POST['dimension']:"";
-      $category_level = isset($_POST['category_level'])?$_POST['category_level']:"";
+      $campaign_name = isset($_POST['campaign_name'])?sanitize_text_field($_POST['campaign_name']):"";
+      $campaign_budget = isset($_POST['campaign_budget'])?sanitize_text_field($_POST['campaign_budget']):"";
+      $sales_country = isset($_POST['sales_country'])?sanitize_text_field($_POST['sales_country']):"";
+      $all_products = isset($_POST['all_products'])?sanitize_text_field($_POST['all_products']):"";
+      $category_id = isset($_POST['dimension'])?sanitize_text_field($_POST['dimension']):"";
+      $category_level = isset($_POST['category_level'])?sanitize_text_field($_POST['category_level']):"";
 
       $campaign = $api_obj->createCampaign($campaign_name, $campaign_budget, $sales_country, $all_products, $category_id, $category_level);
       if(isset($campaign->errors) && !empty($campaign->errors)){
-        $class = 'notice notice-error';
-        $message = esc_html__((isset($campaign->errors) && isset($campaign->errors[0])) ? $campaign->errors[0] : 'Error', 'sample-text-domain');
-        printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html('Error : ' . $message));
+        $class = 'alert-message tvc-alert-error';
+        $message = esc_html__((is_array($campaign->errors) && isset($campaign->errors[0])) ? $campaign->errors[0] : 'Error', 'conversios');
       }else{
-        $class = 'notice notice-success';
+        $class = 'alert-message tvc-alert-success';
         $campaign_neme = isset($campaign->data)?'with Resource name '.$campaign->data:"";
-        $message = esc_html__('Smart Shopping Campaign Created Successfully '.$campaign_neme, 'sample-text-domain');
-        printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));            
+        $message = esc_html__('Smart Shopping Campaign Created Successfully '.$campaign_neme, 'conversios');            
       }
     }else if (isset($_POST['update_campaign'])) {
-      $campaign_name = isset($_POST['campaign_name'])?$_POST['campaign_name']:"";
-      $campaign_budget = isset($_POST['campaign_budget'])?$_POST['campaign_budget']:"";
-      $campaign_id = isset($_POST['campaign_id'])?$_POST['campaign_id']:"";
-      $budget_id = isset($_POST['budget_id'])?$_POST['budget_id']:"";
-      $sales_country = isset($_POST['sales_country'])?$_POST['sales_country']:"";
-      $all_products = isset($_POST['all_products'])?$_POST['all_products']:"";
-      $ad_group_id = isset($_POST['ad_group_id'])?$_POST['ad_group_id']:"";
-      $ad_group_resource_name = isset($_POST['ad_group_resource_name'])?$_POST['ad_group_resource_name']:"";
-      $category_id = isset($_POST['dimension']) ? $_POST['dimension']:"";
-      $category_level = isset($_POST['category_level'])?$_POST['category_level']:"";
+      $campaign_name = isset($_POST['campaign_name'])?sanitize_text_field($_POST['campaign_name']):"";
+      $campaign_budget = isset($_POST['campaign_budget'])?sanitize_text_field($_POST['campaign_budget']):"";
+      $campaign_id = isset($_POST['campaign_id'])?sanitize_text_field($_POST['campaign_id']):"";
+      $budget_id = isset($_POST['budget_id'])?sanitize_text_field($_POST['budget_id']):"";
+      $sales_country = isset($_POST['sales_country'])?sanitize_text_field($_POST['sales_country']):"";
+      $all_products = isset($_POST['all_products'])?sanitize_text_field($_POST['all_products']):"";
+      $ad_group_id = isset($_POST['ad_group_id'])?sanitize_text_field($_POST['ad_group_id']):"";
+      $ad_group_resource_name = isset($_POST['ad_group_resource_name'])?sanitize_text_field($_POST['ad_group_resource_name']):"";
+      $category_id = isset($_POST['dimension']) ? sanitize_text_field($_POST['dimension']):"";
+      $category_level = isset($_POST['category_level'])?sanitize_text_field($_POST['category_level']):"";
 
       $campaign = $api_obj->updateCampaign($campaign_name, $campaign_budget, $campaign_id, $budget_id, $sales_country, $all_products, $category_id, $category_level, $ad_group_id, $ad_group_resource_name);
       if (isset($campaign->errors) && !empty($campaign->errors)) {
-        $class = 'notice notice-error';
-        $message = esc_html__(isset($campaign->errors) ? $campaign->errors[0] : 'Error', 'sample-text-domain');
-        printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html('Error : ' . $message));
+        $class = 'alert-message tvc-alert-error';
+        $message = esc_html__(isset($campaign->errors) ? $campaign->errors[0] : 'Error', 'conversios');
       } else if(isset($campaign->data)){      
         $campaign_neme = isset($campaign->data)?'with Resource name '.$campaign->data:"";
-        $class = 'notice notice-success';
-        $message = esc_html__('Smart Shopping Campaign Updated Successfully ' . $campaign_neme, 'sample-text-domain');
-        printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
-          // $url = admin_url('admin.php?page=tvc-configuration-page');
-          //wp_redirect($url);
-        
+        $class = 'alert-message tvc-alert-success';
+        $message = esc_html__('Smart Shopping Campaign Updated Successfully ' . $campaign_neme, 'conversios');
+        // $url = admin_url('admin.php?page=tvc-configuration-page');
+        //wp_redirect($url);        
       }
-      echo "<script>jQuery('#feed-spinner').css('display', 'none');</script>";
+      ?>
+      <script>jQuery('#feed-spinner').css('display', 'none');</script>
+      <?php
     }
     $currency = $this->TVC_Admin_Helper->get_user_currency_symbol();
-    if (isset($_GET['edit']) && $_GET['edit'] != '') {
-      $campaign_details_res = $api_obj->getCampaignDetails($_GET['edit']);
+    if (isset($_GET['edit']) && sanitize_text_field($_GET['edit']) != '') {
+      $campaign_details_res = $api_obj->getCampaignDetails(sanitize_text_field($_GET['edit']));
       if (isset($campaign_details_res->errors) && !empty($campaign_details_res->errors)) {
         $error_code = array_keys($campaign_details_res->errors)[0];
         if($error_code == 404){
-          $error_msg = 'Campaign details not found';
+          $error_msg = esc_html__("Campaign details not found","conversios");
         }else{
           if (isset($campaign_details_res->error_data) && !empty($campaign_details_res->error_data)) {
             // $error_msg = array_values($campaign_details_res->error_data)[0]->errors[0];
           }
         }
-        $class = 'notice notice-error';
-        $message = esc_html__(isset($error_msg) ? $error_msg : 'There was some error fetching campaign details.', 'sample-text-domain');
-        printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html('Error : ' . $message));
+        $class = 'alert-message tvc-alert-error';
+        $message = esc_html__(isset($error_msg) ? $error_msg : 'There was some error fetching campaign details.', 'conversios');
       } else {
         $campaign_details = $campaign_details_res->data;
         if ($campaign_details['status'] == 200) {
@@ -141,159 +131,131 @@ class AddCampaign {
      ?>
 
 <div class="tab-content">
+  <?php if($message){
+    printf('<div class="%1$s"><div class="alert">%2$s</div></div>', esc_attr($class), esc_html($message));
+  }?>
   <div class="tab-pane show active" id="googleShoppingFeed">
     <div class="tab-card">
       <div class="row">
         <div class="col-md-6 col-lg-8 edit-section">
           <div class="edit-header-section">           
-            <script>
-              var back_img = '<img src="<?php echo ENHANCAD_PLUGIN_URL.'/admin/images/icon/left-angle-arrow.svg'; ?>" alt="back"/>';
-              document.write('<a href="' + document.referrer + '" class="back-btn">'+back_img+'<span>Back</span></a>');
+            <script>              
+              document.write('<a href="<?php echo esc_url_raw($this->site_url."shopping_campaigns_page"); ?>" class="back-btn"><img src="'+"<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL."/admin/images/icon/left-angle-arrow.svg"); ?>"+'" alt="back"/><span>'+"<?php esc_html_e("Campaigns","conversios");?>"+'</span></a>');
             </script>
           </div>
         <?php
         if (!isset($_GET['edit'])) { ?>
           <form method="post" id="create-form">
             <div class="form-group">
-              <h2 class="lead">Create a Smart Shopping Campaign to promote your products</h2>
-              <p style="text-align:left; font-size: 14px;">A Smart Shopping campaign shows your products to potential customers across Google, Google Search Partners, the Google Display Network, YouTube, and Gmail.</p>
+              <h2 class="lead"><?php esc_html_e("Create a Smart Shopping Campaign to promote your products","conversios"); ?></h2>
+              <p style="text-align:left; font-size: 14px;"><?php esc_html_e("A Smart Shopping campaign shows your products to potential customers across Google, Google Search Partners, the Google Display Network, YouTube, and Gmail.","conversios"); ?></p>
               <p style="text-align:left">
-                <a href="https://support.google.com/google-ads/answer/7674739?hl=en" target="_blank">Learn more about Smart Shopping Campaigns.</a>
+                <a href="<?php echo esc_url_raw("https://support.google.com/google-ads/answer/7674739?hl=en"); ?>" target="_blank"><?php esc_html_e("Learn more about Smart Shopping Campaigns.","conversios"); ?></a>
               </p>
             </div>
             <div class="form-row" style="margin-bottom: 0">
               <div class="col-md-12 row">
-                <label for="campaign-name" class="form-group col-md-4 mt-2 text-left font-weight-bold">Campaign name: </label>
+                <label for="campaign-name" class="form-group col-md-4 mt-2 text-left font-weight-bold"><?php esc_html_e("Campaign name: ","conversios"); ?></label>
                 <input type="text" class="form-group col-md-6" name="campaign_name" id="campaign-name" required>
               </div>
               <div class="col-md-12 row">
-                <label for="campaign-budget" class="form-group col-md-4 mt-2 mb-0 text-left"><span class="font-weight-bold">Daily Campaign Budget (<?php echo  $currency ;?>):</span> <p style="text-align:left;font-size: 11px;">Only pay if someone clicks your ad. Recommended minimum budget of <?php echo  $currency ; ?>5 per day.</p></label>  
+                <label for="campaign-budget" class="form-group col-md-4 mt-2 mb-0 text-left"><span class="font-weight-bold"><?php esc_html_e("Daily Campaign Budget","conversios"); ?> (<?php echo  esc_attr($currency) ;?>):</span> <p style="text-align:left;font-size: 11px;"><?php esc_html_e("Only pay if someone clicks your ad. Recommended minimum budget of $5 per day.","conversios"); ?></p></label>  
                 <input type="number" class="form-group col-md-6" name="campaign_budget" id="campaign-budget" style="height: 35px;" required>    
               </div>
               <div class="col-md-12 row">
-                <label for="sales-country" class="form-group col-md-4 mt-2 text-left"><span class="font-weight-bold">Target Country:</span> <p style="text-align:left;font-size: 11px;">If you want to target multiple countries, then create multiple campaigns.</p></label><?php echo  $this->country_dropdown(); ?>
+                <label for="sales-country" class="form-group col-md-4 mt-2 text-left"><span class="font-weight-bold"><?php esc_html_e("Target Country:","conversios"); ?></span> <p style="text-align:left;font-size: 11px;"><?php esc_html_e("If you want to target multiple countries, then create multiple campaigns.","conversios"); ?></p></label><?php echo  $this->country_dropdown(); ?>
               </div>
               <div class="col-md-12 row">
-                <label for="campaign-products" class="form-group col-md-4 mt-2 text-left font-weight-bold">Products in campaign: </label>
-                <label class="mt-2"><input type="radio" id="campaign-products" name="all_products" value="1" checked />Include all Merchant Center products</label>
+                <label for="campaign-products" class="form-group col-md-4 mt-2 text-left font-weight-bold"><?php esc_html_e("Products in campaign:","conversios"); ?> </label>
+                <label class="mt-2"><input type="radio" id="campaign-products" name="all_products" value="1" checked /><?php esc_html_e("Include all Merchant Center products","conversios"); ?></label>
               </div>
               <div class="col-md-12 row" style="display:none;">
                 <div class="col-md-4"></div>
-                <label class=""><input type="radio" id="campaign-product-partition" value="0" name="all_products" />Select products using product partition filters</label>
+                <label class=""><input type="radio" id="campaign-product-partition" value="0" name="all_products" /><?php esc_html_e("Select products using product partition filters","conversios"); ?></label>
               </div>
-              <div class="col-md-12 row" style="display:none;">
-                <div class="col-md-4"></div>
-                <label>Product Partition filter dimension:</label><b>  Category</b>
-              </div>
-              <div class="col-md-12 row" style="display:none;">
-                <div class="col-md-4"></div>
-                <label>Dimension Value:</label>
-                <input type="hidden" name="category_level" id="category_level" value="" />
-                <select class="col-md-3 ml-2" name="dimension" id="dimension" onchange="changeCategory()">
-                  <?php
-                  for ($i = 0; $i < count($categories); $i++) {
-                      echo '<option value="' . $categories[$i]->id . '" level="' . $categories[$i]->level . '">' . $categories[$i]->name . '</option>';
-                  } ?>
-                </select>
-              </div>
+              
               <div class="col-md-12 row">
-                  <label class="form-group col-md-12 mt-2 mb-0 text-left font-weight-bold">Campaign duration: </label>
-                  <p class="ml-3" style="text-align:left; font-size: 14px;">Your campaign will run until you pause it. You can pause your campaign at any time, however it can take up to 30 days for google to optimize your products and ads.</p>
+                  <label class="form-group col-md-12 mt-2 mb-0 text-left font-weight-bold"><?php esc_html_e("Campaign duration:","conversios"); ?> </label>
+                  <p class="ml-3" style="text-align:left; font-size: 14px;"><?php esc_html_e("Your campaign will run until you pause it. You can pause your campaign at any time, however it can take up to 30 days for google to optimize your products and ads.","conversios"); ?></p>
               </div>
             </div>
-            <div class="col-12 row">
-              <button onclick="showLoader()" type="submit" class="btn btn-primary" id="create_campaign" name="create_campaign">Create Smart Shopping Campaign</button>
+            <div class="col-12">
+              <button onclick="showLoader()" type="submit" class="btn btn-primary" id="create_campaign" name="create_campaign"><?php esc_html_e("Create Smart Shopping Campaign","conversios"); ?></button>
             </div>
           </form>
           <hr>
           <form method="post">
             <div class="text-left">
-              <p style="font-size: 14px;">Please note that campaigns will be created with accounts configured in previous steps.</p>
-              <p style="font-size: 14px;"><span>Google Merchant Center : <?php echo  $this->merchantId; ?></span>&nbsp;&nbsp;&nbsp;&nbsp;<span>Google Ads Account Id : <?php echo $this->currentCustomerId; ?></span></p>
+              <p style="font-size: 14px;"><?php esc_html_e("Please note that campaigns will be created with accounts configured in previous steps.","conversios"); ?></p>
+              <p style="font-size: 14px;"><span><?php esc_html_e("Google Merchant Center :","conversios"); ?> <?php echo  esc_attr($this->merchantId); ?></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><?php esc_html_e("Google Ads Account Id :","conversios"); ?> <?php echo esc_attr($this->currentCustomerId); ?></span></p>
             </div>
           </form>
           <?php
-          } else if (isset($_GET['edit']) && $_GET['edit'] != '') { ?>
+          } else if (isset($_GET['edit']) && sanitize_text_field($_GET['edit']) != '') { ?>
           <form method="post">
             <div class="form-group">
-              <h2 class="lead">Create/Update a Smart Shopping Campaign to promote your products</h2>
-              <p style="text-align:left; font-size: 14px;">A Smart Shopping campaign shows your products to potential customers across Google, Google Search Partners, the Google Display Network, YouTube, and Gmail.</p>
+              <h2 class="lead"><?php esc_html_e("Create/Update a Smart Shopping Campaign to promote your products","conversios"); ?></h2>
+              <p style="text-align:left; font-size: 14px;"><?php esc_html_e("A Smart Shopping campaign shows your products to potential customers across Google, Google Search Partners, the Google Display Network, YouTube, and Gmail.","conversios"); ?></p>
               <p style="text-align:left">
-                <a href="https://support.google.com/google-ads/answer/7674739?hl=en" target="_blank">Learn more about Smart Shopping Campaigns.</a>
+                <a href="<?php echo esc_url_raw("https://support.google.com/google-ads/answer/7674739?hl=en"); ?>" target="_blank"><?php esc_html_e("Learn more about Smart Shopping Campaigns.","conversios"); ?></a>
               </p>
             </div>
             <div class="form-row" style="margin-bottom: 0">
               <div class="col-md-12 row">
-                <label for="campaign-name" class="form-group col-md-4 mt-2 text-left font-weight-bold">Campaign name: </label>
-                <input type="text" class="form-group col-md-6" name="campaign_name" value="<?php echo (isset($campaign_details) && $campaign_details != '')?$campaign_details->compaignName:""; ?>" id="campaign-name" required>
+                <label for="campaign-name" class="form-group col-md-4 mt-2 text-left font-weight-bold"><?php esc_html_e("Campaign name:","conversios"); ?> </label>
+                <input type="text" class="form-group col-md-6" name="campaign_name" value="<?php echo (isset($campaign_details) && $campaign_details != '')?esc_attr($campaign_details->compaignName):""; ?>" id="campaign-name" required>
               </div>
               <div class="col-md-12 row">
-                <label for="campaign-budget" class="form-group col-md-4 mt-2 mb-0 text-left"><span class="font-weight-bold">Daily Campaign Budget (<?php echo $currency; ?>):</span> <p style="text-align:left;font-size: 11px;">Only pay if someone clicks your ad. Recommended minimum budget of <?php echo $currency; ?>5 per day.</p></label>    
-                <input type="number" class="form-group col-md-6" name="campaign_budget" id="campaign-budget" value="<?php echo (isset($campaign_details) && $campaign_details != '')?$campaign_details->dailyBudget:""; ?>" style="height: 35px;" required>    
+                <label for="campaign-budget" class="form-group col-md-4 mt-2 mb-0 text-left"><span class="font-weight-bold"><?php esc_html_e("Daily Campaign Budget","conversios"); ?> (<?php echo esc_attr($currency); ?>):</span> <p style="text-align:left;font-size: 11px;"><?php esc_html_e("Only pay if someone clicks your ad. Recommended minimum budget of","conversios"); ?> <?php echo esc_attr($currency); ?>5 per day.</p></label>    
+                <input type="number" class="form-group col-md-6" name="campaign_budget" id="campaign-budget" value="<?php echo (isset($campaign_details) && $campaign_details != '')?esc_attr($campaign_details->dailyBudget):""; ?>" style="height: 35px;" required>    
               </div>
-              <input type="hidden" name="campaign_id" value="<?php echo (isset($campaign_details) && $campaign_details != '')?$campaign_details->compaignId:""; ?>" />
-              <input type="hidden" name="budget_id" value="<?php echo (isset($campaign_details) && $campaign_details != '')?$campaign_details->budgetId:""; ?>" />
-              <input type="hidden" name="ad_group_id" value="<?php echo (isset($campaign_details) && $campaign_details != '')?$campaign_details->adGroupId:""; ?>" />
-              <input type="hidden" name="ad_group_resource_name" value="<?php echo(isset($campaign_details) && $campaign_details != '')? $campaign_details->adGroupResourceName:""; ?>" />
+              <input type="hidden" name="campaign_id" value="<?php echo (isset($campaign_details) && $campaign_details != '')?esc_attr($campaign_details->compaignId):""; ?>" />
+              <input type="hidden" name="budget_id" value="<?php echo (isset($campaign_details) && $campaign_details != '')?esc_attr($campaign_details->budgetId):""; ?>" />
+              <input type="hidden" name="ad_group_id" value="<?php echo (isset($campaign_details) && $campaign_details != '')?esc_attr($campaign_details->adGroupId):""; ?>" />
+              <input type="hidden" name="ad_group_resource_name" value="<?php echo(isset($campaign_details) && $campaign_details != '')? esc_attr($campaign_details->adGroupResourceName):""; ?>" />
               <div class="col-md-12 row">
-                <label for="sales-country" class="form-group col-md-4 mt-2 text-left"><span class="font-weight-bold">Target Country:</span> <p style="text-align:left;font-size: 11px;">If you want to target multiple countries, then create multiple campaigns.</p></label>
+                <label for="sales-country" class="form-group col-md-4 mt-2 text-left"><span class="font-weight-bold"><?php esc_html_e("Target Country:","conversios"); ?></span> <p style="text-align:left;font-size: 11px;"><?php esc_html_e("If you want to target multiple countries, then create multiple campaigns.","conversios"); ?></p></label>
                 <?php echo $this->country_dropdown($defaultCountry, true); ?>
               </div>
               <div class="col-md-12 row">
-                <label for="campaign-products" class="form-group col-md-4 mt-2 text-left font-weight-bold">Products in campaign: </label>
+                <label for="campaign-products" class="form-group col-md-4 mt-2 text-left font-weight-bold"><?php esc_html_e("Products in campaign:","conversios"); ?> </label>
                 <label class="mt-2">
                 <?php
-                if(isset($campaign_details) && $campaign_details->category_level > 0 && $campaign_details->category_id > 0){
-                  echo '<input type="radio" id="campaign-products" name="all_products" value="1" />';
-                }else{
-                  echo '<input type="radio" id="campaign-products" name="all_products" value="1" checked />';
-                } ?> Include all Merchant Center products</label>
-              </div>
-              <div class="col-md-12 row" style="display: none;">
-                <div class="col-md-4"></div>
-                <label class="">
+                if(isset($campaign_details) && $campaign_details->category_level > 0 && $campaign_details->category_id > 0){?>
+                  <input type="radio" id="campaign-products" name="all_products" value="1" />
                 <?php
-                if (isset($campaign_details) && $campaign_details->category_level > 0 && $campaign_details->category_id > 0) {
-                  echo '<input type="radio" id="campaign-product-partition" value="0" name="all_products" checked />';
-                } else {
-                  echo '<input type="radio" id="campaign-product-partition" value="0" name="all_products" />';
-                } ?> Select products using product partition filters</label>
-              </div>
-              <div class="col-md-12 row" style="display: none;">
-                <div class="col-md-4"></div>
-                <label>Product Partition filter dimension:</label><b>  Category</b>
-              </div>
-              <div class="col-md-12 row" style="display: none;">
-                <div class="col-md-4"></div>
-                <label>Dimension Value:</label>
-                <input type="hidden" name="category_level" id="category_level" value=" <?php echo (isset($campaign_details) && $campaign_details != '')?$campaign_details->category_level:""; ?>" />
-                <select class="col-md-3 ml-2" name="dimension" id="dimension" onchange="changeCategory()">
+                }else{ ?>
+                  <input type="radio" id="campaign-products" name="all_products" value="1" checked />
                 <?php
-                  if (isset($campaign_details) && $campaign_details != '') {
-                    for ($i = 0; $i < count($categories); $i++) {
-                      if ($campaign_details->category_id == $categories[$i]->id) {
-                        echo '<option value="' . $categories[$i]->id . '" level="' . $categories[$i]->level . '" selected="selected">' . $categories[$i]->name . '</option>';
-                      } else {
-                        echo '<option value="' . $categories[$i]->id . '" level="' . $categories[$i]->level . '">' . $categories[$i]->name . '</option>';
-                      }
-                    }
-                  }?>
-                </select>
+                } ?> <?php esc_html_e("Include all Merchant Center products","conversios"); ?></label>
+              </div>
+              <div class="col-md-12 row" style="display: none;">
+                <div class="col-md-4"></div>
+                <label>
+                <?php
+                if (isset($campaign_details) && $campaign_details->category_level > 0 && $campaign_details->category_id > 0) { ?>
+                  <input type="radio" id="campaign-product-partition" value="0" name="all_products" checked />
+                <?php
+                } else { ?>
+                  <input type="radio" id="campaign-product-partition" value="0" name="all_products" />
+                <?php
+                } ?> 
+                <?php esc_html_e("Select products using product partition filters","conversios"); ?></label>
               </div>
               <div class="col-md-12 row">
-                <label class="form-group col-md-12 mt-2 mb-0 text-left font-weight-bold">Campaign duration: </label>
-                <p class="ml-3" style="text-align:left; font-size: 14px;">Your campaign will run until you pause it. You can pause your campaign at any time, however it can take up to 30 days for google to optimize your products and ads.</p>
+                <label class="form-group col-md-12 mt-2 mb-0 text-left font-weight-bold"><?php esc_html_e("Campaign duration:","conversios"); ?> </label>
+                <p class="ml-3" style="text-align:left; font-size: 14px;"><?php esc_html_e("Your campaign will run until you pause it. You can pause your campaign at any time, however it can take up to 30 days for google to optimize your products and ads.","conversios"); ?></p>
               </div>
             </div>
-            <div class="col-12 row">
-                <button onclick="showLoader()" type="submit" class="btn btn-primary btn-success" id="update_campaign" name="update_campaign">Update Smart Shopping Campaign</button>
+            <div class="col-12">
+                <button onclick="showLoader()" type="submit" class="btn btn-primary btn-success" id="update_campaign" name="update_campaign"><?php esc_html_e("Update Smart Shopping Campaign","conversios"); ?></button>
             </div>
           </form>
           <hr>
           <form method="post">
             <div class="text-left">
-              <p style="font-size: 14px;">Please note that campaigns will be created with accounts configured in previous steps.</p>
-              <p style="font-size: 14px;"><span>Google Merchant Center : <?php echo $this->merchantId; ?></span>&nbsp;&nbsp;&nbsp;&nbsp;<span>Google Ads Account Id : <?php echo $this->currentCustomerId; ?></span></p>
+              <p style="font-size: 14px;"><?php esc_html_e("Please note that campaigns will be created with accounts configured in previous steps.","conversios"); ?></p>
+              <p style="font-size: 14px;"><span><?php esc_html_e("Google Merchant Center :","conversios"); ?> <?php echo esc_attr($this->merchantId); ?></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><?php esc_html_e("Google Ads Account Id :","conversios"); ?> <?php echo esc_attr($this->currentCustomerId); ?></span></p>
             </div>
         </form>
         <?php } ?>
@@ -307,8 +269,8 @@ class AddCampaign {
 </div>
     
 <script>
-  $(document).ready(function() {
-    $('.select2').select2();
+  jQuery(document).ready(function() {
+    jQuery('.select2').select2();
   });
   jQuery('.create-merchant-center').addClass('active');
   jQuery('.create-google-ads').addClass('active');
@@ -319,9 +281,9 @@ class AddCampaign {
     let level = jQuery('#dimension').find('option[value='+dimension+']'). attr('level');
     jQuery('#category_level').val(level);
   }
-  function selectCountry() {
+  /*function selectCountry() {
     var sales_country = document.getElementById('sales_country').value;
-    var customer_id = "<?php echo $this->currentCustomerId; ?>";
+    var customer_id = "<?php //echo esc_attr($this->currentCustomerId); ?>";
     jQuery('#feed-spinner').css('display', 'block');
     jQuery.post(
       tvc_ajax_url,
@@ -342,9 +304,9 @@ class AddCampaign {
         jQuery('#feed-spinner').css('display', 'none');
       }
     );
-  } 
+  } */
   function showLoader() {
-      if($('#campaign-name').val()!=''&&$('#campaign-budget').val()!=''){
+      if(jQuery('#campaign-name').val()!=''&& jQuery('#campaign-budget').val()!=''){
           jQuery('#feed-spinner').css('display', 'block');
       }
   }
@@ -353,24 +315,17 @@ class AddCampaign {
   }
   public function success_message($customerId) {
     $class = 'notice notice-success';
-    $message = esc_html__($customerId . ' Set as default Ads Account ID.', 'sample-text-domain');
+    $message = esc_html__($customerId . ' Set as default Ads Account ID.', 'conversios');
     printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
   }
 
   public function success_messageV2($campaign_name, $status) {
     $active = ($status == true) ? 'active' : 'inactive';
-    $class = 'notice notice-success';
-    //$message = esc_html__($campaign_name . ' Campaign Set as '.$active.'.', 'sample-text-domain');
-    // return '<div class='.$class.'><p>'.$campaign_name.' Campaign Set as '.$active.'</p></div>';
     $message = $campaign_name . ' set as ' . $active;
     return $message;
   }
 
   public function success_deleteMessage($campaign_name) {
-    //$active = ($status == true) ? 'active' : 'inactive';
-    $class = 'notice notice-success';
-    //$message = esc_html__($campaign_name . ' Campaign Set as '.$active.'.', 'sample-text-domain');
-    // return '<div class='.$class.'><p>'.$campaign_name.' Campaign Set as '.$active.'</p></div>';
     $message = $campaign_name . ' is deleted successfully';
     return $message;
   }

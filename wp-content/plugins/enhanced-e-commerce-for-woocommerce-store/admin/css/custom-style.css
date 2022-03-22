@@ -690,6 +690,10 @@ section {
   background-color: #66BB6A;
   padding-left: 30px;
 }
+.alert-message.tvc-alert-error .alert{
+  background-color: #fff3cd;
+  color: #856404;
+}
 .alert-message.tvc-alert-success .alert:after {
     content: '\2713';
     position: absolute;
@@ -887,26 +891,6 @@ section {
   height: 40px !important;
 }
 
-.select2.select2-container--default .select2-selection__arrow b {
-  border: solid #888888 !important;
-  border-style: solid;
-  border-width: 0 1px 1px 0 !important;
-  vertical-align: middle;
-  -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
-  padding: 3px;
-  margin-left: -8px  !important;
-  margin-top: -5.5px !important;
-}
-
-.select2.select2-container--default.select2-container--open .select2-selection__arrow b {
-  border: solid #888888;
-  border-style: solid;
-  border-width: 0 1px 1px 0 !important;
-  -webkit-transform: rotate(-135deg);
-          transform: rotate(-135deg);
-  margin-top: 0 !important;
-}
 
 .select2-dropdown {
   border-color: #707070 !important;
@@ -1477,6 +1461,7 @@ textarea.form-control, .select2.select2-container--default textarea.select2-sele
 .wizard-section.campaign-wizard .wizard-content .wizard .content .card-wrapper .row .col-6 .form-group {
   padding-left: 15px;
   padding-right: 15px;
+  margin-bottom: 10px;
 }
 
 .wizard-section.campaign-wizard .wizard-content .wizard .content .card-wrapper .row .col-6 .form-group .form-label-control {
@@ -1976,8 +1961,7 @@ textarea.form-control, .select2.select2-container--default textarea.select2-sele
 .back-btn {
   padding: 0;
   color: #25283D;
-  position: absolute;
-  top: -25px;
+  position: relative;
   left: 0;
   font-size: 12px;
 }
@@ -2120,7 +2104,7 @@ textarea.form-control, .select2.select2-container--default textarea.select2-sele
 .pro-account {
   max-width: 250px;
   position: relative;
-  margin-top: 30px;
+  margin-top: 65px;
 }
 
 .pro-account .card {

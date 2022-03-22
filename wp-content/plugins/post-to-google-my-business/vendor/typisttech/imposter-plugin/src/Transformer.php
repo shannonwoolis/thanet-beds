@@ -19,18 +19,34 @@ class Transformer
         $io->write('Loading package information from <comment>' . getcwd() . '/composer.json</comment>', true);
 
         $imposter = ImposterFactory::forProject(getcwd(), ['typisttech/imposter-plugin']);
-        $autoloads = $imposter->getAutoloads();
 
+        $autoloads = $imposter->getAutoloads();
         $count = count($autoloads);
         $index = 1;
         foreach ($autoloads as $autoload) {
             $io->write(" - <comment>$index/$count</comment>: Transforming $autoload", true);
             $imposter->transform($autoload);
             $index++;
-        };
+        }
+
+        $io->write('<info>Success: Imposter transformed vendor files.</info>', true);
+
+        $invalidAutoloads = $imposter->getInvalidAutoloads();
+        if (! empty($invalidAutoloads)) {
+            $invalidAutoloadsCount = count($invalidAutoloads);
+            $io->writeError('', true);
+            $io->writeError(
+                // phpcs:ignore Generic.Files.LineLength.TooLong
+                "<warning>Warning: Imposter failed to transformed $invalidAutoloadsCount of the autoload path(s).</warning>",
+                true
+            );
+
+            foreach ($invalidAutoloads as $invalidAutoload) {
+                $io->writeError(" - $invalidAutoload", true);
+            }
+        }
 
         // Print empty lines to separate imposter outputs.
-        $io->write('<info>Success: Imposter transformed vendor files.</info>', true);
         $io->write('', true);
         $io->write('', true);
     }

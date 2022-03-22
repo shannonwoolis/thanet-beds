@@ -60,14 +60,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
 		 * @since    4.0.2
 		 */
 		public function get_analytics_web_properties(){
-			$nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+			$nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
 			if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){	
-			  $tvc_data = (object)$_POST['tvc_data'];
-				$api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+			  $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+				$api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
 			  echo json_encode($api_obj->getAnalyticsWebProperties($_POST));
 			  wp_die();
 			}else{
-				echo "Admin security nonce is not verified.";
+				echo esc_html__("Admin security nonce is not verified.","conversios");
 			}
 		}
 
@@ -76,10 +77,11 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function save_analytics_data(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         /*sendingblue*/
         $data = array();
         $data["email"] = $tvc_data->g_mail;
@@ -92,7 +94,7 @@ if(!class_exists('Conversios_Onboarding_Helper')):
         echo json_encode($api_obj->saveAnalyticsData($_POST));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
 
@@ -101,14 +103,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function list_googl_ads_account(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));        
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         echo json_encode($api_obj->getGoogleAdsAccountList($_POST));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
     /**
@@ -116,14 +119,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function create_google_ads_account(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         echo json_encode($api_obj->createGoogleAdsAccount($_POST));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
 
@@ -132,14 +136,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function save_google_ads_data(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         /*sendingblue*/
         $data = array();
-        $data["email"] = $tvc_data->g_mail;
-        $data["attributes"]["PRODUCT"] = "Woocommerce Free Plugin";
+        $data["email"] = sanitize_email($tvc_data->g_mail);
+        $data["attributes"]["PRODUCT"] = sanitize_text_field("Woocommerce Free Plugin");
         $data["attributes"]["SET_ADS"] = true;
         $data["listIds"]=[40,41];
         $data["updateEnabled"]=true;
@@ -148,7 +153,7 @@ if(!class_exists('Conversios_Onboarding_Helper')):
         echo json_encode($api_obj->saveGoogleAdsData($_POST));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
 
@@ -157,14 +162,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function link_analytic_to_ads_account(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         echo json_encode($api_obj->linkAnalyticToAdsAccount($_POST));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
 
@@ -173,14 +179,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function list_google_merchant_account(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         echo json_encode($api_obj->listMerchantCenterAccount($_POST));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
     /**
@@ -188,14 +195,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function create_google_merchant_center_account(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         echo json_encode($api_obj->createMerchantAccount($_POST));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
 
@@ -204,14 +212,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function save_merchant_data(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         /*sendingblue*/
         $data = array();
-        $data["email"] = $tvc_data->g_mail;
-        $data["attributes"]["PRODUCT"] = "Woocommerce Free Plugin";
+        $data["email"] = sanitize_email($tvc_data->g_mail);
+        $data["attributes"]["PRODUCT"] = sanitize_text_field("Woocommerce Free Plugin");
         $data["attributes"]["SET_GMC"] = true;
         $data["listIds"]=[40,41];
         $data["updateEnabled"]=true;
@@ -220,7 +229,7 @@ if(!class_exists('Conversios_Onboarding_Helper')):
         echo json_encode($api_obj->saveMechantData($_POST));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
     /**
@@ -228,16 +237,17 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function get_conversion_list(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         unset($_POST['tvc_data']);
         unset($_POST['conversios_onboarding_nonce']);
         echo json_encode($api_obj->getConversionList($_POST));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
     
@@ -246,14 +256,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function link_google_ads_to_merchant_center(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
         echo json_encode($api_obj->linkGoogleAdsToMerchantCenter($_POST));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
     /**
@@ -261,14 +272,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function get_subscription_details(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
-        echo json_encode($api_obj->getSubscriptionDetails($_POST['tvc_data'], $_POST['subscription_id']));
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
+        echo json_encode($api_obj->getSubscriptionDetails($tvc_data, sanitize_text_field($_POST['subscription_id']) ));
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
     
@@ -277,17 +289,18 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function update_setup_time_to_subscription(){
-      $nonce = (isset($_POST['conversios_onboarding_nonce']))?$_POST['conversios_onboarding_nonce']:"";
+      $nonce = (isset($_POST['conversios_onboarding_nonce']))?sanitize_text_field($_POST['conversios_onboarding_nonce']):"";
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
-        $tvc_data = (object)$_POST['tvc_data'];
-        $api_obj = new Conversios_Onboarding_ApiCall($tvc_data->access_token,$tvc_data->refresh_token);
-        $return_url = $this->save_wp_setting_from_subscription_api($api_obj, $tvc_data, $_POST['subscription_id']);
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
+        $return_url = $this->save_wp_setting_from_subscription_api($api_obj, $tvc_data, sanitize_text_field($_POST['subscription_id']) );
         $return_rs = $api_obj->updateSetupTimeToSubscription($_POST);
         $return_rs->return_url = $return_url;
         echo json_encode($return_rs);
         wp_die();
       }else{
-        echo "Admin security nonce is not verified.";
+        echo esc_html__("Admin security nonce is not verified.","conversios");
       }
     }
 
@@ -296,8 +309,7 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function save_wp_setting_from_subscription_api($api_obj, $tvc_data, $subscription_id){ 
-      //print_r($tvc_data); 
-      //echo "=================";  
+        
       $TVC_Admin_Helper = new TVC_Admin_Helper(); 
       $google_detail = $api_obj->getSubscriptionDetails($tvc_data, $subscription_id);
       /**
@@ -306,7 +318,7 @@ if(!class_exists('Conversios_Onboarding_Helper')):
       $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
       if(isset($ee_additional_data['temp_active_licence_key']) && $ee_additional_data['temp_active_licence_key'] != ""){
         $licence_key = $ee_additional_data['temp_active_licence_key'];
-        $TVC_Admin_Helper->active_licence($licence_key, $_GET['subscription_id']);
+        $TVC_Admin_Helper->active_licence($licence_key, sanitize_text_field($_GET['subscription_id']));
         unset($ee_additional_data['temp_active_licence_key']);
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
       }
@@ -315,42 +327,42 @@ if(!class_exists('Conversios_Onboarding_Helper')):
          * for save conversion send to in WP DB
          */      
         $googleDetail = $google_detail->data;
-        if($googleDetail->plan_id != 1 && $googleDetail->google_ads_conversion_tracking == 1){
+        if($googleDetail->plan_id != 1 && sanitize_text_field($googleDetail->google_ads_conversion_tracking) == 1){
           $TVC_Admin_Helper->update_conversion_send_to();
         }
         /**
          * for site verifecation
          */
-        if(isset($googleDetail->google_merchant_center_id) && $googleDetail->google_merchant_center_id){
+        if(isset($googleDetail->google_merchant_center_id) && sanitize_text_field($googleDetail->google_merchant_center_id)){
           $this->site_verification_and_domain_claim($googleDetail);
         }
 
-        $_POST['subscription_id'] = $googleDetail->id;
-        $_POST['ga_eeT'] = (isset($googleDetail->enhanced_e_commerce_tracking) && $googleDetail->enhanced_e_commerce_tracking == "1") ? "on" : "";
+        $settings['subscription_id'] = sanitize_text_field($googleDetail->id);
+        $settings['ga_eeT'] = (isset($googleDetail->enhanced_e_commerce_tracking) && sanitize_text_field($googleDetail->enhanced_e_commerce_tracking) == "1") ? "on" : "";
         
-        $_POST['ga_ST'] = (isset($googleDetail->add_gtag_snippet) && $googleDetail->add_gtag_snippet == "1") ? "on" : "";           
-        $_POST['gm_id'] = $googleDetail->measurement_id;
-        $_POST['ga_id'] = $googleDetail->property_id;
-        $_POST['google_ads_id'] = $googleDetail->google_ads_id;
-        $_POST['google_merchant_id'] = $googleDetail->google_merchant_center_id;
-        $_POST['tracking_option'] = $googleDetail->tracking_option;
-        $_POST['ga_gUser'] = 'on';
-        //$_POST['ga_gCkout'] = 'on';
-        $_POST['ga_Impr'] = 6;
-        $_POST['ga_IPA'] = 'on';
-        $_POST['ga_OPTOUT'] = 'on';
-        $_POST['ga_PrivacyPolicy'] = 'on';
-        $_POST['google-analytic'] = '';
+        $settings['ga_ST'] = (isset($googleDetail->add_gtag_snippet) && sanitize_text_field($googleDetail->add_gtag_snippet) == "1") ? "on" : "";           
+        $settings['gm_id'] = sanitize_text_field($googleDetail->measurement_id);
+        $settings['ga_id'] = sanitize_text_field($googleDetail->property_id);
+        $settings['google_ads_id'] = sanitize_text_field($googleDetail->google_ads_id);
+        $settings['google_merchant_id'] = sanitize_text_field($googleDetail->google_merchant_center_id);
+        $settings['tracking_option'] = sanitize_text_field($googleDetail->tracking_option);
+        $settings['ga_gUser'] = 'on';
+        $settings['ga_Impr'] = 6;
+        $settings['ga_IPA'] = 'on';
+        $settings['ga_OPTOUT'] = 'on';
+        $settings['ga_PrivacyPolicy'] = 'on';
+        $settings['google-analytic'] = '';
         //update option in wordpress local database
-        update_option('google_ads_conversion_tracking',  $googleDetail->google_ads_conversion_tracking);
-        update_option('ads_tracking_id',  $googleDetail->google_ads_id);
+        update_option('google_ads_conversion_tracking', $googleDetail->google_ads_conversion_tracking);
+        update_option('ads_tracking_id', $googleDetail->google_ads_id);
         update_option('ads_ert', $googleDetail->remarketing_tags);
         update_option('ads_edrt', $googleDetail->dynamic_remarketing_tags);
-        Enhanced_Ecommerce_Google_Settings::add_update_settings('ee_options');
+        
+        $TVC_Admin_Helper->save_ee_options_settings($settings);
         /*
          * function call for save API data in WP DB
          */
-        $TVC_Admin_Helper->set_update_api_to_db($googleDetail, false);  
+        $TVC_Admin_Helper->set_update_api_to_db($googleDetail);  
                
         /**
          * function call for save remarketing snippets in WP DB
@@ -359,18 +371,15 @@ if(!class_exists('Conversios_Onboarding_Helper')):
         /**
          * save gmail and view ID in WP DB
          */
-        if(property_exists($tvc_data,"g_mail") && $tvc_data->g_mail){
+        if(property_exists($tvc_data,"g_mail") && sanitize_email($tvc_data->g_mail)){
           update_option('ee_customer_gmail', $tvc_data->g_mail);     
-        }
-        if(isset($_POST['ga_view_id']) && $_POST['ga_view_id']){
-          update_option('ee_ga_view_id', $_POST['ga_view_id']);
         }
         $return_url = "admin.php?page=conversios-google-shopping-feed&tab=gaa_config_page";
         if(isset($googleDetail->google_merchant_center_id) || isset($googleDetail->google_ads_id) ){
-          if( $googleDetail->google_merchant_center_id != "" && $googleDetail->google_ads_id != ""){      
-            $return_url = "admin.php?page=conversios-google-shopping-feed&tab=sync_product_page&welcome_msg=true";            
+          if( sanitize_text_field($googleDetail->google_merchant_center_id) != "" && sanitize_text_field($googleDetail->google_ads_id) != ""){      
+            $return_url = esc_url_raw("admin.php?page=conversios-google-shopping-feed&tab=sync_product_page&welcome_msg=true");            
           }else{
-            $return_url = "admin.php?page=conversios-google-shopping-feed&tab=gaa_config_page&welcome_msg=true";
+            $return_url = esc_url_raw("admin.php?page=conversios-google-shopping-feed&tab=gaa_config_page&welcome_msg=true");
           }          
         }
         return $return_url;
@@ -385,10 +394,10 @@ if(!class_exists('Conversios_Onboarding_Helper')):
       $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
       $customApiObj = new CustomApi();
       $postData = [
-          'merchant_id' => $googleDetail->merchant_id,          
-          'website_url' => get_site_url(),
-          'subscription_id' => $googleDetail->id,
-          'account_id' => $googleDetail->google_merchant_center_id
+          'merchant_id' => sanitize_text_field($googleDetail->merchant_id),          
+          'website_url' => esc_url_raw(get_site_url()),
+          'subscription_id' => sanitize_text_field($googleDetail->id),
+          'account_id' => sanitize_text_field($googleDetail->google_merchant_center_id)
       ];
       //is site verified
       if ($googleDetail->is_site_verified == '0') {
@@ -397,7 +406,7 @@ if(!class_exists('Conversios_Onboarding_Helper')):
         if (isset($siteVerificationToken->error) && !empty($siteVerificationToken->errors)) {
             goto call_method_tag;
         } else {
-          $myFile = ABSPATH.$siteVerificationToken->data->token; 
+          $myFile =ABSPATH.$siteVerificationToken->data->token; 
           if (!file_exists($myFile)) {
               $fh = fopen($myFile, 'w+');
               chmod($myFile,0777);
@@ -440,14 +449,14 @@ if(!class_exists('Conversios_Onboarding_Helper')):
       /**
        * function call for save API data in WP DB
        */
-      $TVC_Admin_Helper->set_update_api_to_db($googleDetail, false);
+      $TVC_Admin_Helper->set_update_api_to_db($googleDetail);
     }
     /**
      * update contact details on sendinblue.
      * @since    4.0.2
      */
     function add_sendinblue_contant($data, $api_obj){
-        $api_obj->TVC_CALL_API("POST", "https://api.sendinblue.com/v3/contacts", json_encode($data));    
+      $api_obj->TVC_CALL_API_sendinblue("POST", "https://api.sendinblue.com/v3/contacts", $data);    
     }
 		
 	}
@@ -462,105 +471,95 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
     protected $access_token;
     protected $refresh_token;
 		public function __construct($access_token, $refresh_token) {
-      $merchantInfo = json_decode(file_get_contents(ENHANCAD_PLUGIN_URL.'/includes/setup/json/merchant-info.json'), true);
+      $merchantInfo = json_decode(file_get_contents(ENHANCAD_PLUGIN_DIR.'includes/setup/json/merchant-info.json'), true);
       $this->refresh_token = $refresh_token;
-      $this->access_token = $this->generateAccessToken($access_token, $this->refresh_token);
+      $this->access_token = base64_encode( $this->generateAccessToken( base64_decode($access_token), base64_decode($this->refresh_token) ) );
       $this->apiDomain = TVC_API_CALL_URL;
       $this->token = 'MTIzNA==';
-      $this->merchantId = $merchantInfo['merchantId'];
+      $this->merchantId = sanitize_text_field($merchantInfo['merchantId']);
 		}
-
-    function TVC_CALL_API($method, $url, $data, $headers = false){
-      $curl = curl_init();
-      switch ($method){
-        case "POST":
-           curl_setopt($curl, CURLOPT_POST, 1);
-           if ($data)
-              curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-           break;
-        case "PUT":
-           curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
-           if ($data)
-              curl_setopt($curl, CURLOPT_POSTFIELDS, $data);                                
-           break;
-        default:
-           if ($data)
-              $url = sprintf("%s?%s", $url, http_build_query($data));
-      }
-      // OPTIONS:
-      curl_setopt($curl, CURLOPT_URL, $url);
-      if(!$headers){
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-          'api-key: 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',
-          'Content-Type: application/json',
-        ));
-      }else{
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-          'api-key: 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',
-          'Content-Type: application/json',
-          $headers
-        ));
-      }
-      curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-      curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-      // EXECUTE:
-      $result = curl_exec($curl);
-      curl_close($curl);
-      return $result;
-    }
-
-    public function updateTokenToSubscription($tvc_data) {
+    public function tc_wp_remot_call_post($url, $args){
       try {
-          $tvc_data = json_decode(base64_decode($tvc_data));
-          $url = $this->apiDomain . '/customer-subscriptions/update-token';
-          $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");          
-          $data = [
-            'subscription_id' => "",//$this->subscription_id,
-            'gmail' => $tvc_data->g_mail,
-            'access_token' => $this->access_token,
-            'refresh_token' => $this->refresh_token,
-            'domain' => $tvc_data->user_domain
-          ];
-          $curl_url = $url;
-          $data = json_encode($data);
-          $ch = curl_init();
-          curl_setopt_array($ch, array(
-              CURLOPT_URL => $curl_url, //esc_url($curl_url),
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_TIMEOUT => 0,
-              CURLOPT_HTTPHEADER => $header,
-              CURLOPT_POSTFIELDS => $data
-          ));
-          $response = curl_exec($ch);
-          $response = json_decode($response);
-          return $response;
+        if(!empty($args)){    
+          // Send remote request
+          $args['timeout']= "1000";
+          $request = wp_remote_post($url, $args);
+
+          // Retrieve information
+          $response_code = wp_remote_retrieve_response_code($request);
+
+          $response_message = wp_remote_retrieve_response_message($request);
+          $response_body = json_decode(wp_remote_retrieve_body($request));
+
+          if ((isset($response_body->error) && $response_body->error == '')) {
+            return new WP_REST_Response($response_body->data);
+          } else {
+              return new WP_Error($response_code, $response_message, $response_body);
+          }
+        }
       } catch (Exception $e) {
           return $e->getMessage();
       }
+    }
+    public function TVC_CALL_API_sendinblue($method, $url, $data, $headers = false){
+      try {
+        $args = array(
+          'headers' => array(
+              'api-key' => sanitize_text_field("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"),
+              'Content-Type' => 'application/json'
+          ),
+          'method' => $method,
+          'body' => $data
+        );
+        // Send remote request
+        $request = wp_remote_post($url, $args);
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response_body = json_decode(wp_remote_retrieve_body($request));
+
+        if ((isset($response_body->error) && $response_body->error == '')) {
+          return new WP_REST_Response(
+            array('status' => $response_code, 'message' => $response_message, 'data' => $response_body->data)
+          );
+        } else {
+          return new WP_Error($response_code, $response_message, $response_body);
+        }
+      } catch (Exception $e) {
+          return $e->getMessage();
+      }
+     
     }
 
     public function getSubscriptionDetails($tvc_data, $subscription_id){
       try{
         $tvc_data = (object)$tvc_data;
+        $access_token = sanitize_text_field(base64_decode($this->access_token));
         $url = $this->apiDomain . '/customer-subscriptions/subscription-detail';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json", "AccessToken:$this->access_token");
+        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json", "AccessToken: $access_token");
         $data = [
-          'subscription_id' => $subscription_id,//$this->subscription_id,
-          'domain' => $tvc_data->user_domain
+          'subscription_id' => sanitize_text_field($subscription_id),//$this->subscription_id,
+          'domain' => sanitize_text_field($tvc_data->user_domain)
         ];
-        $curl_url = $url;
-        $postData = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-          CURLOPT_URL => $curl_url, //esc_url($curl_url),
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_HTTPHEADER => $header,
-          CURLOPT_POSTFIELDS => $postData
-        ));
-        $response = curl_exec($ch);
-        $response = json_decode($response);
-        return $response;
+        $args = array(
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+
+        $return = new \stdClass();
+        if($result->status == 200){
+          $return->status = $result->status;
+          $return->data = $result->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->data = $result->data;
+          $return->status = $result->status;
+          return $return;
+        }
       }catch(Exception $e){
         return $e->getMessage();
       }
@@ -568,36 +567,47 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
 
 		public function getAnalyticsWebProperties($postData) {
       try {
-       // print_r($postData);
-        //$tvc_data = json_decode(base64_decode($postData['tvc_data']));
-        //unset($postData['tvc_data']);
         $url = $this->apiDomain . '/google-analytics/account-list';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json", "AccessToken:$this->access_token"); 
+        
+        $access_token = sanitize_text_field(base64_decode($this->access_token));
         $max_results = 10; 
-        $page = (isset($postData['page']) && $postData['page'] >1)?$postData['page']:"1";
+        $page = (isset($postData['page']) && sanitize_text_field($postData['page']) >1)?sanitize_text_field($postData['page']):"1";
         if($page > 1){
           //set index
           $page = (($page-1) * $max_results)+1;
         }       
         $data = [
-          'type' => $postData['type'],
-          'page'=>$page,
-          'max_results'=>$max_results
+          'type' => sanitize_text_field($postData['type']),
+          'page'=>sanitize_text_field($page),
+          'max_results'=>sanitize_text_field($max_results)
         ];
-        //print_r($data);
-        $curl_url = $url;
-        $postData = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-          CURLOPT_URL => $curl_url, //esc_url($curl_url),
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_HTTPHEADER => $header,
-          CURLOPT_POSTFIELDS => $postData
-        ));
-        $response = curl_exec($ch);
-        $response = json_decode($response);
-        return $response;
+        $args = array(
+          'timeout' => 10000,
+          'headers' => array(
+            'Authorization' => "Bearer MTIzNA==",
+            'Content-Type' => 'application/json',
+            'AccessToken' => $access_token
+          ),
+          'body' => wp_json_encode($data)
+        );
+        $request = wp_remote_post(esc_url_raw($url), $args);
+        
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        if (isset($response->error) && $response->error == '') {
+          $return->status = $response_code;
+          $return->data = $response->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->data = $response->data;
+          $return->status = $response_code;
+          return $return;
+        }
       } catch (Exception $e) {
         return $e->getMessage();
       }
@@ -606,20 +616,35 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
     public function getGoogleAdsAccountList($postData) {
       try {
         if($this->refresh_token != ""){
-          //$tvc_data = json_decode(base64_decode($postData['tvc_data']));
           $url = $this->apiDomain . '/adwords/list';
-          $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json", "RefreshToken:$this->refresh_token");         
-          $curl_url = $url;
-          $ch = curl_init();
-          curl_setopt_array($ch, array(
-              CURLOPT_URL => $curl_url, //esc_url($curl_url),
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_TIMEOUT => 0,
-              CURLOPT_HTTPHEADER => $header,
-              CURLOPT_POSTFIELDS => ""
-          ));          
-          $response = curl_exec($ch);
-          return json_decode($response);
+          $refresh_token = sanitize_text_field(base64_decode($this->refresh_token));
+          $args = array(
+            'timeout' => 10000,
+            'headers' => array(
+              'Authorization' => "Bearer MTIzNA==",
+              'Content-Type' => 'application/json',
+              'RefreshToken' => $refresh_token
+            ),
+            'body' => ""
+          );
+          $request = wp_remote_post(esc_url_raw($url), $args);
+          
+          // Retrieve information
+          $response_code = wp_remote_retrieve_response_code($request);
+          $response_message = wp_remote_retrieve_response_message($request);
+          $response = json_decode(wp_remote_retrieve_body($request));
+          $return = new \stdClass();
+          if (isset($response->error) && $response->error == '') {
+            $return->status = $response_code;
+            $return->data = $response->data;
+            $return->error = false;
+            return $return;
+          }else{
+            $return->error = true;
+            $return->data = $response->data;
+            $return->status = $response_code;
+            return $return;
+          }       
         }else{
           return json_decode(array("error"=>true));
         }
@@ -631,22 +656,29 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
     public function listMerchantCenterAccount() {
       try {
         $url = $this->apiDomain . '/gmc/user-merchant-center/list';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");
+        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
         $data = [
-          'access_token' => $this->access_token,
+          'access_token' => sanitize_text_field(base64_decode($this->access_token)),
         ];
-        $curl_url = $url;
-        $postData = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $curl_url, //esc_url($curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $postData
-        ));
-        $response = curl_exec($ch);
-        return json_decode($response);
+        $args = array(
+          'timeout' => 10000,
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        $return = new \stdClass();
+        if($result->status == 200){
+          $return->status = $result->status;
+          $return->data = $result->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->data = $result->data;
+          $return->status = $result->status;
+          return $return;
+        }
       } catch (Exception $e) {
         return $e->getMessage();
       }
@@ -654,28 +686,37 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
 
     public function createGoogleAdsAccount($postData) {
       try {
-        $tvc_data = (object)$postData['tvc_data'];
+        //$tvc_data = (object)$postData['tvc_data'];
+        $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
+        $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $url = $this->apiDomain . '/adwords/create-ads-account';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");
+        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
         $data = [
-          'email' => $tvc_data->g_mail,
-          'currency' => $tvc_data->currency_code,
-          'time_zone' => $tvc_data->timezone_string, //'Asia/Kolkata',
-          'domain' => $tvc_data->user_domain
+          'subscription_id' => sanitize_text_field($tvc_data->subscription_id),
+          'email' => sanitize_email($tvc_data->g_mail),
+          'currency' => sanitize_text_field($tvc_data->currency_code),
+          'time_zone' => sanitize_text_field($tvc_data->timezone_string), //'Asia/Kolkata',
+          'domain' => sanitize_text_field($tvc_data->user_domain)
         ];
-        $curl_url = $url;
-        $postData = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $curl_url, //esc_url($curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $postData
-        ));
-        $response = curl_exec($ch);
-        $response = json_decode($response);
-        return $response;
+        $args = array(
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        $return = new \stdClass();
+        if($result->status == 200){
+          $return->status = $result->status;
+          $return->data = $result->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->error = $result->errors;
+          //$return->data = $result->data;
+          $return->status = $result->status;
+          return $return;
+        }
       } catch (Exception $e) {
           return $e->getMessage();
       }
@@ -683,102 +724,93 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
     public function createMerchantAccount($postData) {
       try {
         $url = $this->apiDomain . '/gmc/create';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");
+        $header = array(
+            "Authorization: Bearer MTIzNA==",
+            "Content-Type" => "application/json"
+        );
         $data = [
-          'merchant_id' => $this->merchantId, //'256922349',
-          'name' => $postData['store_name'],
-          'website_url' => $postData['website_url'],
-          'customer_id' => $postData['customer_id'],
-          'adult_content' => isset($postData['adult_content']) && $postData['adult_content'] == 'true' ? true : false,
-          'country' => $postData['country'],
+          'merchant_id' => sanitize_text_field($this->merchantId), //'256922349',
+          'name' => sanitize_text_field($postData['store_name']),
+          'website_url' => esc_url_raw(sanitize_text_field($postData['website_url'])),
+          'customer_id' => sanitize_text_field($postData['customer_id']),
+          'adult_content' => isset($postData['adult_content']) && sanitize_text_field($postData['adult_content']) == 'true' ? true : false,
+          'country' => sanitize_text_field($postData['country']),
           'users' => [
             [
-              "email_address" => $postData['email_address'], //"sarjit@pivotdrive.ca"
+              "email_address" => sanitize_email($postData['email_address']), //"sarjit@pivotdrive.ca"
               "admin" => true
             ]
           ],
           'business_information' => [
             'address' => [
-                'country' => $postData['country']
+                'country' => sanitize_text_field($postData['country'])
             ]
           ]
         ];
-        $curl_url = $url;
-        $data = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $curl_url, //esc_url($curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $data
-        ));
-        $response = curl_exec($ch);
-        return json_decode($response);
+        $args = array(
+          'timeout' => 10000,
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $args['timeout']= "1000";
+        $request = wp_remote_post(esc_url_raw($url), $args);
+        
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response_body = json_decode(wp_remote_retrieve_body($request));
+        if ((isset($response_body->error) && $response_body->error == '') || (!isset($response_body->error)) ) {
+            return $response_body;
+        } else {
+          $return = new \stdClass();
+          $return->error = true;
+          //$return->data = $result->data;
+          $return->status = $response_code;
+          return $return;
+          //return new WP_Error($response_code, $response_message, $response_body);
+        }
       } catch (Exception $e) {
         return $e->getMessage();
       }
     }
-    public function doCustomerLogin($tvc_data) {
-      try {
-        $tvc_data = json_decode(base64_decode($tvc_data));
-        $url = $this->apiDomain . '/customers/login';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");
-        $data = [
-          'email' => $tvc_data->g_mail,
-          'access_token' => $this->access_token,
-          'refresh_token' => $this->refresh_token,
-          'sign_in_type' => $tvc_data->sign_in_type
-        ];
-        $curl_url = $url;
-        $data = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $curl_url, //esc_url($curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $data
-        ));
-        $response = curl_exec($ch);
-        return json_decode($response);
-      } catch (Exception $e) {
-        return $e->getMessage();
-      }
-    }//doCustomerLogin
-
     
-
     public function saveAnalyticsData($postData = array()) {
       try {
         $url = $this->apiDomain . '/customer-subscriptions/update-detail';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");
+        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
         $data = array(
-          'subscription_id' => (isset($postData['subscription_id']))?$postData['subscription_id'] : '',
-          'tracking_option' => (isset($postData['tracking_option']))?$postData['tracking_option'] : '',
-          'measurement_id' => (isset($postData['web_measurement_id']))?$postData['web_measurement_id'] : '',
-          'ga4_analytic_account_id' => (isset($postData['ga4_account_id']))?$postData['ga4_account_id'] : '',
-          'property_id' => (isset($postData['web_property_id'])) ? $postData['web_property_id'] : '',
-          'ua_analytic_account_id' => (isset($postData['ua_account_id'])) ? $postData['ua_account_id'] : '',
-          'enhanced_e_commerce_tracking' => (isset($postData['enhanced_e_commerce_tracking']) && $postData['enhanced_e_commerce_tracking'] == 'true') ? 1 : 0,
-          'user_time_tracking' => (isset($postData['user_time_tracking']) && $postData['user_time_tracking']=='true')?1:0,
-          'add_gtag_snippet' => (isset($postData['add_gtag_snippet']) && $postData['add_gtag_snippet'] == 'true')? 1:0,
-          'client_id_tracking' => (isset($postData['client_id_tracking']) && $postData['client_id_tracking']=='true')?1:0,
-          'exception_tracking' => (isset($postData['exception_tracking']) && $postData['exception_tracking']=='true')?1:0,
-          'enhanced_link_attribution_tracking' => (isset($postData['enhanced_link_attribution_tracking']) && $postData['enhanced_link_attribution_tracking'] == 'true')? 1 : 0
+          'subscription_id' => sanitize_text_field((isset($postData['subscription_id']))?$postData['subscription_id'] : ''),
+          'tracking_option' => sanitize_text_field((isset($postData['tracking_option']))?$postData['tracking_option'] : ''),
+          'measurement_id' => sanitize_text_field((isset($postData['web_measurement_id']))?$postData['web_measurement_id'] : ''),
+          'ga4_analytic_account_id' => sanitize_text_field((isset($postData['ga4_account_id']))?$postData['ga4_account_id'] : ''),
+          'property_id' => sanitize_text_field((isset($postData['web_property_id'])) ? $postData['web_property_id'] : ''),
+          'ua_analytic_account_id' => sanitize_text_field((isset($postData['ua_account_id'])) ? $postData['ua_account_id'] : ''),
+          'enhanced_e_commerce_tracking' => sanitize_text_field((isset($postData['enhanced_e_commerce_tracking']) && $postData['enhanced_e_commerce_tracking'] == 'true') ? 1 : 0),
+          'user_time_tracking' => sanitize_text_field((isset($postData['user_time_tracking']) && $postData['user_time_tracking']=='true')?1:0),
+          'add_gtag_snippet' => sanitize_text_field((isset($postData['add_gtag_snippet']) && $postData['add_gtag_snippet'] == 'true')? 1:0),
+          'client_id_tracking' => sanitize_text_field((isset($postData['client_id_tracking']) && $postData['client_id_tracking']=='true')?1:0),
+          'exception_tracking' => sanitize_text_field((isset($postData['exception_tracking']) && $postData['exception_tracking']=='true')?1:0),
+          'enhanced_link_attribution_tracking' => sanitize_text_field((isset($postData['enhanced_link_attribution_tracking']) && $postData['enhanced_link_attribution_tracking'] == 'true')? 1 : 0)
         );
-        $curl_url = $url;
-        $data = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $curl_url, //esc_url($curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $data
-        ));
-        $response = curl_exec($ch);
-        return json_decode($response);
+        $args = array(
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        $return = new \stdClass();
+        if($result->status == 200){
+          $return->status = $result->status;
+          $return->data = $result->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->data = $result->data;
+          $return->status = $result->status;
+          return $return;
+        }
       } catch (Exception $e) {
         return $e->getMessage();
       }
@@ -787,27 +819,34 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
     public function saveGoogleAdsData($postData = array()){
       try {
         $url = $this->apiDomain . '/customer-subscriptions/update-detail';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");
+        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
         $data = [
-            'subscription_id' => (isset($postData['subscription_id']))?$postData['subscription_id'] : '',
-            'google_ads_id' => (isset($postData['google_ads_id']))? $postData['google_ads_id'] : '',
-            'remarketing_tags' => (isset($postData['remarketing_tags']) && $postData['remarketing_tags'] == 'true') ? 1 : 0,
-            'dynamic_remarketing_tags' => (isset($postData['dynamic_remarketing_tags']) && $postData['dynamic_remarketing_tags'] == 'true') ? 1 : 0,
-            'google_ads_conversion_tracking' => (isset($postData['google_ads_conversion_tracking']) && $postData['google_ads_conversion_tracking'] == 'true') ? 1 : 0,
-            'link_google_analytics_with_google_ads' => (isset($postData['link_google_analytics_with_google_ads']) && $postData['link_google_analytics_with_google_ads'] == 'true') ? 1 : 0
+            'subscription_id' => sanitize_text_field((isset($postData['subscription_id']))?$postData['subscription_id'] : ''),
+            'google_ads_id' => sanitize_text_field((isset($postData['google_ads_id']))? $postData['google_ads_id'] : ''),
+            'remarketing_tags' => sanitize_text_field((isset($postData['remarketing_tags']) && $postData['remarketing_tags'] == 'true') ? 1 : 0),
+            'dynamic_remarketing_tags' => sanitize_text_field((isset($postData['dynamic_remarketing_tags']) && $postData['dynamic_remarketing_tags'] == 'true') ? 1 : 0),
+            'google_ads_conversion_tracking' => sanitize_text_field((isset($postData['google_ads_conversion_tracking']) && $postData['google_ads_conversion_tracking'] == 'true') ? 1 : 0),
+            'link_google_analytics_with_google_ads' => sanitize_text_field((isset($postData['link_google_analytics_with_google_ads']) && $postData['link_google_analytics_with_google_ads'] == 'true') ? 1 : 0)
         ];
-        $curl_url = $url;
-        $data = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-          CURLOPT_URL => $curl_url, //esc_url($curl_url),
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_HTTPHEADER => $header,
-          CURLOPT_POSTFIELDS => $data
-        ));
-        $response = curl_exec($ch);
-        return json_decode($response);
+        $args = array(
+          'timeout' => 10000,
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        $return = new \stdClass();
+        if($result->status == 200){
+          $return->status = $result->status;
+          $return->data = $result->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->data = $result->data;
+          $return->status = $result->status;
+          return $return;
+        }
       } catch (Exception $e) {
         return $e->getMessage();
       }
@@ -816,26 +855,32 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
     public function saveMechantData($postData = array()) {
       try {
         $url = $this->apiDomain . '/customer-subscriptions/update-detail';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");
+        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
         $data = [
-          'merchant_id' => ($postData['merchant_id'] == 'NewMerchant') ? $this->merchantId: $postData['merchant_id'],
-          'subscription_id' => (isset($postData['subscription_id']))?$postData['subscription_id'] : '',
-          'google_merchant_center_id' => (isset($postData['google_merchant_center']))? $postData['google_merchant_center'] : '',
-          'website_url' => $postData['website_url'],
-          'customer_id' => $postData['customer_id']
+          'merchant_id' => sanitize_text_field(($postData['merchant_id'] == 'NewMerchant') ? $this->merchantId: $postData['merchant_id']),
+          'subscription_id' => sanitize_text_field((isset($postData['subscription_id']))?$postData['subscription_id'] : ''),
+          'google_merchant_center_id' => sanitize_text_field((isset($postData['google_merchant_center']))? $postData['google_merchant_center'] : ''),
+          'website_url' => sanitize_text_field($postData['website_url']),
+          'customer_id' => sanitize_text_field($postData['customer_id'])
         ];
-        $curl_url = $url;
-        $postData = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $curl_url, //esc_url($curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $postData
-        ));
-        $response = curl_exec($ch);
-        return json_decode($response);
+        $args = array(
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        $return = new \stdClass();
+        if($result->status == 200){
+          $return->status = $result->status;
+          $return->data = $result->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->data = $result->data;
+          $return->status = $result->status;
+          return $return;
+        }
       } catch (Exception $e) {
         return $e->getMessage();
       }
@@ -844,37 +889,57 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
     public function linkAnalyticToAdsAccount($postData) {
       try {
         $url = $this->apiDomain . '/google-analytics/link-ads-to-analytics';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json", "AccessToken:$this->access_token", "RefreshToken:$this->refresh_token");
+        $access_token = sanitize_text_field(base64_decode($this->access_token));
+        $refresh_token = sanitize_text_field(base64_decode($this->refresh_token));
         if ($postData['type'] == "UA") {
           $data = [
-            'type' => $postData['type'],
-            'ads_customer_id' => $postData['ads_customer_id'], //'7894072776', //$postData['ads_customer_id']
-            'analytics_id' => $postData['analytics_id'], //'184918792', //$postData['analytics_id']
-            'web_property_id' => $postData['web_property_id'], //'UA-184918792-2', //$postData['web_property_id']
-            'profile_id' => $postData['profile_id'], //'234239637', //$postData['profile_id']
+            'type' => sanitize_text_field($postData['type']),
+            'ads_customer_id' => sanitize_text_field($postData['ads_customer_id']), 
+            'analytics_id' => sanitize_text_field($postData['analytics_id']), 
+            'web_property_id' => sanitize_text_field($postData['web_property_id']), 
+            'profile_id' => sanitize_text_field($postData['profile_id']),
           ];
         } else {
           $data = [
-            'type' => $postData['type'],
-            'ads_customer_id' => $postData['ads_customer_id'], //'7894072776', //$postData['ads_customer_id']
-            'analytics_id' => '', //$postData['analytics_id']
-            'web_property_id' => $postData['web_property_id'], //'properties/257833054', //$postData['web_property_id']
-            'profile_id' => '', //$postData['profile_id']
-            'web_property' => $postData['web_property'], //'234239637', //$postData['profile_id']
+            'type' => sanitize_text_field($postData['type']),
+            'ads_customer_id' => sanitize_text_field($postData['ads_customer_id']), 
+            'analytics_id' => '', 
+            'web_property_id' => sanitize_text_field($postData['web_property_id']), 
+            'profile_id' => '', 
+            'web_property' => sanitize_text_field($postData['web_property']),
           ];
         }
-        $curl_url = $url;
-        $data = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $curl_url, //esc_url($curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $data
-        ));
-        $response = curl_exec($ch);
-        return json_decode($response);
+        
+        $args = array(
+          'timeout' => 10000,
+          'headers' => array(
+              'Authorization' => "Bearer $this->token",
+              'Content-Type' => 'application/json',
+              'AccessToken' => $access_token,
+              'RefreshToken' => $refresh_token
+          ),
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $request = wp_remote_post(esc_url_raw($url), $args);
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $result = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        if($response_code == 200 && isset($result->error) && $result->error == ''){
+          $return->status = $response_code;
+          $return->data = $result->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->errors = $result->errors;
+          //$return->data = $result->data;
+          $return->status = $response_code;
+          return $return;
+        }
       } catch (Exception $e) {
           return $e->getMessage();
       }
@@ -882,24 +947,44 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
     public function linkGoogleAdsToMerchantCenter($postData) {
       try {
         $url = $this->apiDomain . '/adwords/link-ads-to-merchant-center';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json", "AccessToken:$this->access_token");
+        $access_token = sanitize_text_field(base64_decode($this->access_token));
         $data = [
-          'merchant_id' => ($postData['merchant_id'] == 'NewMerchant') ? $this->merchantId: $postData['merchant_id'],
-          'account_id' => $postData['account_id'],
-          'adwords_id' => $postData['adwords_id']
+          'merchant_id' => sanitize_text_field(($postData['merchant_id']) == 'NewMerchant' ?  $this->merchantId: $postData['merchant_id']),
+          'account_id' => sanitize_text_field($postData['account_id']),
+          'adwords_id' => sanitize_text_field($postData['adwords_id'])
         ];
-        $curl_url = $url;
-        $data = json_encode($data);        
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $curl_url, //esc_url($curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $data
-        ));
-        $response = curl_exec($ch);
-        return json_decode($response);
+        $args = array(
+          'timeout' => 10000,
+            'headers' => array(
+                'Authorization' => "Bearer $this->token",
+                'Content-Type' => 'application/json',
+                'AccessToken' => $access_token
+            ),
+            'method' => 'POST',
+            'body' => wp_json_encode($data)
+        );
+
+        // Send remote request
+        $request = wp_remote_post(esc_url_raw($url), $args);
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $result = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        if($response_code == 200){
+          $return->status = $response_code;
+          $return->data = $result->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->errors = $result->errors;
+          //$return->data = $result->data;
+          $return->status = $response_code;
+          return $return;
+        }
+        
       } catch (Exception $e) {
         return $e->getMessage();
       }
@@ -907,67 +992,95 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
     public function updateSetupTimeToSubscription($postData) {
       try {
         $url = $this->apiDomain . '/customer-subscriptions/update-setup-time';
-        $this->header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");
         $data = [
-          'subscription_id' => (isset($postData['subscription_id']))?$postData['subscription_id'] : '',
+          'subscription_id' => sanitize_text_field((isset($postData['subscription_id']))?$postData['subscription_id'] : ''),
           'setup_end_time' => date('Y-m-d H:i:s')
         ];
-        $this->curl_url = $url;
-        $data = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $this->curl_url, //esc_url($this->curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $this->header,
-            CURLOPT_POSTFIELDS => $data
-        ));
-        $this->response = curl_exec($ch);
-        $this->response = json_decode($this->response);
-        return $this->response;
+        $args = array(
+            'timeout' => 10000,
+            'headers' => array(
+                'Authorization' => "Bearer $this->token",
+                'Content-Type' => 'application/json'
+            ),
+            'method' => 'POST',
+            'body' => wp_json_encode($data)
+        );
+
+        // Send remote request
+        $request = wp_remote_post(esc_url_raw($url), $args);
+
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $result = json_decode(wp_remote_retrieve_body($request));
+        $return = new \stdClass();
+        if($response_code == 200){
+          $return->status = $response_code;
+          $return->data = $result->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->errors = $result->errors;
+          //$return->data = $result->data;
+          $return->status = $response_code;
+          return $return;
+        }
+        
       } catch (Exception $e) {
-          return $e->getMessage();
+        return $e->getMessage();
       }
     }
 
-    public function getConversionList($data) {
+    public function getConversionList($postData) {
       try {
+        if(!empty($postData)){
+          foreach ($postData as $key => $value) {
+            $postData[$key] = sanitize_text_field($value); 
+          }
+        }
         $url = $this->apiDomain . '/google-ads/conversion-list';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");        
-        $curl_url = $url;
-        $postData = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $curl_url, //esc_url($curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $postData
-        ));
-        $response = curl_exec($ch);
-        $response = json_decode($response);
+        $header = array(
+            "Authorization: Bearer MTIzNA==",
+            "Content-Type" => "application/json"
+        );
+        $args = array(
+          'timeout' => 10000,
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($postData)
+        );
+        $request = wp_remote_post(esc_url_raw($url), $args);
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response = json_decode(wp_remote_retrieve_body($request));
+
         $return = new \stdClass();
-        
-        if(isset($response->data) && count($response->data) > 0){  
+        if ((isset($response->error) && $response->error == '')) {
+          $return->status = $response_code;
+          $return->data =$response->data;
           $return->error = false;
-          $return->message = "Google Ads conversion tracking setting success.";      
-        }else{
-          if(isset($response->error) && $response->error == false){
-            $response = $this->createConversion($data); 
+          if(isset($response->data) && count($response->data) > 0){
+            $return->message = esc_html__("Google Ads conversion tracking setting success.","conversios");
+          }else{
+             $response = $this->createConversion($postData); 
             if(isset($response->error) && $response->error == false){         
               $return->error = false;
-              $return->message = $response->message; 
+              $return->message = esc_html__("Google Ads conversion tracking setting success.","conversios"); 
             }else{
              $return->error = true;
              $errors = json_decode($response->errors[0]);
-            $return->errors = $errors->message;
+             $return->errors = $errors->message;
             }
-          }else{
-            $return->error = true;
-            $return->errors = $response->errors[0]; 
-          }
+          }  
+          return $return;
+        }else{
+          $return->error = true;
+          $return->errors = $response->errors[0];
+          //$return->data = $result->data;
+          $return->status = $response_code;
+          return $return;
         }
-        return $return;
       } catch (Exception $e) {
         return $e->getMessage();
       }
@@ -976,38 +1089,40 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
     public function createConversion($postData) {
       try {
         $url = $this->apiDomain . '/google-ads/create-conversion';
-        $header = array("Authorization: Bearer MTIzNA==", "content-type: application/json");
+        $header = array("Authorization: Bearer MTIzNA==", "Content-Type" => "application/json");
         $data = [
-          'customer_id' => (isset($postData['customer_id']))?$postData['customer_id'] : '',
+          'customer_id' => sanitize_text_field((isset($postData['customer_id']))?$postData['customer_id'] : ''),
           'name' => "Order Conversion"
         ];
-        $curl_url = $url;
-        $postData = json_encode($data);
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $curl_url, //esc_url($curl_url),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $postData
-        ));
-        $response = curl_exec($ch);
-        $response = json_decode($response);                
-        return $response;
+        $args = array(
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($data)
+        );
+        $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
+        $return = new \stdClass();
+        if($result->status == 200){
+          $return->status = $result->status;
+          $return->data = $result->data;
+          $return->error = false;
+          return $return;
+        }else{
+          $return->error = true;
+          $return->data = $result->data;
+          $return->status = $result->status;
+          return $return;
+        }
       } catch (Exception $e) {
         return $e->getMessage();
       }
     }
     public function generateAccessToken($access_token, $refresh_token) {
-      $request = "https://www.googleapis.com/oauth2/v1/tokeninfo?"
-              . "access_token=" . $access_token;
+      $url = "https://www.googleapis.com/oauth2/v1/tokeninfo?=" . $access_token;
+      $request =  wp_remote_get(esc_url_raw($url), array( "access_token" => $access_token, 'timeout' => 10000 ));
+      $response_code = wp_remote_retrieve_response_code($request);
 
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $request);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-      $response = curl_exec($ch);
-      $result = json_decode($response);
+      $response_message = wp_remote_retrieve_response_message($request);
+      $result = json_decode(wp_remote_retrieve_body($request));
       
       if (isset($result->error) && $result->error) {
           $credentials = json_decode(file_get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
@@ -1018,23 +1133,26 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
           
           $data = [
               "grant_type" => 'refresh_token',
-              "client_id" => $clientId,
-              'client_secret' => $clientSecret,
-              'refresh_token' => $refresh_token,
+              "client_id" => sanitize_text_field($clientId),
+              'client_secret' => sanitize_text_field($clientSecret),
+              'refresh_token' => sanitize_text_field($refresh_token),
           ];
-
-          $postData = json_encode($data);
-          $ch = curl_init();
-          curl_setopt_array($ch, array(
-              CURLOPT_URL => $url, //esc_url($curl_url),
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_TIMEOUT => 0,
-              CURLOPT_HTTPHEADER => $header,
-              CURLOPT_POSTFIELDS => $postData
-          ));
-          $response = curl_exec($ch);
-          $response = json_decode($response);
-          return $response->access_token;
+          $args = array(
+            'timeout' => 10000,
+            'headers' =>$header,
+            'method' => 'POST',
+            'body' => $data
+          );
+          $request = wp_remote_post(esc_url_raw($url), $args);
+          // Retrieve information
+          $response_code = wp_remote_retrieve_response_code($request);
+          $response_message = wp_remote_retrieve_response_message($request);
+          $response = json_decode(wp_remote_retrieve_body($request));
+          if(isset($response->access_token)){
+              return $response->access_token; 
+          }else{
+              //return $access_token;
+          }
       } else {
         return $access_token;
       }

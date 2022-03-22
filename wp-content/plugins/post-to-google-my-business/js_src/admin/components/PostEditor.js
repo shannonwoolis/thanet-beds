@@ -7,21 +7,28 @@ import * as $ from 'jquery';
 import "jquery-ui-timepicker-addon";
 import "jquery-ui-timepicker-addon/src/jquery-ui-timepicker-addon.css";
 
-let PostEditor = function(ajax, ajax_prefix, default_fields){
+let PostEditor = function(ajax, ajax_prefix, default_fields, nonce){
     let ajaxEnabled = ajax || false;
     const postEditorInstance = this;
-    const postTextField = $('#post_text');
+    const counterFields = $('.pgmb-field-with-counter');
 
     const postFormContainer = $(".mbp-post-form-container");
 
     let fieldPrefix = "mbp_form_fields";
 
     this.mediaUploader = new MediaUploader($('.mediaupload_selector'));
+    if(!ajaxEnabled){
+        let staticImage = $('.mbp-post-attachment');
+        if(staticImage.val()){
+            this.mediaUploader.loadItem($('.mbp-attachment-type').val(), staticImage.val(),staticImage.val());
+        }
+    }
 
     new BusinessSelector($('.mbp-business-selector-container'), ajax_prefix);
 
 
     this.setFieldPrefix = function(prefix){
+        this.mediaUploader.setFieldName(prefix);
         fieldPrefix = prefix;
     };
 
@@ -33,7 +40,8 @@ let PostEditor = function(ajax, ajax_prefix, default_fields){
         eventEndDate,
         {
             showOn: "button",
-            buttonText: "<span class=\"dashicons dashicons-calendar-alt\"></span>",
+            //buttonImageOnly: true,
+            buttonText: "",
             minInterval: (1000*60*60), // 1hr
             dateFormat : 'yy-mm-dd',
             timeFormat: 'HH:mm',
@@ -53,7 +61,7 @@ let PostEditor = function(ajax, ajax_prefix, default_fields){
         }
         const data = {
             'action': ajax_prefix + '_check_date',
-            'mbp_post_nonce': mbp_localize_script.post_nonce,
+            'mbp_post_nonce': nonce,
             'timestring': $(this).val()
         };
         $.post(ajaxurl, data, function (response) {
@@ -75,8 +83,8 @@ let PostEditor = function(ajax, ajax_prefix, default_fields){
     this.switch_tab = function(clicked){
         $('.nav-tab', postFormContainer).removeClass("nav-tab-active");
         $(clicked).addClass("nav-tab-active");
-        $('.mbp-fields tr').not('.mbp-button-settings').hide(); //Spaghetti
-        $('.mbp-fields tr.' + $(clicked).data('fields')).not('.mbp-button-settings').show();
+        $('.mbp-fields > tbody > tr').hide();
+        $('.mbp-fields > tbody > tr.' + $(clicked).data('fields')).show();
         $('input.mbp-topic-type').val($(clicked).data("topic"));
 
     };
@@ -114,19 +122,19 @@ let PostEditor = function(ajax, ajax_prefix, default_fields){
     /**
      * Trigger change on the post text field when it is changed externally, to update the character counter
      */
-    postTextField.change(function () {
+    counterFields.change(function () {
         $(this).trigger("keyup");
     });
 
     /**
      * Update text and word counter for the text field
      */
-    postTextField.keyup(function () {
-        let counter = $('.mbp-character-count');
+    counterFields.keyup(function () {
+        let counter = $(this).parents('tr').find('.mbp-character-count');
         let count = $(this).val().length;
         let words = $(this).val().split(' ').length - 1;
         counter.text(count);
-        if(count > 1500){
+        if(count > $(this).data('maxchars')){
             counter.css('color', 'red');
         }else{
             counter.css('color', 'inherit');
@@ -169,6 +177,34 @@ let PostEditor = function(ajax, ajax_prefix, default_fields){
 
     });
 
+    this.recurseMultiDimensionalFields = function(name, value, depth){
+        if(!depth){ depth = '[' + name + ']'; }
+        if ($.isArray(value) || $.isPlainObject(value)) {
+
+            $.each(value, function (key, checkboxVal) {
+                let newDepth = '';
+                if($.isArray(value)){
+                    newDepth = depth + '[]';
+                }else{
+                    newDepth = depth + '[' + key + ']';
+                }
+                postEditorInstance.recurseMultiDimensionalFields(key, checkboxVal, newDepth);
+            });
+            return;
+        }
+
+        if(value === "1" || value === "on"){
+            value = true;
+        }
+        if(typeof value === 'boolean'){
+            $('[name="' + fieldPrefix + depth + '"]').prop('checked', value);
+        }else{
+            $('[name^="' + fieldPrefix + depth + '"][value="' + value + '"]').prop('checked', true);
+            //console.log('[name="' + fieldPrefix + depth + '"][value="' + value + '"]');
+        }
+
+    }
+
     /**
      * Repopulate the form fields from data object
      *
@@ -176,26 +212,36 @@ let PostEditor = function(ajax, ajax_prefix, default_fields){
      */
     this.loadFormFields = function(form_fields){
         $.each(form_fields, function(name, value){
-            let field = $('[name="' + fieldPrefix + '[' + name + ']"], [name="' + fieldPrefix + '[' + name + '][]"]');
+            //let field = $('[name="' + fieldPrefix + '[' + name + ']"], [name="' + fieldPrefix + '[' + name + '][]"]');
+            let field = $('[name^="' + fieldPrefix + '[' + name + ']"]');
 
             if(field.is(':checkbox') || field.is(':radio')) {
+                //console.log(name);
+                //console.log(value);
                 //Uncheck everything first
                 field.prop('checked', false);
 
-                if ($.isArray(value)) {
-                    $.each(value, function (key, checkboxVal) {
-                        $('[name="' + fieldPrefix + '[' + name + '][]"][value="' + checkboxVal + '"]').prop('checked', true);
-                    });
-                } else {
-                    if(value === "1" || value === "on"){
-                        value = true;
-                    }
-                    if(typeof value === 'boolean'){
-                        $('[name="' + fieldPrefix + '[' + name + ']"]').prop('checked', value);
-                    }else{
-                        $('[name="' + fieldPrefix + '[' + name + ']"][value="' + value + '"]').prop('checked', true);
-                    }
-                }
+                postEditorInstance.recurseMultiDimensionalFields(name, value);
+                // if ($.isArray(value)) {
+                //     $.each(value, function (key, checkboxVal) {
+                //         $('[name="' + fieldPrefix + '[' + name + '][]"][value="' + checkboxVal + '"]').prop('checked', true);
+                //     });
+                // }else if($.isPlainObject(value)){
+                //     $.each(value, function (key, checkboxVal) {
+                //         if ($.isArray(checkboxVal)) {
+                //             $('[name^="' + fieldPrefix + '[' + name + '][' + key + ']"][value="' + checkboxVal + '"]').prop('checked', true);
+                //         }
+                //     });
+                // } else {
+                //     if(value === "1" || value === "on"){
+                //         value = true;
+                //     }
+                //     if(typeof value === 'boolean'){
+                //         $('[name="' + fieldPrefix + '[' + name + ']"]').prop('checked', value);
+                //     }else{
+                //         $('[name="' + fieldPrefix + '[' + name + ']"][value="' + value + '"]').prop('checked', true);
+                //     }
+                // }
 
             }else{
                 field.val(value);
@@ -228,7 +274,7 @@ let PostEditor = function(ajax, ajax_prefix, default_fields){
         $('.mbp-validate-date').trigger("change");
         $('#mbp_button').trigger("change");
         $('.mbp-button-type').trigger("change");
-        $(postTextField).trigger("keyup");
+        $(counterFields).trigger("keyup");
 
         //Switch to the appropriate tab
         let topicType = $("input.mbp-topic-type").val();

@@ -719,7 +719,10 @@
 
 			$language_negotiation_type = apply_filters('wpml_setting', false, 'language_negotiation_type');
 			if(($language_negotiation_type == 2) && $this->isPluginActive('sitepress-multilingual-cms/sitepress.php')){
-				$cache_path = '/cache/all/%{HTTP_HOST}/';
+				$cache_path = '/cache/%{HTTP_HOST}/all/';
+				$disable_condition = true;
+			}else if($this->isPluginActive('polylang/polylang.php')){
+				$cache_path = '/cache/%{HTTP_HOST}/all/';
 				$disable_condition = true;
 			}else{
 				$cache_path = '/cache/all/';
@@ -1695,7 +1698,8 @@
 							    				</button>
 						    				<?php }else{ ?>
 
-						    					<?php if(is_multisite()){ ?>
+						    					<?php //if(is_multisite()){ ?>
+						    					<?php if(false){ ?>
 						    						<button id="wpfc-buy-premium-button" type="submit" class="wpfc-btn primaryCta" style="width:200px;background-color:red;border-color:red;">
 						    							<span>Not Available<br>for<br>Multi-Site</span>
 						    						</button>

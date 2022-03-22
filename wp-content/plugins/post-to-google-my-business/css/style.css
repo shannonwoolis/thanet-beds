@@ -9,6 +9,17 @@
 	height:200px;
 	overflow-y:scroll;
 	padding:10px;
+
+}
+.mbp-business-selector .mbp-checkbox-container{
+	white-space: nowrap;
+}
+
+.mbp-business-selector .mbp-info-container{
+	width:100%;
+}
+.mbp-business-selector table {
+	width:100%;
 }
 
 .mbp-business-item.mbp-business-disabled {
@@ -223,4 +234,30 @@
 .pgmb-new-feature h3{
 	text-align: center;
 	height:2.6em;
+}
+
+.mbp-thickbox-inner ul, .mbp-settings ul{
+	list-style: disc;
+	padding-left:20px;
+}
+
+#mbp-set-cookies-dialog-container table{
+	width:100%;
+}
+
+
+#mbp-set-cookies-dialog-container input{
+	width:100%;
+}
+
+
+.mbp-fields td.pgmb-editor-action-buttons {
+	padding:0;
+}
+
+/* 5.9 fix for button */
+.mbp-fields .ui-datepicker-trigger:before{
+	content: "\f508";
+	font-family: 'Dashicons';
+	font-size:14px;
 }

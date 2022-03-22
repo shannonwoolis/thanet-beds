@@ -1,0 +1,74 @@
+<?php
+
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Extension\SandboxExtension;
+use Twig\Markup;
+use Twig\Sandbox\SecurityError;
+use Twig\Sandbox\SecurityNotAllowedTagError;
+use Twig\Sandbox\SecurityNotAllowedFilterError;
+use Twig\Sandbox\SecurityNotAllowedFunctionError;
+use Twig\Source;
+use Twig\Template;
+
+/* admin/partials/header.twig */
+class __TwigTemplate_66ad7b8665d89b266d267da465800f5c221495bcd9d786d6fca8880e59ae7c59 extends \Twig\Template
+{
+    private $source;
+    private $macros = [];
+
+    public function __construct(Environment $env)
+    {
+        parent::__construct($env);
+
+        $this->source = $this->getSourceContext();
+
+        $this->parent = false;
+
+        $this->blocks = [
+        ];
+    }
+
+    protected function doDisplay(array $context, array $blocks = [])
+    {
+        $macros = $this->macros;
+        // line 1
+        echo "<div class=\"wrap\" id=\"adtrak-advanced-ld\">
+
+
+\t";
+        // line 4
+        if ( !twig_test_empty(($context["notice"] ?? null))) {
+            echo "<div class=\"af-notice ";
+            if ((twig_get_attribute($this->env, $this->source, ($context["notice"] ?? null), "type", [], "any", false, false, false, 4) == "error")) {
+                echo "notice-error";
+            } else {
+                echo "notice-success";
+            }
+            echo " notice is-dismissable\">";
+            echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["notice"] ?? null), "message", [], "any", false, false, false, 4), "html", null, true);
+            echo "</div>";
+        }
+    }
+
+    public function getTemplateName()
+    {
+        return "admin/partials/header.twig";
+    }
+
+    public function isTraitable()
+    {
+        return false;
+    }
+
+    public function getDebugInfo()
+    {
+        return array (  42 => 4,  37 => 1,);
+    }
+
+    public function getSourceContext()
+    {
+        return new Source("", "admin/partials/header.twig", "/Users/shannonwoolis/Sites/thanet-bedz/wp-content/plugins/advanced-location-dynamics/resources/views/admin/partials/header.twig");
+    }
+}

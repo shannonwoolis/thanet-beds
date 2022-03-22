@@ -31,7 +31,7 @@ if ( ! class_exists( 'Tatvic_Category_Wrapper' ) ) :
 			if (!class_exists('Tatvic_Category_Selector_Element')) {
             	require_once(__DIR__ . '/class-tatvic-category-selector-element.php');
         	}
-        	$ee_prod_mapped_cats = unserialize(get_option('ee_prod_mapped_cats'));
+      $ee_prod_mapped_cats = unserialize(get_option('ee_prod_mapped_cats'));
 			//$ee_prod_mapped_attrs = unserialize(get_option('ee_prod_mapped_attrs'));
 
 			$TCSE_Obj = new Tatvic_Category_Selector_Element();
@@ -54,7 +54,7 @@ if ( ! class_exists( 'Tatvic_Category_Wrapper' ) ) :
 					}
 				}
 			} else {
-				$html_code .= esc_html__( 'No shop categories found.', 'tvc-product-feed-manager' );
+				$html_code .= esc_html__( 'No shop categories found.', 'conversios' );
 			}
 			return $html_code;
 		}
@@ -76,5 +76,4 @@ if ( ! class_exists( 'Tatvic_Category_Wrapper' ) ) :
 			return $array_string;
 		}
 	}
-
 endif;

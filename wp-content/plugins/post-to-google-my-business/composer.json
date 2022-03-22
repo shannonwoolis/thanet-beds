@@ -18,7 +18,10 @@
         "dragonmantank/cron-expression": "1.2",
         "ext-mbstring": "*",
         "ext-json": "*",
-        "typisttech/imposter-plugin": "^0.6.0"
+        "firebase/php-jwt": "^5.2",
+        "typisttech/wp-admin-notices": "^0.3.0",
+        "typisttech/imposter-plugin": "^0.6.2",
+      "ext-gd": "*"
     },
     "extra": {
         "imposter": {
@@ -26,5 +29,7 @@
             "excludes": [
             ]
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

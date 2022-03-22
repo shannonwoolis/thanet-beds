@@ -4,20 +4,29 @@
 namespace PGMB\Upgrader;
 
 use InvalidArgumentException;
-use PGMB\BackgroundProcessing\BackgroundProcess;
+use PGMB\EventManagement\SubscriberInterface;
 
-class Upgrader extends \WP_Background_Process implements BackgroundProcess {
+
+class Upgrader implements SubscriberInterface {
+
 	private $database_version;
 	private $plugin_version;
 
-	protected $action = 'mbp_upgrade_process';
+
+	protected $plugin_prefix;
 
 
+	protected $available_upgrades;
+	/**
+	 * @var UpgradeBackgroundProcess
+	 */
+	private $upgrade_process;
 
-	protected $available_upgrades = [
-		'2.2.3',
-		'2.2.11'
-	];
+	public static function get_subscribed_hooks() {
+		return [
+			'init'  => 'run_for_required_updates'
+		];
+	}
 
 	/**
 	 * @param $version PHP-standardized version number
@@ -31,71 +40,77 @@ class Upgrader extends \WP_Background_Process implements BackgroundProcess {
 		return false;
 	}
 
-	public function __construct($database_version, $plugin_version) {
-		parent::__construct();
-		if( !$this->validate_version_number($database_version) || !$this->validate_version_number($plugin_version)){
+	public function get_database_version(){
+		return get_option($this->plugin_prefix.'_version');
+	}
+
+	public function __construct(UpgradeBackgroundProcess $upgrade_process, $plugin_version, $plugin_prefix, $available_upgrades) {
+
+		$this->plugin_prefix = $plugin_prefix;
+
+		$this->plugin_version   = $plugin_version;
+		$this->database_version = $this->get_database_version();
+		//If there is no version saved into the database, there is nothing to upgrade (fresh install)
+		if(!$this->database_version){
+			update_option( $this->plugin_prefix . '_version', $this->plugin_version);
+			return;
+		}
+
+
+		if(!$this->validate_version_number($this->database_version) || !$this->validate_version_number($this->plugin_version)){
 			throw new InvalidArgumentException("Invalid version number(s) supplied to Upgrader constructor");
 		}
-		$this->database_version = $database_version;
-		$this->plugin_version   = $plugin_version;
+
+		$this->available_upgrades = $available_upgrades;
+		$this->upgrade_process = $upgrade_process;
 	}
 
-	public function init(){
-		if(version_compare($this->plugin_version, $this->database_version, '==')){ return; } //If the latest version is already installed
+	public function is_upgrade_running(){
+		return get_option( $this->plugin_prefix . '_upgrade_running');
+	}
 
-		$upgrade_running = get_option('mbp_upgrade_running');
+	protected function set_upgrade_running(){
+		update_option( $this->plugin_prefix . '_upgrade_running', time());
+	}
+
+	public function stop_upgrade_running(){
+		delete_option( $this->plugin_prefix . '_upgrade_running');
+	}
+
+	public function run_for_required_updates(){
+		if(!$this->database_version || version_compare($this->plugin_version, $this->database_version, '==')){ return; } //If the latest version is already installed
+
 //
-		if($upgrade_running){ return; }
+		if($this->is_upgrade_running()){ return; }
 
-		update_option('mbp_upgrade_running', true);
-		foreach($this->get_required_upgrades() as $required_upgrade){
-			$upgrade = $this->get_upgrade_instance($required_upgrade);
-			if($upgrade){
-				$upgrade->run();
+		$this->set_upgrade_running();
+
+		$distributed_upgrades = false;
+
+		foreach($this->get_required_upgrades() as $upgrade){
+			$upgrade_instance = $upgrade();
+			if(!$upgrade_instance instanceof Upgrade){ continue; }
+
+			if($upgrade_instance instanceof DistributedUpgrade){
+				$distributed_upgrades = true;
+				$upgrade_instance->set_background_process($this->upgrade_process);
 			}
+			$upgrade_instance->run();
+
 		}
-		update_option('mbp_version', $this->plugin_version);
-		delete_option('mbp_upgrade_running');
-	}
+		update_option( $this->plugin_prefix . '_version', $this->plugin_version);
 
-	/**
-	 * @param $version
-	 *
-	 * @return Upgrade | bool Upgrade instance or false
-	 */
-	protected function get_upgrade_instance($version){
-		$class_name = '\PGMB\Upgrader\Upgrade_'.str_replace('.', '_', $version);
-
-		if(!class_exists($class_name)){ return false; }
-
-		$upgrade = new $class_name($this);
-		if(!$upgrade instanceof Upgrade){ return false; }
-		return $upgrade;
+		$this->stop_upgrade_running();
 	}
 
 	protected function get_required_upgrades(){
 		$required_upgrades = [];
-		foreach($this->available_upgrades as $available_upgrade){
-			if(version_compare($this->database_version, $available_upgrade, '<')){
-				$required_upgrades[] = $available_upgrade;
+		foreach($this->available_upgrades as $upgrade_version => $upgrade){
+			if(version_compare($this->database_version, $upgrade_version, '<')){
+				$required_upgrades[$upgrade_version] = $upgrade;
 			}
 		}
 		return $required_upgrades;
 	}
 
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function task( $item ) {
-		if(!$upgrade = $this->get_upgrade_instance($item['version'])){ return false; }
-
-		return $upgrade->task($item);
-
-	}
-
-	protected function complete() {
-		parent::complete(); // TODO: Change the autogenerated stub
-
-	}
 }

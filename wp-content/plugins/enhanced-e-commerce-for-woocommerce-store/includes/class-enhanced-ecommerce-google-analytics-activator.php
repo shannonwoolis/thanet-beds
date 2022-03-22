@@ -32,7 +32,7 @@ class Enhanced_Ecommerce_Google_Analytics_Activator {
      */
     public static function activate() {    	
     	if (!is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
-           wp_die('Hey, It seems WooCommerce plugin is not active on your wp-admin. Enhanced ecommerce plugin can only be activated if you have active WooCommerce plugin in your wp-admin. <br><a href="' . admin_url( 'plugins.php' ) . '">&laquo; Return to Plugins</a>');
+           wp_die(wp_sprintf("%s <br><a href='" . esc_url_raw(admin_url( 'plugins.php' )) . "'>&laquo; %s</a>", esc_html__("Hey, It seems WooCommerce plugin is not active on your wp-admin. Conversios.io - Google Analytics and Google Shopping plugin can only be activated if you have active WooCommerce plugin in your wp-admin.","conversios"), esc_html__("Return to Plugins","conversios")));
         }
     }
 }

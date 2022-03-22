@@ -14,8 +14,8 @@ class ShoppingApi {
         //$queries = new TVC_Queries();
         $this->apiDomain = TVC_API_CALL_URL;
         $this->token = 'MTIzNA==';
-        $this->merchantId = $this->TVC_Admin_Helper->get_merchantId();
-        $this->customerId = $this->TVC_Admin_Helper->get_currentCustomerId();
+        $this->merchantId = sanitize_text_field($this->TVC_Admin_Helper->get_merchantId());
+        $this->customerId = sanitize_text_field($this->TVC_Admin_Helper->get_currentCustomerId());
     }
 
     public function getCampaigns() {
@@ -23,10 +23,11 @@ class ShoppingApi {
             $url = $this->apiDomain . '/campaigns/list';
 
             $data = [
-                'merchant_id' => $this->merchantId,
-                'customer_id' => $this->customerId
+                'merchant_id' => sanitize_text_field($this->merchantId),
+                'customer_id' => sanitize_text_field($this->customerId)
             ];
             $args = array(
+                'timeout' => 10000,
                 'headers' => array(
                     'Authorization' => "Bearer $this->token",
                     'Content-Type' => 'application/json'
@@ -35,7 +36,7 @@ class ShoppingApi {
             );
 
             // Send remote request
-            $request = wp_remote_post($url, $args);
+            $request = wp_remote_post(esc_url_raw($url), $args);
             // Retrieve information
             $response_code = wp_remote_retrieve_response_code($request);
             $response_message = wp_remote_retrieve_response_message($request);
@@ -46,7 +47,7 @@ class ShoppingApi {
                 return new WP_REST_Response(
                         array(
                     'status' => $response_code,
-                    'message' => $response_message,
+                    'message' => esc_attr($response_message),
                     'data' => $response_body->data
                         )
                 );
@@ -63,8 +64,8 @@ class ShoppingApi {
             $url = $this->apiDomain . '/products/categories';
 
             $data = [
-                'customer_id' => $this->customerId,
-                'country_code' => $country_code
+                'customer_id' => sanitize_text_field($this->customerId),
+                'country_code' => sanitize_text_field($country_code)
             ];
 
             $args = array(
@@ -76,7 +77,7 @@ class ShoppingApi {
             );
 
             // Send remote request
-            $request = wp_remote_post($url, $args);
+            $request = wp_remote_post(esc_url_raw($url), $args);
 
             // Retrieve information
             $response_code = wp_remote_retrieve_response_code($request);
@@ -88,7 +89,7 @@ class ShoppingApi {
                 return new WP_REST_Response(
                         array(
                     'status' => $response_code,
-                    'message' => $response_message,
+                    'message' => esc_attr($response_message),
                     'data' => $response_body->data
                         )
                 );
@@ -100,22 +101,22 @@ class ShoppingApi {
         }
     }
 
-    public function accountPerformance($date_range_type, $days = 0, $from_date = '', $to_date = '') {
+    public function accountPerformance( $from_date = '', $to_date = '') {
         try {
-            $days_diff = 0;
+           /* $days_diff = 0;
             if ($date_range_type == 2) {
                 $days_diff = strtotime($to_date) - strtotime($from_date);
                 $days_diff = abs(round($days_diff / 86400));
-            }
+            }*/
 
             $url = $this->apiDomain . '/reports/account-performance';
             $data = [
-                'customer_id' => $this->customerId,
-                'graph_type' => ($date_range_type == 2 && $days_diff > 31) ? 'month' : 'day',
-                'date_range_type' => $date_range_type,
-                'days' => $days,
-                'from_date' => $from_date,
-                'to_date' => $to_date
+                'customer_id' => sanitize_text_field($this->customerId),
+                /*'graph_type' => sanitize_text_field(($date_range_type == 2 && $days_diff > 31) ? 'month' : 'day'),
+                'date_range_type' => sanitize_text_field($date_range_type),
+                'days' => sanitize_text_field($days),*/
+                'from_date' => sanitize_text_field($from_date),
+                'to_date' => sanitize_text_field($to_date)
             ];
             $args = array(
                 'headers' => array(
@@ -128,7 +129,7 @@ class ShoppingApi {
 
 
             // Send remote request
-            $request = wp_remote_post($url, $args);
+            $request = wp_remote_post(esc_url_raw($url), $args);
 
             // Retrieve information
             $response_code = wp_remote_retrieve_response_code($request);
@@ -138,7 +139,7 @@ class ShoppingApi {
                 return new WP_REST_Response(
                         array(
                     'status' => $response_code,
-                    'message' => $response_message,
+                    'message' => esc_attr($response_message),
                     'data' => $response_body->data
                         )
                 );
@@ -150,77 +151,102 @@ class ShoppingApi {
         }
     }
 
-    public function accountPerformance_for_dashboard($date_range_type, $days = 0, $from_date = '', $to_date = '') {
+    public function accountPerformance_for_dashboard( $from_date = '', $to_date = '') {
         try {
-            $days_diff = 0;
+            /*$days_diff = 0;
             if ($date_range_type == 2) {
                 $days_diff = strtotime($to_date) - strtotime($from_date);
                 $days_diff = abs(round($days_diff / 86400));
-            }
-            $curl_url = $this->apiDomain . '/reports/account-performance';
+            }*/
+            $url = $this->apiDomain . '/reports/account-performance';
             $data = [
-                'customer_id' => $this->customerId,
-                'graph_type' => ($date_range_type == 2 && $days_diff > 61) ? 'month' : 'day',
-                'date_range_type' => $date_range_type,
-                'days' => $days,
-                'from_date' => $from_date,
-                'to_date' => $to_date
+                'customer_id' => sanitize_text_field($this->customerId),
+                /*'graph_type' => sanitize_text_field(($date_range_type == 2 && $days_diff > 61) ? 'month' : 'day'),
+                'date_range_type' => sanitize_text_field($date_range_type),
+                'days' => sanitize_text_field($days),*/
+                'from_date' => sanitize_text_field($from_date),
+                'to_date' => sanitize_text_field($to_date)
             ];
 
             $header = array(
                 "Authorization: Bearer $this->token",
-                "content-type: application/json"
+                "Content-Type" => "application/json"
             );
-            $postData = json_encode($data);
-            $ch = curl_init();
-            curl_setopt_array($ch, array(
-                CURLOPT_URL => esc_url($curl_url),
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 2000,
-                CURLOPT_HTTPHEADER => $header,
-                CURLOPT_POSTFIELDS => $postData
-            ));
-            $response = curl_exec($ch);
-            $response = json_decode($response);
-            $response->data->graph_type = $data['graph_type'];
-            return $response;
+            $args = array(
+              'headers' =>$header,
+              'method' => 'POST',
+              'body' => wp_json_encode($data)
+            );
+            // Send remote request
+            $request = wp_remote_post(esc_url_raw($url), $args);
+
+            // Retrieve information
+            $response_code = wp_remote_retrieve_response_code($request);
+            $response_message = wp_remote_retrieve_response_message($request);
+            $result = json_decode(wp_remote_retrieve_body($request));
+            $return = new \stdClass();
+            if ((isset($result->error) && $result->error == '')) {
+              $return->data = $result->data;
+              $return->data->graph_type = "day";
+              $return->error = false;
+              return $return;
+            }else{
+              $return->error = true;
+              $return->errors = $result->errors;
+              $return->status = $response_code;
+              return $return;
+            }
+            
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
     public function campaign_performance($date_range_type, $days = 0, $from_date = '', $to_date = '') {
         try {
-            $curl_url = $this->apiDomain . '/reports/campaign-performance';
+            $url = $this->apiDomain . '/reports/campaign-performance';
             $days_diff = 0;
             if ($date_range_type == 2) {
                 $days_diff = strtotime($to_date) - strtotime($from_date);
                 $days_diff = abs(round($days_diff / 86400));
             }
             $data = [
-                'customer_id' => $this->customerId,
-                'graph_type' => ($date_range_type == 2 && $days_diff > 61) ? 'month' : 'day',
-                'date_range_type' => $date_range_type,
-                'days' => $days,
-                'from_date' => $from_date,
-                'to_date' => $to_date
+                'customer_id' => sanitize_text_field($this->customerId),
+                'graph_type' => sanitize_text_field(($date_range_type == 2 && $days_diff > 61) ? 'month' : 'day'),
+                'date_range_type' => sanitize_text_field($date_range_type),
+                'days' => sanitize_text_field($days),
+                'from_date' => sanitize_text_field($from_date),
+                'to_date' => sanitize_text_field($to_date)
             ];
             $header = array(
                 "Authorization: Bearer $this->token",
-                "content-type: application/json"
+                "Content-Type" => "application/json"
             );
-            $postData = json_encode($data);
-            $ch = curl_init();
-            curl_setopt_array($ch, array(
-                CURLOPT_URL => esc_url($curl_url),
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 2000,
-                CURLOPT_HTTPHEADER => $header,
-                CURLOPT_POSTFIELDS => $postData
-            ));
-            $response = curl_exec($ch);
-            $response = json_decode($response);
-           // $response->data->graph_type = $data['graph_type'];
-            return $response;
+            $args = array(
+              'headers' =>$header,
+              'method' => 'POST',
+              'body' => wp_json_encode($data)
+            );
+            // Send remote request
+            $request = wp_remote_post(esc_url_raw($url), $args);
+
+            // Retrieve information
+            $response_code = wp_remote_retrieve_response_code($request);
+            $response_message = wp_remote_retrieve_response_message($request);
+            $result = json_decode(wp_remote_retrieve_body($request));
+            $return = new \stdClass();
+            if ((isset($result->error) && $result->error == '')) {
+              $return->data = $result->data;
+              //$return->data->graph_type = isset($data['graph_type'])?$data['graph_type']:"";
+              $return->error = false;
+              return $return;
+            }else{
+              $return->error = true;
+              $return->data = $result->data;
+              $return->errors = $result->errors;
+              $return->status = $response_code;
+              return $return;
+            }
+            
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -235,12 +261,12 @@ class ShoppingApi {
                 $days_diff = abs(round($days_diff / 86400));
             }
             $data = [
-                'customer_id' => $this->customerId,
-                'graph_type' => ($date_range_type == 2 && $days_diff > 31) ? 'month' : 'day',
-                'date_range_type' => $date_range_type,
-                'days' => $days,
-                'from_date' => $from_date,
-                'to_date' => $to_date
+                'customer_id' => sanitize_text_field($this->customerId),
+                'graph_type' => sanitize_text_field(($date_range_type == 2 && $days_diff > 31) ? 'month' : 'day'),
+                'date_range_type' => sanitize_text_field($date_range_type),
+                'days' => sanitize_text_field($days),
+                'from_date' => sanitize_text_field($from_date),
+                'to_date' => sanitize_text_field($to_date)
             ];
 
             $args = array(
@@ -252,18 +278,27 @@ class ShoppingApi {
             );
 
             // Send remote request
-            $request = wp_remote_post($url, $args);
+            $request = wp_remote_post(esc_url_raw($url), $args);
 
             // Retrieve information
             $response_code = wp_remote_retrieve_response_code($request);
             $response_message = wp_remote_retrieve_response_message($request);
             $response_body = json_decode(wp_remote_retrieve_body($request));
-
             if (!is_wp_error($request) && (isset($response_body->error) && $response_body->error == '')) {
+                // Change ordring base on status
+                $active_list = array(); $deactive_list = array();
+                foreach ($response_body->data as $key => $value) {
+                   if(isset($value->active) && $value->active == 1){
+                    $active_list[] = $value;
+                   }else{
+                    $deactive_list[] = $value;
+                   }
+                }
+                $response_body->data = array_merge($active_list, $deactive_list);
                 return new WP_REST_Response(
                         array(
                     'status' => $response_code,
-                    'message' => $response_message,
+                    'message' => esc_attr($response_message),
                     'data' => $response_body->data
                         )
                 );
@@ -275,41 +310,51 @@ class ShoppingApi {
         }
     }
 
-    public function productPerformance($campaign_id = '', $date_range_type='', $days = 0, $from_date = '', $to_date = '') {
+    public function productPerformance($campaign_id = '', $date_range_type='', $days = 30, $from_date = '', $to_date = '', $adGroupId = '') {
         try {
             $url = $this->apiDomain . '/reports/product-performance';
 
+            /*$data = [
+                'merchant_id' => sanitize_text_field($this->merchantId),
+                'customer_id' => sanitize_text_field($this->customerId),
+                'campaign_id' => sanitize_text_field($campaign_id),
+                'date_range_type' => sanitize_text_field($date_range_type),
+                'days' => sanitize_text_field($days),
+                'from_date' => sanitize_text_field($from_date),
+                'to_date' => sanitize_text_field($to_date)
+            ];*/
             $data = [
-                'merchant_id' => $this->merchantId,
-                'customer_id' => $this->customerId,
-                'campaign_id' => $campaign_id,
-                'date_range_type' => $date_range_type,
-                'days' => $days,
-                'from_date' => $from_date,
-                'to_date' => $to_date
+                'customer_id' => sanitize_text_field($this->customerId),
+                'campaign_id' => sanitize_text_field($campaign_id),
+                "adgroup_id" => sanitize_text_field($adGroupId),
+                'date_range_type' => sanitize_text_field($date_range_type),
+                'days' => sanitize_text_field($days),
+                'from_date' => sanitize_text_field($from_date),
+                'to_date' => sanitize_text_field($to_date)
             ];
 
             $args = array(
+                'timeout' => 10000,
                 'headers' => array(
                     'Authorization' => "Bearer $this->token",
                     'Content-Type' => 'application/json'
                 ),
                 'body' => wp_json_encode($data)
             );
-
+            
             // Send remote request
-            $request = wp_remote_post($url, $args);
+            $request = wp_remote_post(esc_url_raw($url), $args);
 
             // Retrieve information
             $response_code = wp_remote_retrieve_response_code($request);
             $response_message = wp_remote_retrieve_response_message($request);
             $response_body = json_decode(wp_remote_retrieve_body($request));
-
+            //print_r($response_body);
             if (!is_wp_error($request) && (isset($response_body->error) && $response_body->error == '')) {
                 return new WP_REST_Response(
                         array(
                     'status' => $response_code,
-                    'message' => $response_message,
+                    'message' => esc_attr($response_message),
                     'data' => $response_body->data
                         )
                 );
@@ -321,21 +366,23 @@ class ShoppingApi {
         }
     }
 
-    public function productPartitionPerformance($campaign_id = '', $date_range_type='', $days = 0, $from_date = '', $to_date = '') {
+    public function productPartitionPerformance($campaign_id = '', $date_range_type='', $days = 0, $from_date = '', $to_date = '', $adGroupId = '') {
         try {
             $url = $this->apiDomain . '/reports/product-partition-performance';
 
             $data = [
-                'merchant_id' => $this->merchantId,
-                'customer_id' => $this->customerId,
-                'campaign_id' => $campaign_id,
-                'date_range_type' => $date_range_type,
-                'days' => $days,
-                'from_date' => $from_date,
-                'to_date' => $to_date
+                //'merchant_id' => sanitize_text_field($this->merchantId),
+                'customer_id' => sanitize_text_field($this->customerId),
+                'campaign_id' => sanitize_text_field($campaign_id),
+                "adgroup_id" => sanitize_text_field($adGroupId),
+                'date_range_type' => sanitize_text_field($date_range_type),
+                'days' => sanitize_text_field($days),
+                'from_date' => sanitize_text_field($from_date),
+                'to_date' => sanitize_text_field($to_date)
             ];
 
             $args = array(
+                'timeout' => 10000,
                 'headers' => array(
                     'Authorization' => "Bearer $this->token",
                     'Content-Type' => 'application/json'
@@ -344,7 +391,7 @@ class ShoppingApi {
             );
 
             // Send remote request
-            $request = wp_remote_post($url, $args);
+            $request = wp_remote_post(esc_url_raw($url), $args);
 
             // Retrieve information
             $response_code = wp_remote_retrieve_response_code($request);
@@ -355,7 +402,7 @@ class ShoppingApi {
                 return new WP_REST_Response(
                         array(
                     'status' => $response_code,
-                    'message' => $response_message,
+                    'message' => esc_attr($response_message),
                     'data' => $response_body->data
                         )
                 );
@@ -372,9 +419,9 @@ class ShoppingApi {
             $url = $this->apiDomain . '/campaigns/detail';
 
             $data = [
-                'merchant_id' => $this->merchantId,
-                'customer_id' => $this->customerId,
-                'campaign_id' => $campaign_id
+                'merchant_id' => sanitize_text_field($this->merchantId),
+                'customer_id' => sanitize_text_field($this->customerId),
+                'campaign_id' => sanitize_text_field($campaign_id)
             ];
 
             $args = array(
@@ -387,7 +434,7 @@ class ShoppingApi {
 
             
             // Send remote request
-            $request = wp_remote_post($url, $args);
+            $request = wp_remote_post(esc_url_raw($url), $args);
             
 
             // Retrieve information
@@ -400,7 +447,7 @@ class ShoppingApi {
                 return new WP_REST_Response(
                         array(
                     'status' => $response_code,
-                    'message' => $response_message,
+                    'message' => esc_attr($response_message),
                     'data' => $response_body->data
                         )
                 );
@@ -415,34 +462,35 @@ class ShoppingApi {
         try {
             $header = array(
                 "Authorization: Bearer MTIzNA==",
-                "content-type: application/json"
+                "Content-Type" => "application/json"
             );
             $curl_url = $this->apiDomain . "/campaigns/create";  
             $data = [
-                'merchant_id' => $this->merchantId,
-                'customer_id' => $this->customerId,
-                'campaign_name' => $campaign_name,
-                'budget' => $budget,
-                'target_country' => $target_country,
-                'all_products' => $all_products,
+                'merchant_id' => sanitize_text_field($this->merchantId),
+                'customer_id' => sanitize_text_field($this->customerId),
+                'campaign_name' => sanitize_text_field($campaign_name),
+                'budget' => sanitize_text_field($budget),
+                'target_country' => sanitize_text_field($target_country),
+                'all_products' => sanitize_text_field($all_products),
                 'filter_by' => 'category',
-                'filter_data' => ["id" => $category_id, "level" => $category_level]
+                'filter_data' => ["id" => sanitize_text_field($category_id), "level" => sanitize_text_field($category_level)]
             ];          
-            $postData = json_encode($data);           
-            $ch = curl_init();
-            curl_setopt_array($ch, array(
-                CURLOPT_URL => esc_url($curl_url),
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 1000,
-                CURLOPT_HTTPHEADER => $header,
-                CURLOPT_POSTFIELDS => $postData
-            ));
-            $response = curl_exec($ch);
-            $response = json_decode($response);
+            
+            $args = array(
+                'headers' =>$header,
+                'method' => 'POST',
+                'body' => wp_json_encode($data)
+              );
+            $request = wp_remote_post(esc_url_raw($curl_url), $args);
+           
+            $response_code = wp_remote_retrieve_response_code($request);
+            $response_message = wp_remote_retrieve_response_message($request);
+            $response = json_decode(wp_remote_retrieve_body($request));
+            
             $return = new \stdClass();
             if (isset($response->error) && $response->error == false) {
                 $return->error = false;
-                $return->message = $response->message; 
+                $return->message = esc_attr($response->message); 
                 $return->data = $response->data;
                 return $return;
             } else {                
@@ -459,41 +507,38 @@ class ShoppingApi {
         try {
             $header = array(
                 "Authorization: Bearer MTIzNA==",
-                "content-type: application/json"
+                "Content-Type" => "application/json"
             );
             $curl_url = $this->apiDomain . '/campaigns/update';
             $data = [
-                'merchant_id' => $this->merchantId,
-                'customer_id' => $this->customerId,
-                'campaign_id' => $campaign_id,
-                'account_budget_id' => $budget_id,
-                'campaign_name' => $campaign_name,
-                'target_country' => $target_country,
-                'budget' => $budget,
+                'merchant_id' => sanitize_text_field($this->merchantId),
+                'customer_id' => sanitize_text_field($this->customerId),
+                'campaign_id' => sanitize_text_field($campaign_id),
+                'account_budget_id' => sanitize_text_field($budget_id),
+                'campaign_name' => sanitize_text_field($campaign_name),
+                'target_country' => sanitize_text_field($target_country),
+                'budget' => sanitize_text_field($budget),
                 'status' => 2, // ENABLE => 2, PAUSED => 3, REMOVED => 4
-                'all_products' => $all_products,
-                'ad_group_id' => $ad_group_id,
-                'ad_group_resource_name' => $ad_group_resource_name,
+                'all_products' => sanitize_text_field($all_products),
+                'ad_group_id' => sanitize_text_field($ad_group_id),
+                'ad_group_resource_name' => sanitize_text_field($ad_group_resource_name),
                 'filter_by' => 'category',
-                'filter_data' => ["id" => $category_id, "level" => $category_level]
+                'filter_data' => ["id" => sanitize_text_field($category_id), "level" => sanitize_text_field($category_level)]
             ];        
-            $postData = json_encode($data);           
-            $ch = curl_init();
-            curl_setopt_array($ch, array(
-                CURLOPT_URL => esc_url($curl_url),
-                CURLOPT_CUSTOMREQUEST => 'PATCH',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 1000,
-                CURLOPT_HTTPHEADER => $header,
-                CURLOPT_POSTFIELDS => $postData
-            ));
-            $response = curl_exec($ch);
-            $response = json_decode($response);
             
+            $args = array(
+                'headers' =>$header,
+                'method' => 'PATCH',
+                'body' => wp_json_encode($data)
+              );
+            $request = wp_remote_post(esc_url_raw($curl_url), $args);
+            $response_code = wp_remote_retrieve_response_code($request);
+            $response_message = wp_remote_retrieve_response_message($request);
+            $response = json_decode(wp_remote_retrieve_body($request));
             $return = new \stdClass();
             if (isset($response->error) && $response->error == false) {
                 $return->error = false;
-                $return->message = $response->message; 
+                $return->message = esc_attr($response->message); 
                 $return->data = $response->data;
                 return $return;
             } else {                

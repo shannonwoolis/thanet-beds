@@ -163,6 +163,7 @@ class LocalPost extends AbstractGoogleJsonObject {
 		$this->jsonOutput['event'] = $localPostEvent->getArray();
 	}
 
+
 	/**
 	 * Create a LocalPost from an array (e.g. Array stored in custom fields, Post data returned by Google)
 	 *

@@ -38,7 +38,11 @@ do_action( 'kadence_woomail_designer_email_text', $email ); ?>
 
 <?php if ( 'yes' === get_option( 'woocommerce_registration_generate_password' ) && $password_generated ) : ?>
 
-	<p><?php printf( __( 'Your password has been automatically generated: %s', 'kadence-woocommerce-email-designer' ), '<strong>' . esc_html( $user_pass ) . '</strong>' ); ?></p>
+	<?php if ($set_password_url) { /** $set_password_url was introduced in WooCommerce 6.0 */ ?>
+		<p><a href="<?php echo esc_attr( $set_password_url ); ?>"><?php printf( esc_html__( 'Click here to set your new password.', 'kadence-woocommerce-email-designer' ) ); ?></a></p>
+	<?php } else { ?>
+		<p><?php printf( __( 'Your password has been automatically generated: %s', 'kadence-woocommerce-email-designer' ), '<strong>' . esc_html( $user_pass ) . '</strong>' ); ?></p>
+	<?php } ?>
 
 <?php
 endif;

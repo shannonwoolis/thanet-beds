@@ -5,13 +5,13 @@ namespace PGMB\Google;
 
 
 class LocalPostEditMask {
-	private $oldPostFlat, $newPostFlat = [];
+	private $livePostFlat, $updatedPostFlat = [];
 	private $mask;
 
-	public function __construct(LocalPost $oldPost, LocalPost $newPost) {
-		$this->walk($oldPost->getArray(), $this->oldPostFlat);
-		$this->walk($newPost->getArray(), $this->newPostFlat);
-		$this->mask = implode(',', array_keys(array_diff_assoc($this->newPostFlat, $this->oldPostFlat)));
+	public function __construct($livePost, LocalPost $updatedPost) {
+		$this->walk((array)$livePost, $this->livePostFlat);
+		$this->walk($updatedPost->getArray(), $this->updatedPostFlat);
+		$this->mask = implode(',', array_keys(array_diff_assoc($this->updatedPostFlat, $this->livePostFlat)));
 	}
 
 	private function walk($array, &$output, $parent = ''){

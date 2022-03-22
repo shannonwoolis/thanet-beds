@@ -6,11 +6,12 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'TypistTech\\WPAdminNotices\\' => array($vendorDir . '/typisttech/wp-admin-notices/src'),
     'TypistTech\\Imposter\\Plugin\\' => array($vendorDir . '/typisttech/imposter-plugin/src'),
     'TypistTech\\Imposter\\' => array($vendorDir . '/typisttech/imposter/src'),
     'Rarst\\WordPress\\DateTime\\' => array($vendorDir . '/rarst/wpdatetime/src'),
-    'PGMB\\Tests\\' => array($baseDir . '/tests/PGMB'),
     'PGMB\\' => array($baseDir . '/src'),
     'Html2Text\\' => array($vendorDir . '/html2text/html2text/src', $vendorDir . '/html2text/html2text/test'),
+    'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
     'Cron\\' => array($vendorDir . '/dragonmantank/cron-expression/src/Cron'),
 );

@@ -38,7 +38,7 @@
     },
     {
         "field": "mpn",
-        "desc": "Your product’s Global Trade Item Number (GTIN). Required for all new products with an assigned GTIN."
+        "desc": "Your product’s  Manufacturer Part Number (MPN). Required for all new products with an assigned MPN."
     },
     {
         "field": "age_group",

@@ -76,7 +76,8 @@ class Enhanced_Ecommerce_Google_Analytics {
         $this->load_dependencies();
         $this->set_locale();
         $this->define_admin_hooks();
-        $this->define_public_hooks();
+        //$this->define_public_hooks();
+        add_action('init', array($this, 'define_public_hooks'));
         $this->check_dependency();
         add_filter( 'plugin_action_links_' .plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_name . '.php' ), array($this,'tvc_plugin_action_links'),10 );
     }
@@ -98,62 +99,55 @@ class Enhanced_Ecommerce_Google_Analytics {
      * @access   private
      */
     private function load_dependencies() {
+      /**
+       * The class responsible for orchestrating the actions and filters of the
+       * core plugin.
+       */
+      require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-enhanced-ecommerce-google-analytics-loader.php';
 
-        
+      /**
+       * The class responsible for defining internationalization functionality
+       * of the plugin.
+       */
+      require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-enhanced-ecommerce-google-analytics-i18n.php'; 
+      require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tvc-admin-db-helper.php';
+      
+      require_once plugin_dir_path(dirname(__FILE__)) . 'includes/data/class-tvc-ajax-calls.php';
+      require_once plugin_dir_path(dirname(__FILE__)) . 'includes/data/class-tvc-ajax-file.php';
+      require_once plugin_dir_path(dirname(__FILE__)) . 'includes/data/class-tvc-taxonomies.php';
+      
+      require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-tvc-register-scripts.php';
+      /**
+       * The class responsible for defining all actions that occur in the admin area.
+       */
+      require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-enhanced-ecommerce-google-analytics-admin.php';
 
-        /**
-         * The class responsible for orchestrating the actions and filters of the
-         * core plugin.
-         */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-enhanced-ecommerce-google-analytics-loader.php';
+      /**
+        * New conversios UI file list
+        */
+      require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-conversios-onboarding.php';
+      require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/helper/class-onboarding-helper.php';
+      require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/helper/class-dashboard-helper.php';
+      require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-conversios-admin.php';
+      /**
+        * End New conversios UI file list
+        */
+      require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tvc-admin-auto-product-sync-helper.php';
+      require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-survey.php';
 
-        /**
-         * The class responsible for defining internationalization functionality
-         * of the plugin.
-         */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-enhanced-ecommerce-google-analytics-i18n.php'; 
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tvc-admin-db-helper.php';
-        
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/data/class-tvc-ajax-calls.php';
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/data/class-tvc-ajax-file.php';
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/data/class-tvc-taxonomies.php';
-        
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-tvc-register-scripts.php';
-        /**
-         * The class responsible for defining all actions that occur in the admin area.
-         */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-enhanced-ecommerce-google-analytics-admin.php';
+      /**
+       * The class responsible for defining all actions that occur in the public-facing
+       * side of the site.
+       */
 
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-enhanced-ecommerce-google-analytics-settings.php';
-        /**
-          * New conversios UI file list
-          */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-conversios-onboarding.php';
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/helper/class-onboarding-helper.php';
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/helper/class-dashboard-helper.php';
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-conversios-admin.php';
-        /**
-          * End New conversios UI file list
-          */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tvc-admin-auto-product-sync-helper.php';
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-survey.php';
-        
-
-
-        /**
-         * The class responsible for defining all actions that occur in the public-facing
-         * side of the site.
-         */
-
-        $TVC_Admin_Helper = new TVC_Admin_Helper();
-        $plan_id = $TVC_Admin_Helper->get_plan_id();
-        if($plan_id == 1){
-            require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-enhanced-ecommerce-google-analytics-public.php';
-        }else{
-            require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-enhanced-ecommerce-google-analytics-public-pro.php';
-        }
-        $this->loader = new Enhanced_Ecommerce_Google_Analytics_Loader();
-
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $plan_id = $TVC_Admin_Helper->get_plan_id();
+      if($plan_id == 1){
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-enhanced-ecommerce-google-analytics-public.php';
+      }else{
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-enhanced-ecommerce-google-analytics-public-pro.php';
+      }
+      $this->loader = new Enhanced_Ecommerce_Google_Analytics_Loader();
     }
 
     /**
@@ -179,13 +173,11 @@ class Enhanced_Ecommerce_Google_Analytics {
      */
     private function define_admin_hooks() {
         $plugin_admin = new Enhanced_Ecommerce_Google_Analytics_Admin( $this->get_plugin_name(), $this->get_version() );
-        //$this->loader->add_action( 'admin_menu', $plugin_admin, 'display_admin_page' );
-        // $this->loader->add_action("admin_menu", $plugin_admin, "add_new_menu");
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
         $this->loader->add_action( 'admin_notices', $plugin_admin, 'tvc_admin_notice' );
         if ( is_admin() ) {
-            new TVC_Survey( "Enhanced ecommerce google analytics plugin for woocommerce", ENHANCAD_PLUGIN_NAME );
+            new TVC_Survey( esc_html__("Enhanced ecommerce google analytics plugin for woocommerce"), ENHANCAD_PLUGIN_NAME );
         }
 
     }
@@ -197,8 +189,8 @@ class Enhanced_Ecommerce_Google_Analytics {
      * @since    1.0.0
      * @access   private
      */
-    private function define_public_hooks() {
-        $plugin_public = new Enhanced_Ecommerce_Google_Analytics_Public( $this->get_plugin_name(), $this->get_version() );
+    public function define_public_hooks() {
+      new Enhanced_Ecommerce_Google_Analytics_Public( $this->get_plugin_name(), $this->get_version() );
     }
 
     /**
@@ -207,19 +199,21 @@ class Enhanced_Ecommerce_Google_Analytics {
      * @since    1.0.0
      */
     public function run() {
-        if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-            add_action('woocommerce_init' , function (){
-                $this->loader->run();
-            });
+      if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+          add_action('woocommerce_init' , function (){
+              $this->loader->run();
+          });
+      }
+      else{
+        include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+        if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+          $this->loader->run();
+        }else if( is_plugin_active( 'enhanced-e-commerce-for-woocommerce-store/enhanced-ecommerce-google-analytics.php' ) ){
+          if(!isset($_POST['action'])){
+            printf('<div class="notice tvc-notice notice-error"><p>%s</p></div>',esc_html__("Hey, It seems WooCommerce plugin is not active on your wp-admin. Conversios.io - Google Analytics and Google Shopping plugin can only be activated if you have active WooCommerce plugin in your wp-admin.","conversios"));
+          }
         }
-        else{
-            include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-            if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
-                $this->loader->run();
-            }else if( is_plugin_active( 'enhanced-e-commerce-for-woocommerce-store/enhanced-ecommerce-google-analytics.php' ) ){
-                printf('<div class="notice notice-error"><p>Hey, It seems WooCommerce plugin is not active on your wp-admin. Enhanced ecommerce plugin can only be activated if you have active WooCommerce plugin in your wp-admin.</p></div>');
-            }
-        }
+      }
     }
 
     /**
@@ -258,12 +252,12 @@ class Enhanced_Ecommerce_Google_Analytics {
     public function tvc_plugin_action_links($links) {
         $deactivate_link = $links['deactivate'];
         unset($links['deactivate']);
-        $setting_url = 'admin.php?page=conversios-google-analytics';
-        $links[] = '<a href="' . get_admin_url(null, $setting_url) . '">Settings</a>';
+        $setting_url = esc_url_raw('admin.php?page=conversios-google-analytics');
+        $links[] = '<a href="' . get_admin_url(null, $setting_url) . '">'.esc_html__("Settings","conversios").'</a>';
         
-        $links[] = '<a href="https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/#faq" target="_blank">FAQ</a>';
-        $links[] = '<a href="https://conversios.io/help-center/Installation-Manual.pdf" target="_blank">Documentation</a>';
-        $links[] = '<a href="https://conversios.io/pricings/?utm_source=EE+Plugin+User+Interface&utm_medium=Plugins+Listing+Page+Upgrade+to+Premium&utm_campaign=Upsell+at+Conversios" target="_blank"><b>Upgrade to Premium</b></a>';
+        $links[] = '<a href="'.esc_url_raw("https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/#faq").'" target="_blank">'.esc_html__("FAQ","conversios").'</a>';
+        $links[] = '<a href="'.esc_url_raw("https://conversios.io/help-center/Installation-Manual.pdf").'" target="_blank">'.esc_html__("Documentation","conversios").'</a>';
+        $links[] = '<a href="'.esc_url_raw("https://conversios.io/pricings/?utm_source=EE+Plugin+User+Interface&utm_medium=Plugins+Listing+Page+Upgrade+to+Premium&utm_campaign=Upsell+at+Conversios").'" target="_blank"><b>'.esc_html__("Upgrade to Premium","conversios").'</b></a>';
         $links['deactivate'] = $deactivate_link;
         return $links;
     }
@@ -275,7 +269,7 @@ class Enhanced_Ecommerce_Google_Analytics {
 
     public function check_dependency(){
         if ( function_exists('run_actionable_google_analytics')) {
-            _e('<div class="error"><p><strong>'. wp_sprintf( 'Note: ' ) .'</strong>'. wp_sprintf( 'It seems <strong>Actionable Google Analytics Plugin</strong> is active on your store. Kindly deactivate it in order to avoid data duplication in GA.' ) .'</p></div>');
+            printf('<div class="error"><p><strong>%s</strong>%s</p></div>', esc_html__("Note: ","conversios"),esc_html__("It seems Actionable Google Analytics Plugin is active on your store. Kindly deactivate it in order to avoid data duplication in GA.","conversios"));
             die();
         }
     }

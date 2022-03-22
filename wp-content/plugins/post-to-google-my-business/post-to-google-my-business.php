@@ -5,11 +5,16 @@ Plugin Name: Post to Google My Business
 Plugin URI: https://tycoonmedia.net
 Description: Automatically create a post on Google My Business when creating a new WordPress post
 Author: Koen Reus
-Version: 2.2.49
+Version: 3.0.13
 Author URI: https://koenreus.com
+Text Domain: post-to-google-my-business
 */
-if ( !defined( 'ABSPATH' ) ) {
-    die;
+if ( version_compare( PHP_VERSION, '7.0', '<' ) ) {
+    exit( sprintf( 'Post to Google My Business requires PHP 7.0 or higher. Your WordPress site is using PHP %s.', PHP_VERSION ) );
+}
+global  $wp_version ;
+if ( version_compare( $wp_version, '4.9.0', '<' ) ) {
+    exit( sprintf( 'Post to Google My Business requires WordPress 4.9.0 or higher. Your WordPress version is %s.', $wp_version ) );
 }
 
 if ( function_exists( 'mbp_fs' ) ) {
@@ -53,44 +58,20 @@ if ( function_exists( 'mbp_fs' ) ) {
     
     }
     require_once __DIR__ . '/vendor/autoload.php';
-    // Init Freemius.
-    mbp_fs();
-    // Signal that SDK was initiated.
-    do_action( 'mbp_fs_loaded' );
-    function mbp_fs_custom_icon()
-    {
-        return dirname( __FILE__ ) . '/img/plugin-icon.png';
-    }
-    
-    mbp_fs()->add_filter( 'plugin_icon', 'mbp_fs_custom_icon' );
-    require_once __DIR__ . '/inc/class-mbp-autoloader.php';
-    MBP_Autoloader::register();
-    set_error_handler( array( 'MBP_Admin_Notices', 'error_handler' ) );
-    register_activation_hook( __FILE__, array( 'MBP_Plugin', 'activate' ) );
-    register_deactivation_hook( __FILE__, array( 'MBP_Plugin', 'deactivate' ) );
-    //register_uninstall_hook(__FILE__, array('MBP_Plugin', 'uninstall'));
-    mbp_fs()->add_action( 'after_uninstall', array( 'MBP_Plugin', 'uninstall' ) );
     //wp_insert_site is new in WordPress 5.1.0, wpmu_new_blog deprecated
     
-    if ( function_exists( 'wp_insert_site' ) ) {
-        add_action( 'wp_insert_site', [ 'MBP_Plugin', 'insert_site' ] );
+    if ( function_exists( 'wp_initialize_site' ) ) {
+        add_action( 'wp_initialize_site', [ '\\PGMB\\Plugin', 'insert_site' ] );
     } else {
-        add_action( 'wpmu_new_blog', [ 'MBP_Plugin', 'insert_site' ] );
+        add_action( 'wpmu_new_blog', [ '\\PGMB\\Plugin', 'insert_site' ] );
     }
     
-    $post_to_google_my_business_plugin = new MBP_Plugin();
-    add_action( 'after_setup_theme', array( $post_to_google_my_business_plugin, 'init' ) );
-    //Loading textdomain from subfolder is troublesome
-    
-    if ( !function_exists( 'mbp_load_textdomain' ) ) {
-        function mbp_load_textdomain()
-        {
-            $dir = dirname( plugin_basename( __FILE__ ) ) . '/languages/';
-            load_plugin_textdomain( 'post-to-google-my-business', false, $dir );
-        }
-        
-        add_action( 'after_setup_theme', 'mbp_load_textdomain' );
-    }
-    
-    restore_error_handler();
+    register_activation_hook( __FILE__, [ '\\PGMB\\Plugin', 'activate' ] );
+    register_deactivation_hook( __FILE__, [ '\\PGMB\\Plugin', 'deactivate' ] );
+    mbp_fs()->add_action( 'after_uninstall', [ '\\PGMB\\Plugin', 'uninstall' ] );
+    mbp_fs()->add_action( 'after_premium_version_activation', [ '\\PGMB\\Plugin', 'premium_version_activation' ] );
+    mbp_fs()->add_action( 'after_free_version_reactivation', [ '\\PGMB\\Plugin', 'free_version_reactivation' ] );
+    $post_to_google_my_business = new \PGMB\Plugin( __FILE__, mbp_fs() );
+    do_action( 'mbp_fs_loaded' );
+    add_action( 'after_setup_theme', [ $post_to_google_my_business, 'init' ] );
 }

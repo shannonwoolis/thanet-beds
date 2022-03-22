@@ -1,51 +1,48 @@
-=== Post to Google My Business ===
+=== Post to Google My Business (Google Business Profile) ===
 Contributors: koen12344, freemius
 Donate link: https://tycoonmedia.net/?utm_source=repository&utm_medium=link&utm_campaign=donate
 Tags: google my business, google, business, auto publish, posts, post, local search, google my business posts, google places, google plus, google+
 Requires at least: 4.9.0
-Tested up to: 5.8.1
-Stable tag: 2.2.49
-Requires PHP: 5.6.0
+Tested up to: 5.9.2
+Stable tag: 3.0.13
+Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Easily create new posts on Google My Business directly from the WordPress Dashboard!
+(Auto-)Publish and manage Google My Business (GMB) Posts from the WordPress Dashboard!
 
 == Description ==
 
-The new posts functionality in Google My Business is a great way to improve the presence of your, or your clients' business on Google. It can be a hassle however to have to log in to Google My Business every time you want to create a new post, likewise it can be an easy thing to forget.
+The posts feature in Google Business Profile (formerly: Google My Business) is a great way to improve the presence of your, or your clients' business on Google. It can be a hassle however to have to log in to Google My Business every time you want to create a new post, likewise it can be an easy thing to forget.
 
 Don't miss out on the SEO benefit, and save time by creating posts on Google My Business directly from the WordPress Dashboard!
 
-Use the Auto-post feature to instantly publish your latest WordPress post to Google My Business, based on a preset template and the posts' featured image.
+Use the Auto-post feature to instantly publish your latest WordPress post to your Google Business Profile, based on a preset template and the posts' featured image.
 
 The Post to Google My Business plugin utilizes the official Google My Business API with secure oAuth authentication to ensure your Google account is safe.
-
-= New: "COVID-19 update" post type support =
-The plugin now supports the new **"COVID-19 Update"** post type, which allows you to share announcements about how your business is dealing with the coronavirus pandemic.
 
 = Features =
 * Create, edit or delete posts without having to visit your Google My Business dashboard
 * Automatically publish your latest WordPress posts to GMB using the Auto-post feature
 * Network- and site-level Multisite support
-* Supports publishing to GMB from external apps (such as Windows Live Writer, Zapier, Integromat, ManageWP, InfiniteWP, MainWP etc)
+* Supports publishing to GMB from external apps (such as Zapier, Integromat, IFTTT, ManageWP, InfiniteWP, MainWP, Windows Live Writer etc)
 * Uses official Google My Business API
+* "COVID-19 update" post type support
 * Developer friendly. Uses the latest built-in WordPress functions and has various actions/filters to hook into.
 * Translatable. Uses built-in WordPress functions for easy translation.
 * Gutenberg compatible
 
-> **Time-saving features available in the Premium version:**
+> **Time-saving features available in the Premium versions:**
 >
+> * Product support, create "real" Products in GBP based on your WooCommerce Products or other content
 > * Schedule Google My Business posts for automatic publishing in the future
-> * Create event and offer posts
-> * Create new Google My Business posts from any WordPress post type (e.g. WooCommerce products)
-> * Pick location per post, or post to multiple locations at once
+> * Publish posts to multiple locations, across multiple Google accounts at once
 > * Automatic re-posting (post recycling) - Automatically recycle your GMB posts at preset intervals and x amount of times
 > * Auto publish posts with specific tags or categories
-> * Make unique posts using Spintax and %variables%
+> * Make posts unique using Spintax
 > * Post Campaigns - Create posts on GMB that aren't tied to any specific WordPress post or page.
-> * Post Analytics - See how many views and clicks your post has gotten straight from the WordPress Dash
-> * Increased posting (API) limits
+> * Evergreen content - randomly publish items from a selection of your content
+> * Multiple Auto-post templates
 > * Priority email support from the developer of the plugin
 > * Support and updates for 1 year
 > * Much more!
@@ -93,6 +90,121 @@ Post to Google My Business relies on the WP Cron system to send out scheduled po
 6. Auto-post template settings
 
 == Changelog ==
+
+= 3.0.13 =
+* Fix auto-post toggle not being turned on by default in block editor
+* Improve API code to be compatible with new version of GMB API
+
+> **Premium**
+>
+> * Improve product publishing api
+
+= 3.0.12 =
+
+> **Premium**
+>
+> * Improve code for product publishing
+
+= 3.0.11 =
+* Fix incorrect token revocation request
+* Fix pre-php 7.3 error composer message
+* Clarify "Refresh token" error message
+* Fix a few locale mistakes
+* Bump minimum PHP version to 7.0
+* Fix for Notice: Trying to access array offset on line 163
+* Add account key to mbp_business_selector_locations filter
+* Fix display of service area businesses in business selector
+* Add placeholder parsing to event/offer title and trim it to 80 characters
+
+> **Premium**
+>
+> * Show error when evergreen content schedule does not exist in cron
+> * Fix edit and duplicate functions in Starter version
+> * Add debug data download for products
+
+= 3.0.10 =
+* Add graceful error for when the Google authorization is cancelled
+* Fix advanced post settings spacing
+* Update Freemius SDK
+* Clear access token cache when account is deleted
+* Fix a few permission issues
+
+= 3.0.9 =
+
+> **Premium**
+>
+>* Improvements to product publishing code
+
+= 3.0.8 =
+* Fix text domain on update notification
+* Prevent api error when trying to create product
+
+= 3.0.7 =
+* Fix location list not showing all locations in groups with more than 100 locations
+* Add upgrade & new feature notifications
+* Improve upgrade process
+
+= 3.0.6 =
+
+* Fix controls on dynamically loaded accounts in business selector
+
+> **Premium**
+>
+> * Fix woocommerce product category sync
+
+= 3.0.5 =
+
+* Update locales (Portuguese thanks to Valdemir Maran)
+* Post editor: Various layout and logic fixes
+* WP 5.9: Fix calendar icon
+
+> **Premium**
+>
+> * Add product support
+> * Fix evergreen not selecting the correct posts
+> * Fix evergreen page empty in Starter version
+> * Fix evergreen date timezone issue
+
+= 3.0.2 =
+* Updated Brazilian Portuguese translations (Thanks to @valdemirmaran)
+* Fix error when no post types are selected in the settings
+* Added evergreen content promotional page
+* Fix not showing welcome message on new site within multisite
+
+> **Premium**
+>
+> * Fix private backend post types being indexed by Yoast causing 404s
+
+= 3.0.1 =
+* Remove deprecated "Get Offer" call to action
+* Fix link parsing mode not working
+* Updated pot file (now automatically included in build process)
+* Updated Dutch translations
+* Fixed localization for calendar
+* Fixed datetime check in auto-post template editor
+
+> **Premium**
+>
+> * Added check for invalid evergreen post schedule
+> * Fixed localization for cron selector
+
+= 3.0.0 =
+* Refactor & improve a lot of code, mainly improved the way the plugin connects to Google
+* Paginated post & created post list, added bulk actions
+* Fix Featured Image checkbox state not saving
+* Remove pointless debug page
+* Moved post scheduling calendar to its own dashboard page, added popup with options
+* Added WebP support (GMB does not support it, so plugin will convert image to PNG)
+* Added WooCommerce support by default
+
+> **Premium**
+>
+> * (Starter) Moved ability to select a location per post to Starter
+> * (Pro) Added ability to create multiple post templates
+> * (Pro) Added "evergreen content" feature to automatically publish posts old posts
+> * (Pro) Moved ability to publish posts to multiple locations at once to Pro
+> * (Agency) Added ability to connect multiple Google accounts
+
 
 = 2.2.49 =
 * Add option to advanced post options to change link parsing mode
@@ -442,3 +554,6 @@ Post to Google My Business relies on the WP Cron system to send out scheduled po
 * Initial release
 
 == Upgrade Notice ==
+
+= 3.0.0 =
+* Important! You might need to re-authenticate your Google account in the plugin settings after this update!

@@ -15,15 +15,15 @@
  * Plugin Name:       Conversios.io - Google Analytics and Google Shopping plugin for WooCommerce
  * Plugin URI:        https://www.tatvic.com/tatvic-labs/woocommerce-extension/
  * Description:       Automates eCommerce tracking in Google Analytics, dynamic remarkting in Google Ads, and provides complete Google Shopping features.
- * Version:           4.4.1
+ * Version:           4.6.8
  * Author:            Tatvic
  * Author URI:        www.tatvic.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       www.tatvic.com
  * Domain Path:       /languages
- * WC requires at least: 1.4.1
- * WC tested up to: 5.9.0
+ * WC requires at least: 3.5.0
+ * WC tested up to: 6.2.1
  */
 
 /**
@@ -37,7 +37,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'PLUGIN_TVC_VERSION', '4.4.1' );
+define( 'PLUGIN_TVC_VERSION', '4.6.8' );
 $fullName = plugin_basename( __FILE__ );
 $dir = str_replace('/enhanced-ecommerce-google-analytics.php','',$fullName);
 if ( ! defined( 'ENHANCAD_PLUGIN_NAME' ) ) {

@@ -1,17 +1,13 @@
 <?php
-
 /**
  * TVC Category Selector Element Class.
  */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 if ( ! class_exists( 'Tatvic_Category_Selector_Element' ) ) :
-
 	class Tatvic_Category_Selector_Element {
-
 		/**
 		 * Returns the code for a single row meant for the category mapping table.
 		 *
@@ -30,12 +26,12 @@ if ( ! class_exists( 'Tatvic_Category_Selector_Element' ) ) :
 			return '<div class="row">
                 <div class="col-6">
                   <div class="form-group shop-category">
-                      <label class="form-label-control">' . $category->name .' <small>('.$category->count. ')</small> '.$level_indicator .'</label>
+                      <label class="form-label-control">' . esc_attr($category->name) .' <small>('.esc_attr($category->count). ')</small> '.esc_attr($level_indicator) .'</label>
                   </div>
                 </div>
                 <div class="col-6 align-self-center">
                   <div class="form-group">
-                  	<div id="feed-category-' . $category->term_id . '"></div>' .$mode_column . '
+                  	<div id="feed-category-' . esc_attr($category->term_id) . '"></div>' .$mode_column . '
 									</div>
                 </div>
             </div>';
@@ -54,42 +50,40 @@ if ( ! class_exists( 'Tatvic_Category_Selector_Element' ) ) :
 			$display         = $start_visible ? 'initial' : 'none';
 			$ident           = '-1' !== $id ? $identifier . '-' . $id : $identifier;
 			$category_levels = apply_filters( 'tvc_category_selector_level', 6 );
+			$id = esc_attr($id);
 			if(isset($ee_prod_mapped_cats[$id]['id']) && isset($ee_prod_mapped_cats[$id]['name']) && $ee_prod_mapped_cats[$id]['id'] && $ee_prod_mapped_cats[$id]['name']){
 
-				$cat_id = $ee_prod_mapped_cats[$id]['id'];
-				$cat_name = $ee_prod_mapped_cats[$id]['name'];
-				$html_code  = '<div id="category-selector-' . $ident . '" style="display:' . $display . '">
+				$cat_id = esc_attr($ee_prod_mapped_cats[$id]['id']);
+				$cat_name = esc_attr($ee_prod_mapped_cats[$id]['name']);
+				$html_code  = '<div id="category-selector-' . esc_attr($ident) . '" style="display:' . esc_attr($display) . '">
 					<div id="selected-categories">
-					<input type="hidden" name="category-'.$id.'" id="category-'.$id.'" value="'.$cat_id.'">
-					<input type="hidden" name="category-name-'.$id.'" id="category-name-'.$id.'" value="'.$cat_name.'">
+					<input type="hidden" name="category-'.esc_attr($id).'" id="category-'.esc_attr($id).'" value="'.esc_attr($cat_id).'">
+					<input type="hidden" name="category-name-'.esc_attr($id).'" id="category-name-'.esc_attr($id).'" value="'.esc_attr($cat_name).'">
 					</div>
-					<label id="label-'.$ident.'_0">'.$cat_name.'</label><span class="change_prodct_feed_cat" data-cat-id="'.$id.'" data-id="'.$ident.'_0">Edit</span>
-					<select class="form-control" style="display:none;" id="' . $ident . '_0" catId="'.$id.'" onchange="selectSubCategory(this)"></select>';
+					<label id="label-'.esc_attr($ident).'_0">'.esc_attr($cat_name).'</label><span class="change_prodct_feed_cat" data-cat-id="'.esc_attr($id).'" data-id="'.esc_attr($ident).'_0">Edit</span>
+					<select class="form-control" style="display:none;" id="' . esc_attr($ident) . '_0" catId="'.esc_attr($id).'" onchange="selectSubCategory(this)"></select>';
 
 				for ( $i = 1; $i < $category_levels; $i ++ ) {
-					$html_code .= '<select class="" id="' . $ident . '_' . $i . '" value="0" catId="'.$id.'" style="display:none;" onchange="selectSubCategory(this)"></select>';
+					$html_code .= '<select class="" id="' . esc_attr($ident) . '_' . esc_attr($i) . '" value="0" catId="'.esc_attr($id).'" style="display:none;" onchange="selectSubCategory(this)"></select>';
 				}
 			}else{
-				$html_code  = '<div id="category-selector-' . $ident . '" style="display:' . $display . '">
+				$html_code  = '<div id="category-selector-' . esc_attr($ident) . '" style="display:' . esc_attr($display) . '">
 					<div id="selected-categories">
-					<input type="hidden" name="category-'.$id.'" id="category-'.$id.'" value="">
-					<input type="hidden" name="category-name-'.$id.'" id="category-name-'.$id.'" value="">
+					<input type="hidden" name="category-'.esc_attr($id).'" id="category-'.esc_attr($id).'" value="">
+					<input type="hidden" name="category-name-'.esc_attr($id).'" id="category-name-'.esc_attr($id).'" value="">
 					</div>
-					<select class="form-control" id="' . $ident . '_0" catId="'.$id.'" onchange="selectSubCategory(this)"></select>';
+					<select class="form-control" id="' . esc_attr($ident) . '_0" catId="'.esc_attr($id).'" onchange="selectSubCategory(this)"></select>';
 
 				for ( $i = 1; $i < $category_levels; $i ++ ) {
-					$html_code .= '<select class="" id="' . $ident . '_' . $i . '" value="0" catId="'.$id.'" style="display:none;" onchange="selectSubCategory(this)"></select>';
+					$html_code .= '<select class="" id="' . esc_attr($ident) . '_' . esc_attr($i) . '" value="0" catId="'.esc_attr($id).'" style="display:none;" onchange="selectSubCategory(this)"></select>';
 				}
 
 			}
 			/*if (!class_exists('ShoppingApi')) {
 	            require_once(__DIR__ . '/ShoppingApi.php');
-	        }*/
-
-	        
+	        }*/        
 
 			$html_code .= '</div>';
-
 			return $html_code;
 		}
 
@@ -103,12 +97,10 @@ if ( ! class_exists( 'Tatvic_Category_Selector_Element' ) ) :
 		private static function category_description_data_item( $category_id ) {
 			$category_description = '' !== category_description( $category_id ) ? category_description( $category_id ) : '—';
 
-			$html_code = '<span aria-hidden="true">' . $category_description . '</span>';
+			$html_code = '<span aria-hidden="true">' . esc_attr($category_description) . '</span>';
 
 			return $html_code;
 		}
 	}
-
 	// end of TVC_Category_Selector_Element class
-
 endif;

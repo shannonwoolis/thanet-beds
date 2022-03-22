@@ -1,8 +1,6 @@
 <?php
-if ( ! class_exists( 'TVC_Survey' ) ) {
-	
+if ( ! class_exists( 'TVC_Survey' ) ) {	
 	class TVC_Survey {
-		public $api_url = TVC_API_CALL_URL.'/customersurvey';
 		public $name;
 		public $plugin;
 		protected $TVC_Admin_DB_Helper;
@@ -26,7 +24,7 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 			$url = network_site_url( '/' );
 			$is_local_url = false;
 			// Trim it up
-			$url = strtolower( trim( $url ) );
+			$url =  esc_url_raw(strtolower( trim( $url ) ) );
 			if ( false === strpos( $url, 'http://' ) && false === strpos( $url, 'https://' ) ) {
 				$url = 'http://' . $url;
 			}
@@ -61,7 +59,7 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 					}
 				}
 			}
-			return $is_local_url;
+			return esc_url_raw($is_local_url);
 		}
 		public function is_plugin_page() {
 			$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : false;
@@ -78,8 +76,8 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 			?>
 			<script type="text/javascript">
 			jQuery(function($){
-				var $deactivateLink = $('#the-list').find('[data-slug="<?php echo $this->plugin; ?>"] span.deactivate a'),
-					$overlay        = $('#ee-survey-<?php echo $this->plugin; ?>'),
+				var $deactivateLink = jQuery('#the-list').find('[data-slug="<?php echo esc_attr($this->plugin); ?>"] span.deactivate a'),
+					$overlay        = jQuery('#ee-survey-<?php echo esc_attr($this->plugin); ?>'),
 					$form           = $overlay.find('form'),
 					formOpen        = false;
 				// Plugin listing table deactivate link.
@@ -94,18 +92,18 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 					event.preventDefault();
 					$form.find('input[type=text], .error').hide();
 					$form.find('.ee-survey-option').removeClass('selected');
-					$(this).closest('.ee-survey-option').addClass('selected').find('input[type=text]').show();
+					jQuery(this).closest('.ee-survey-option').addClass('selected').find('input[type=text]').show();
 				});
 				// Survey Skip & Deactivate.
 				$form.on('click', '.ee-survey-deactivate', function(event) {
 					event.preventDefault();
 					var data = {
 						action:'tvc_call_add_survey',
-						customer_id:'<?php echo $this->apiCustomerId; ?>',
-						subscription_id:'<?php echo $this->subscriptionId; ?>',
+						customer_id:'<?php echo esc_attr($this->apiCustomerId); ?>',
+						subscription_id:'<?php echo esc_attr($this->subscriptionId); ?>',
 						radio_option_val: "skip",
 						other_reason: "",
-						site_url: '<?php echo esc_url( home_url() ); ?>',
+						site_url: '<?php echo esc_url_raw( home_url() ); ?>',
 						plugin_name: 'ee-woocommerce'
 					}
 					add_survey(data);
@@ -114,27 +112,22 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 				$form.submit(function(event) {
 					event.preventDefault();
 					if (! $form.find('input[type=radio]:checked').val()) {
-						$form.find('.ee-survey-footer').prepend('<span class="error"><?php echo esc_js( __( 'Please select an option', 'google-analytics-for-wordpress' ) ); ?></span>');
+						$form.find('.ee-survey-footer').prepend('<span class="error"><?php echo esc_js( esc_html__( 'Please select an option', 'conversios' ) ); ?></span>');
 						return;
 					}
 					var data = {
 						action:'tvc_call_add_survey',
-						customer_id:'<?php echo $this->apiCustomerId; ?>',
-						subscription_id:'<?php echo $this->subscriptionId; ?>',
+						customer_id:'<?php echo esc_attr($this->apiCustomerId); ?>',
+						subscription_id:'<?php echo esc_attr($this->subscriptionId); ?>',
 						radio_option_val: $form.find('.selected input[type=radio]').val(),
 						other_reason: $form.find('.selected input[type=text]').val(),
-						site_url: '<?php echo esc_url( home_url() ); ?>',
+						site_url: '<?php echo esc_url_raw( home_url() ); ?>',
 						plugin_name: 'ee-woocommerce'
 					}
 					add_survey(data);
-					/*var submitSurvey = $.post('<?php echo $this->api_url; ?>', data);
-					submitSurvey.always(function() {
-						$(".ee-survey-modal").hide(100);
-						location.href = $deactivateLink.attr('href');
-					});*/
 				});
 				// Exit key closes survey when open.
-				$(document).keyup(function(event) {
+				jQuery(document).keyup(function(event) {
 					if (27 === event.keyCode && formOpen) {
 						$overlay.hide();
 						formOpen = false;
@@ -148,12 +141,12 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 		        url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
 		        data: data,
 		        beforeSend: function(){
-		        	//$('.ee-survey-submit').html("Thanks..");
-		        	$('.ee-survey-submit').prop('disabled', true);
-		        	$('.ee-survey-deactivate').hide();
+		        	//jQuery('.ee-survey-submit').html("Thanks..");
+		        	jQuery('.ee-survey-submit').prop('disabled', true);
+		        	jQuery('.ee-survey-deactivate').hide();
 		        },
 		        success: function(response){
-		          $(".ee-survey-modal").hide();
+		          jQuery(".ee-survey-modal").hide();
 							location.href = $deactivateLink.attr('href');		          
 		        }
 		      });
@@ -242,7 +235,7 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 			}
 			.ee-survey-wrap .dashicons{
 				font-size: 24px;
-    color: #3C434A;
+    		color: #3C434A;
 			}
 			</style>
 			<?php
@@ -255,61 +248,54 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 
 			$options = array(
 				1 => array(
-					"title"   => esc_html__("No longer need the plugin","enhanced-e-commerce-for-woocommerce-store"),
+					"title"   => esc_html__("No longer need the plugin","enhanced-e-commerce-for-woocommerce-store", "conversios"),
 				),
 				2 => array(
-					'title'   => esc_html__("Switching to a different plugin","enhanced-e-commerce-for-woocommerce-store"),
-					'details' => esc_html__( 'Please share which plugin', 'google-analytics-for-wordpress' ),
+					'title'   => esc_html__("Switching to a different plugin","conversios"),
+					'details' => esc_html__( 'Please share which plugin', 'conversios' ),
 				),
 				3 => array(
-					'title'   => esc_html__("Couldn't get the plugin to work","enhanced-e-commerce-for-woocommerce-store"),
+					'title'   => esc_html__("Couldn't get the plugin to work","conversios"),
 				),
 				4 => array(
-					'title'   => esc_html__("It's a temporary deactivation","enhanced-e-commerce-for-woocommerce-store"),
+					'title'   => esc_html__("It's a temporary deactivation","conversios"),
 				),
 				5 => array(
-					'title'   => esc_html__("Other","enhanced-e-commerce-for-woocommerce-store"),
-					'details' => esc_html__( 'Please share the reason', 'google-analytics-for-wordpress' ),
+					'title'   => esc_html__("Other","conversios"),
+					'details' => esc_html__( 'Please share the reason', 'conversios' ),
 				),
 			);
 			?>
-			<div class="ee-survey-modal" id="ee-survey-<?php echo $this->plugin; ?>">
+			<div class="ee-survey-modal" id="ee-survey-<?php echo esc_attr($this->plugin); ?>">
 				<div class="ee-survey-wrap">
 					<form class="ee-survey" method="post">
-						<span class="ee-survey-title"><span class="dashicons dashicons-admin-customizer"></span><?php echo ' ' . esc_html__( 'Quick Feedback', 'google-analytics-for-wordpress' ); ?></span>
+						<span class="ee-survey-title"><span class="dashicons dashicons-admin-customizer"></span><?php echo ' ' . esc_html__( 'Quick Feedback', 'conversios' ); ?></span>
 						<span class="ee-survey-desc">
 							<?php
 							// Translators: Placeholder for the plugin name.
-							echo sprintf( esc_html__('If you have a moment, please share why you are deactivating %s:', 'google-analytics-for-wordpress' ), $this->name );
+							echo sprintf( esc_html__('If you have a moment, please share why you are deactivating %s:', 'conversios' ), esc_attr($this->name) );
 							?>
 						</span>
 						<div class="ee-survey-options">
 							<?php foreach ( $options as $id => $option ) : 
-								//$slug=preg_replace('/[^A-Za-z0-9-]+/', '-', $option['title']);
 								$slug = sanitize_title($option['title']); ?>
 							<div class="ee-survey-option">
-								<label for="ee-survey-option-<?php echo $this->plugin; ?>-<?php echo $id; ?>" class="ee-survey-option-label">
-									<input id="ee-survey-option-<?php echo $this->plugin; ?>-<?php echo $id; ?>" class="ee-survey-option-input" type="radio" name="code" value="<?php echo $slug; ?>" />
-									<span class="ee-survey-option-reason"><?php echo $option['title']; ?></span>
+								<label for="ee-survey-option-<?php echo esc_attr($this->plugin); ?>-<?php echo esc_attr($id); ?>" class="ee-survey-option-label">
+									<input id="ee-survey-option-<?php echo esc_attr($this->plugin); ?>-<?php echo esc_attr($id); ?>" class="ee-survey-option-input" type="radio" name="code" value="<?php echo esc_attr($slug); ?>" />
+									<span class="ee-survey-option-reason"><?php echo esc_attr($option['title']); ?></span>
 								</label>
 								<?php if ( ! empty( $option['details'] ) ) : ?>
-								<input class="ee-survey-option-details" type="text" placeholder="<?php echo $option['details']; ?>" />
+								<input class="ee-survey-option-details" type="text" placeholder="<?php echo esc_attr($option['details']); ?>" />
 								<?php endif; ?>
 							</div>
 							<?php endforeach; ?>
 						</div>
 						<div class="ee-survey-footer">
 							<button type="submit" class="ee-survey-submit button button-primary button-large">
-								<?php
-								// Translators: Adds an ampersand.
-								echo sprintf( esc_html__('Submit %s Deactivate', 'google-analytics-for-wordpress' ), '&amp;' );
-								?>
+								<?php echo sprintf( esc_html__('Submit %s Deactivate', 'conversios' ), '&amp;' );	?>
 							</button>
 							<a href="#" class="ee-survey-deactivate">
-								<?php
-								// Translators: Adds an ampersand.
-								echo sprintf( esc_html__('Skip %s Deactivate', 'google-analytics-for-wordpress' ), '&amp;' );
-								?>
+								<?php	echo sprintf( esc_html__('Skip %s Deactivate', 'conversios' ), '&amp;' ); ?>
 							</a>
 						</div>
 					</form>

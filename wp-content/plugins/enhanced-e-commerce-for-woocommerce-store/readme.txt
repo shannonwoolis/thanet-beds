@@ -5,11 +5,11 @@ Plugin URI: https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-st
 Tags: Google Analytics tracking, Dynamic Remarketing, Google Shopping automation,Google Shopping, Universal Analytics tracking,Google Analytics integration,Google Analytics integration for WooCommerce,Ecommerce tracking, google analytics 4 tracking, google shopping feed, Web Analytics, Web Analytics For WooCommerce, WooCommerce Enhanced Ecommerce, WooCommerce Google Analytics, Google Analytics Plugin, Enhanced Ecommerce Plugin
 Author URI: https://conversios.io/
 Author: Tatvic
-Requires at least: 1.4.1
-Tested up to: 5.8.2
+Requires at least: 3.5.0
+Tested up to: 5.9.1
 Requires PHP: 5.6 or Higher
-Stable tag: 4.4.1
-Version: 4.4.1
+Stable tag: 4.6.8
+Version: 4.6.8
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -58,7 +58,7 @@ Achieve all this by connecting Google Analytics, Google Ads, and Google Merchant
 
 <a target="_blank" href="https://conversios.io/help-center/Installation-Manual.pdf">Here is how you can configure the plugin without any hassle and start scaling your eCommerce business faster.</a>
 
-Create a new Google Ads account using the plugin and get a Google ads coupon upto USD 150 (amount differs based on the country you are in) on the spends you make in the first 31 days. <a target="_blank" href ="https://conversios.io/help-center/Google-Spend-Match.pdf">See terms and condition.</a>
+New users can get $500 in Ad Credits when they spend their first $500 on Google Ads within 60 days. (amount differs based on the country you are in) <a target="_blank" href ="https://conversios.io/help-center/new-google-spend-match.pdf">See terms and condition.</a>
 
 ###AN INTERESTING AMALGAM OF - GOOGLE ANALYTICS + ENHANCED ECOMMERCE REPORTS - THE BEST YOU CAN GET!
 
@@ -379,6 +379,86 @@ You can resolve the duplication of data by removing the manually implemented GA 
 
 
 == Changelog ==
+= 4.6.8 - 17/03/2022 =
+* New: In this release, we have add GA4 dashboard with important e-commerce reports.
+
+= 4.6.7 - 11/03/2022 =
+* Fix: - Fixed the Google ads converstion tracking issue for some users.
+
+= 4.6.6 - 03/03/2022 =
+* New: In this release, we have Enhanced and optimized in Google Analytics tracking event.
+* Tweak: Now, the admin user will be able to change the thank you page conversion tracking method while setting up the plugin under Google Analytics tab. 
+* Tweak: Plugin will no longer be supported for the woocommerce versions anything less than 2.8
+
+= 4.6.5 - 16/02/2022 =
+* Fix -  Fixed :- Onboarding loading issue for some users.
+
+= 4.6.4 - 12/02/2022 =
+
+* New: With our New Feedback feature on Dashboard ,user can now share the feedback about the plugin
+* Tweak: We enhance the Product Sync feature wher user can choose the batch size for product sync
+* Fix -We fixed the import products from GMC
+
+= 4.6.3 - 03/02/2022 =
+
+* New:UI Enhancement
+
+= 4.6.2 - 02/02/2022 =
+
+* In this release we have fixed SQL vulnerability Issues.
+
+= 4.6.1 - 27/01/2022 =
+
+* We have fixed the license key activation issue which was raised by some users.
+
+= 4.6.0 - 26/01/2022 =
+
+* In this release, bug fixed and performance improvement.
+* We have fixed the onboarding issue which was raised by some users.
+
+= 4.5.9 - 17/01/2022 =
+
+* In this release we updated the Google Ads reports like Campaign performance, Smart Shopping and Product Performance & Product Partition.
+
+= 4.5.8 - 10/01/2022 =
+
+* In this release, we have optimise the code and upgrade the plugin security.
+
+= 4.5.7 - 29/12/2021 =
+
+* In this release, we have optimize the code.
+
+= 4.5.6 - 28/12/2021 =
+
+* In this release, we have optimization code.
+
+= 4.5.5 - 27/12/2021 =
+
+* Some users were facing PHP warning issue. The issue is now fixed.
+
+= 4.5.4 - 24/12/2021 =
+
+* Resolved JS issue which was reported in earlier version 4.5.3
+
+= 4.5.3 - 23/12/2021 =
+
+* Resolved some bugs
+
+= 4.5.2 - 23/12/2021 =
+
+* In this release, we have focused on code optimization and performance improvement.
+
+= 4.5.1 - 10/12/2021 =
+
+* Plugin has enhanced the feature "Product Sync Compatibility" with the"YITH WooCommerce Brands Add-On".
+
+= 4.5.0 - 07/12/2021 =
+
+* In this release, we have focused on code optimization and performance improvement.
+
+* Custom atributes read from JSON file issue got fixed.
+
+* Improvements in product feed sync feature.
 
 = 4.4.1 - 15/11/2021 =
 

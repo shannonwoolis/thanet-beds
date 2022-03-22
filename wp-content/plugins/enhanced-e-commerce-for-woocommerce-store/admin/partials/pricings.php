@@ -17,8 +17,7 @@ class TVC_Pricings {
     $this->create_form();
   }
 
-  public function create_form() {
-    $message = ""; $class="";        
+  public function create_form() {       
     $googleDetail = [];
     $plan_id = 1;
     if(isset($this->google_detail['setting'])){
@@ -30,328 +29,325 @@ class TVC_Pricings {
       }
     }
 
-    $close_icon =ENHANCAD_PLUGIN_URL.'/admin/images/close.png';
-    $check_icon =ENHANCAD_PLUGIN_URL.'/admin/images/check.png';
+    $close_icon = esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/images/close.png');
+    $check_icon = esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/images/check.png');
     ?>
 <div class="tab-content">
-  <?php if($message){
-    printf('<div class="%1$s"><div class="alert">%2$s</div></div>', esc_attr($class), esc_html($message));
-  }?>
 	<div class="tab-pane show active" id="tvc-account-page">
 		<div class="tab-card" >			
        <div class="tvc-price-table-features columns-5">
         <div class="tvc-container"> 
           <div class="clearfix">
             <div class="row-heading clearfix">
-               <div class="column tvc-blank-col"><span>Features</span></div>
+               <div class="column tvc-blank-col"><span><?php esc_html_e("Features","conversios"); ?></span></div>
                <div class="column discounted tvc-free-plan">
-                  <div class="name-wrap"><div class="name">STARTER</div></div>
+                  <div class="name-wrap"><div class="name"><?php esc_html_e("STARTER","conversios"); ?></div></div>
                   <div class="tvc-list-price">
-                    <div class="price-current"><span class="inner">FREE</span></div>
-                    <div class="tvc_month_free">FOREVER FREE</div>
+                    <div class="price-current"><span class="inner"><?php esc_html_e("FREE","conversios"); ?></span></div>
+                    <div class="tvc_month_free"><?php esc_html_e("FOREVER FREE","conversios"); ?></div>
                   </div>
                   <span>
-                    <a href="javascript:void(0)" class="btn tvc-btn">Currently Active</a>
+                    <a href="javascript:void(0)" class="btn tvc-btn"><?php esc_html_e("Currently Active","conversios"); ?></a>
                   </span>
                </div>
                <div class="column discounted ">
-                  <div class="name-wrap"><div class="name">HUSTLE</div></div>
+                  <div class="name-wrap"><div class="name"><?php esc_html_e("HUSTLE","conversios"); ?></div></div>
                   <div class="tvc-list-price-month">
                     <div class="tvc-list-price">
                       <div class="price-normal">
-                        <span>$39.00</span>
-                        <div class="tvc-plan-off">50% OFF</div>
+                        <span><?php esc_html_e("$39.00","conversios"); ?></span>
+                        <div class="tvc-plan-off"><?php esc_html_e("50% OFF","conversios"); ?></div>
                       </div>
-                      <div class="price-current"><span class="inner">$19<span>/month</span></span></div>
-                      <div class="tvc_month_free">Limited Offer</div>
+                      <div class="price-current"><span class="inner"><?php printf("%s <span>%s</span>",esc_html_e("$19"),esc_html_e("/month")); ?></span></div>
+                      <div class="tvc_month_free"><?php esc_html_e("Limited Offer","conversios"); ?></div>
                     </div>
-                    <a target="_blank" href="https://conversios.io/checkout/?pid=plan_1_m&utm_source=EE+Plugin+User+Interface&utm_medium=HUSTLE&utm_campaign=Upsell+at+Conversios" class="btn tvc-btn">Get Started</a>
+                    <a target="_blank" href="<?php echo esc_url_raw("https://conversios.io/checkout/?pid=plan_1_m&utm_source=EE+Plugin+User+Interface&utm_medium=HUSTLE&utm_campaign=Upsell+at+Conversios"); ?>" class="btn tvc-btn"><?php esc_html_e("Get Started","conversios"); ?></a>
                   </div>              
                </div>
                <div class="column discounted popular">
                 <div class="tvc_popular">
-                  <div class="tvc_popular_inner">POPULAR</div>
+                  <div class="tvc_popular_inner"><?php esc_html_e("POPULAR","conversios"); ?></div>
                 </div>
                   <div class="name-wrap">
-                     <div class="name">GROWTH</div>                
+                     <div class="name"><?php esc_html_e("GROWTH","conversios"); ?></div>                
                   </div>
                   <div class="tvc-list-price-month">
                     <div class="tvc-list-price">
-                      <div class="price-normal"><span>$59.00</span>
-                        <div class="tvc-plan-off">50% OFF</div>
+                      <div class="price-normal"><span><?php esc_html_e("$59.00","conversios"); ?></span>
+                        <div class="tvc-plan-off"><?php esc_html_e("50% OFF","conversios"); ?></div>
                       </div>
-                      <div class="price-current"><span class="inner">$29<span>/month</span></span></div>
-                      <div class="tvc_month_free">Limited Offer</div>
+                      <div class="price-current"><span class="inner"><?php printf("%s <span>%s</span>",esc_html_e("$29"),esc_html_e("/month")); ?></span></div>
+                      <div class="tvc_month_free"><?php esc_html_e("Limited Offer","conversios"); ?></div>
                     </div>
-                    <a target="_blank"  href="https://conversios.io/checkout/?pid=plan_2_m&utm_source=EE+Plugin+User+Interface&utm_medium=GROWTH&utm_campaign=Upsell+at+Conversios" class="btn tvc-btn">Get Started</a>
+                    <a target="_blank"  href="<?php echo esc_url_raw("https://conversios.io/checkout/?pid=plan_2_m&utm_source=EE+Plugin+User+Interface&utm_medium=GROWTH&utm_campaign=Upsell+at+Conversios"); ?>" class="btn tvc-btn"><?php esc_html_e("Get Started","conversios"); ?></a>
                   </div>              
                </div>
                <div class="column discounted ">
                   <div class="name-wrap">
-                     <div class="name">LEAP</div>                
+                     <div class="name"><?php esc_html_e("LEAP","conversios"); ?></div>                
                   </div>
                   <div class="tvc-list-price-month">
                     <div class="tvc-list-price">
-                      <div class="price-normal"><span>$99.00</span>
-                        <div class="tvc-plan-off">50% OFF</div>
+                      <div class="price-normal"><span><?php esc_html_e("$99.00","conversios"); ?></span>
+                        <div class="tvc-plan-off"><?php esc_html_e("50% OFF","conversios"); ?></div>
                       </div>
-                      <div class="price-current"><span class="inner">$49<span>/month</span></span></div>
-                      <div class="tvc_month_free">Limited Offer</div>
+                      <div class="price-current"><span class="inner"><?php printf("%s <span>%s</span>",esc_html_e("$49"),esc_html_e("/month")); ?></span></div>
+                      <div class="tvc_month_free"><?php esc_html_e("Limited Offer","conversios"); ?></div>
                     </div>
-                    <a target="_blank" href="https://conversios.io/checkout/?pid=plan_3_m&utm_source=EE+Plugin+User+Interface&utm_medium=LEAP&utm_campaign=Upsell+at+Conversios" class="btn tvc-btn">Get Started</a>
+                    <a target="_blank" href="<?php echo esc_url_raw("https://conversios.io/checkout/?pid=plan_3_m&utm_source=EE+Plugin+User+Interface&utm_medium=LEAP&utm_campaign=Upsell+at+Conversios"); ?>" class="btn tvc-btn"><?php esc_html_e("Get Started","conversios"); ?></a>
                   </div>                
                </div>
             </div>
-            <div class="row-subheading clearfix">Google Analytics</div>
+            <div class="row-subheading clearfix"><?php esc_html_e("Google Analytics","conversios"); ?></div>
             <div class="row-feature clearfix">
-               <div class="column">Universal Analytics Tracking</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Universal Analytics Tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column">Google Analytics 4 Tracking</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Google Analytics 4 Tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column">Dual Set up (UA + GA4)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Dual Set up (UA + GA4)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column">eCommerce tracking</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Limited)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
+               <div class="column"><?php esc_html_e("eCommerce tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Limited)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Shopping Behavior Analysis</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Limited)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
+               <div class="column"><?php esc_html_e("Shopping Behavior Analysis","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Limited)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Checkout Behavior Tracking</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Limited)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
+               <div class="column"><?php esc_html_e("Checkout Behavior Tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Limited)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Channel Performance Analysis</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Limited)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
+               <div class="column"><?php esc_html_e("Channel Performance Analysis","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Limited)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
             </div><div class="row-feature clearfix">
-               <div class="column">All Pages tracking</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("All Pages tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Google Analytics and Google Ads linking</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Google Analytics and Google Ads linking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Custom dimensions tracking</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Custom dimensions tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Custom metrics tracking</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Custom metrics tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">User id tracking</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("User id tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">client id tracking</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Client id tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Scroll tracking</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Scroll tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column">Affiliate performance tracking</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Affiliate performance tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column">Coupon Performance Tracking</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Coupon Performance Tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column">Actionable Dashboard</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Limited)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
+               <div class="column"><?php esc_html_e("Actionable Dashboard","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Limited)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column">Menu tracking</div>
-               <div class="column">(Upcoming)</div>
-               <div class="column">(Upcoming)</div>
-               <div class="column popular">(Upcoming)</div>
-               <div class="column">(Upcoming)</div>
+               <div class="column"><?php esc_html_e("Menu tracking","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column popular"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column">Search Query Tracking</div>
-               <div class="column">(Upcoming)</div>
-               <div class="column">(Upcoming)</div>
-               <div class="column popular">(Upcoming)</div>
-               <div class="column">(Upcoming)</div>
+               <div class="column"><?php esc_html_e("Search Query Tracking","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column popular"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
             </div>
-            <div class="row-subheading clearfix">Google Shopping</div>
+            <div class="row-subheading clearfix"><?php esc_html_e("Google Shopping","conversios"); ?></div>
             <div class="row-feature clearfix">
-               <div class="column">Google Merchant Center account management</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Google Merchant Center account management","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Site verification</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Site verification","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Domain claim</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Domain claim","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Products Sync via Content API</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(upto 100)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(upto 1000)</div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"><br>(upto 5000)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Unlimited)</div>
+               <div class="column"><?php esc_html_e("Products Sync via Content API","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(upto 100)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(upto 1000)","conversios"); ?></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(upto 5000)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Unlimited)","conversios"); ?></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Automatic Products Update</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(upto 100)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(upto 1000)</div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"><br>(upto 5000)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Unlimited)</div>
+               <div class="column"><?php esc_html_e("Automatic Products Update","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(upto 100)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(upto 1000","conversios"); ?></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(upto 5000)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Unlimited)","conversios"); ?></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Schedule Product Sync</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Schedule Product Sync","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Smart Shopping Campaign management</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Smart Shopping Campaign management","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Smart Shopping reports</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Smart Shopping reports","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Google Ads and Google Merchant Center account linking</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Google Ads and Google Merchant Center account linking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Remarketing tags</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Remarketing tags","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Dynamic Remarketing Tags for eCommerce events</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Limited)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"><br>(Complete)</div>
+               <div class="column"><?php esc_html_e("Dynamic Remarketing Tags for eCommerce events","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Limited)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Google Ads Conversion tracking</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Google Ads Conversion tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Product filters for selected products sync</div>
-               <div class="column">(Upcoming)</div>
-               <div class="column">(Upcoming)</div>
-               <div class="column popular">(Upcoming)</div>
-               <div class="column">(Upcoming)</div>
+               <div class="column"><?php esc_html_e("Product filters for selected products sync","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column popular"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Product filter for Smart Shopping Campaign</div>
-               <div class="column">(Upcoming)</div>
-               <div class="column">(Upcoming)</div>
-               <div class="column popular">(Upcoming)</div>
-               <div class="column">(Upcoming)</div>
+               <div class="column"><?php esc_html_e("Product filter for Smart Shopping Campaign","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column popular"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column">Rule Based Shopping Campaigns</div>
-               <div class="column">(Upcoming)</div>
-               <div class="column">(Upcoming)</div>
-               <div class="column popular">(Upcoming)</div>
-               <div class="column">(Upcoming)</div>
+               <div class="column"><?php esc_html_e("Rule Based Shopping Campaigns","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column popular"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
             </div>
-            <div class="row-subheading clearfix">Support</div>
+            <div class="row-subheading clearfix"><?php esc_html_e("Support","conversios"); ?></div>
             <div class="row-feature clearfix">
-               <div class="column">Free Google Analytics Audit</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Free Google Analytics Audit","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Free Consultation with Shopping Expert</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Free Consultation with Shopping Expert","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column">Dedicated Customer Success Manager</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Dedicated Customer Success Manager","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-footer clearfix">
-               <div class="column">Premium Support (24*7)</div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo $close_icon; ?>" alt="no"></div>
-               <div class="column popular "><img src="<?php echo $check_icon; ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo $check_icon; ?>" alt="yes"></div>
+               <div class="column"><?php esc_html_e("Premium Support (24*7)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div>
           </div>
         </div>
       </div>
       <div class="tvc-guarantee">
         <div class="guarantee">
-          <div class="title"><span>15 Days</span>100% No-Risk Money Back Guarantee!</div>
-          <div class="description">You are fully protected by our 100% No-Risk-Double-Guarantee. If you don’t like over the next 15 days, then we will happily refund 100% of your money. No questions asked.</div>
+          <div class="title"><?php printf("<span>%s</span>%s", esc_html_e("15 Days","conversios"), esc_html_e("100% No-Risk Money Back Guarantee!","conversios")); ?></div>
+          <div class="description"><?php esc_html_e("You are fully protected by our 100% No-Risk-Double-Guarantee. If you don’t like over the next 15 days, then we will happily refund 100% of your money. No questions asked.","conversios"); ?></div>
         </div>
       </div>
     </div>

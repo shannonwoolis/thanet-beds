@@ -114,8 +114,11 @@ function wcpdf_get_packing_slip( $order, $init = false ) {
 }
 
 /**
- * Load HTML into (pluggable) PDF library, DomPDF 0.6 by default
+ * Load HTML into (pluggable) PDF library, DomPDF 1.0.2 by default
  * Use wpo_wcpdf_pdf_maker filter to change the PDF class (which can wrap another PDF library).
+ * 
+ * @param string $html
+ * @param array  $settings
  * @return PDF_Maker
  */
 function wcpdf_get_pdf_maker( $html, $settings = array() ) {
@@ -124,6 +127,16 @@ function wcpdf_get_pdf_maker( $html, $settings = array() ) {
 	}
 	$class = apply_filters( 'wpo_wcpdf_pdf_maker', '\\WPO\\WC\\PDF_Invoices\\PDF_Maker' );
 	return new $class( $html, $settings );
+}
+
+/**
+ * Check if the default PDF maker is used for creating PDF
+ * 
+ * @return bool whether the PDF maker is the default or not
+ */
+function wcpdf_pdf_maker_is_default() {
+	$default_pdf_maker = '\\WPO\\WC\\PDF_Invoices\\PDF_Maker';
+	return $default_pdf_maker == apply_filters( 'wpo_wcpdf_pdf_maker', $default_pdf_maker );
 }
 
 function wcpdf_pdf_headers( $filename, $mode = 'inline', $pdf = null ) {
@@ -162,11 +175,12 @@ function wcpdf_deprecated_function( $function, $version, $replacement = null ) {
 	// if the deprecated function is called from one of our filters, $this should be $document
 	$filter = current_filter();
 	$global_wcpdf_filters = array( 'wp_ajax_generate_wpo_wcpdf' );
-	if ( !in_array($filter, $global_wcpdf_filters) && strpos($filter, 'wpo_wcpdf') !== false && strpos($replacement, '$this') !== false ) {
-		$replacement = str_replace('$this', '$document', $replacement);
+	if ( ! in_array ( $filter, $global_wcpdf_filters ) && strpos( $filter, 'wpo_wcpdf' ) !== false && strpos( $replacement, '$this' ) !== false ) {
+		$replacement = str_replace( '$this', '$document', $replacement );
 		$replacement = "{$replacement} - check that the \$document parameter is included in your action or filter ($filter)!";
 	}
-	if ( is_ajax() ) {
+	$is_ajax = function_exists( 'wp_doing_ajax' ) ? wp_doing_ajax() : defined( 'DOING_AJAX' ) && DOING_AJAX;
+	if ( $is_ajax ) {
 		do_action( 'deprecated_function_run', $function, $replacement, $version );
 		$log_string  = "The {$function} function is deprecated since version {$version}.";
 		$log_string .= $replacement ? " Replace with {$replacement}." : '';
@@ -181,11 +195,15 @@ function wcpdf_deprecated_function( $function, $version, $replacement = null ) {
  * Logger function to capture errors thrown by this plugin, uses the WC Logger when possible (WC3.0+)
  */
 function wcpdf_log_error( $message, $level = 'error', $e = null ) {
-	if (function_exists('wc_get_logger')) {
+	if ( function_exists( 'wc_get_logger' ) ) {
 		$logger = wc_get_logger();
 		$context = array( 'source' => 'wpo-wcpdf' );
 
-		if ( apply_filters( 'wcpdf_log_stacktrace', false ) && !empty($e) && is_callable( array( $e, 'getTraceAsString') ) ) {
+		if ( is_callable( array( $e, 'getFile' ) ) && is_callable( array( $e, 'getLine' ) ) ) {
+			$message = sprintf( '%s (%s:%d)', $message, $e->getFile(), $e->getLine() );
+		}
+
+		if ( apply_filters( 'wcpdf_log_stacktrace', false ) && is_callable( array( $e, 'getTraceAsString' ) ) ) {
 			$message .= "\n".$e->getTraceAsString();
 		}
 		 
@@ -205,14 +223,17 @@ function wcpdf_log_error( $message, $level = 'error', $e = null ) {
 }
 
 function wcpdf_output_error( $message, $level = 'error', $e = null ) {
-	if ( !current_user_can( 'edit_shop_orders' ) ) {
-		_e( 'Error creating PDF, please contact the site owner.', 'woocommerce-pdf-invoices-packing-slips' );
+	if ( ! current_user_can( 'edit_shop_orders' ) ) {
+		esc_html_e( 'Error creating PDF, please contact the site owner.', 'woocommerce-pdf-invoices-packing-slips' );
 		return;
 	}
 	?>
 	<div style="border: 2px solid red; padding: 5px;">
-		<h3><?php echo $message; ?></h3>
-		<?php if ( !empty($e) && is_callable( array( $e, 'getTraceAsString') ) ): ?>
+		<h3><?php echo wp_kses_post( $message ); ?></h3>
+		<?php if ( is_callable( array( $e, 'getFile' ) ) && is_callable( array( $e, 'getLine' ) ) ): ?>
+		<pre><?php echo $e->getFile(); ?> (<?php echo $e->getLine(); ?>)</pre>
+		<?php endif ?>
+		<?php if ( is_callable( array( $e, 'getTraceAsString' ) ) ): ?>
 		<pre><?php echo $e->getTraceAsString(); ?></pre>
 		<?php endif ?>
 	</div>
@@ -227,4 +248,51 @@ function wcpdf_output_error( $message, $level = 'error', $e = null ) {
  */
 function wcpdf_date_format( $document = null, $date_type = null ) {
 	return apply_filters( 'wpo_wcpdf_date_format', wc_date_format(), $document, $date_type );
+}
+
+/**
+ * Catch MySQL errors
+ * 
+ * Inspired from here: https://github.com/johnbillion/query-monitor/blob/d5b622b91f18552e7105e62fa84d3102b08975a4/collectors/db_queries.php#L125-L280
+ * 
+ * With SAVEQUERIES constant defined as 'false', '$wpdb->queries' is empty and '$EZSQL_ERROR' is used instead.
+ * Using the Query Monitor plugin, the SAVEQUERIES constant is defined as 'true'
+ * More info about this constant can be found here: https://wordpress.org/support/article/debugging-in-wordpress/#savequeries
+ *
+ * @param  object $wpdb
+ * @return array  errors found
+ */
+function wcpdf_catch_db_object_errors( $wpdb ) {
+	global $EZSQL_ERROR;
+
+	$errors = array();
+
+	// using '$wpdb->queries'
+	if ( ! empty( $wpdb->queries ) && is_array( $wpdb->queries ) ) {
+		foreach ( $wpdb->queries as $query ) {
+			$result = isset( $query['result'] ) ? $query['result'] : null;
+	
+			if ( is_wp_error( $result ) && is_array( $result->errors ) ) {
+				foreach ( $result->errors as $error ) {
+					$errors[] = reset( $error );
+				}
+			}
+		}
+	} 
+	
+	// fallback to '$EZSQL_ERROR'
+	if ( empty( $errors ) && ! empty( $EZSQL_ERROR ) && is_array( $EZSQL_ERROR ) ) {
+		foreach ( $EZSQL_ERROR as $error ) {
+			$errors[] = $error['error_str'];
+		}
+	}
+
+	// log errors
+	if ( ! empty( $errors ) ) {
+		foreach ( $errors as $error_message ) {
+			wcpdf_log_error( $error_message, 'critical' );
+		}
+	}
+
+	return $errors;
 }

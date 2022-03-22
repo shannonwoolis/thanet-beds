@@ -14,11 +14,28 @@ import * as $ from "jquery";
 import PostEditor from "./components/PostEditor";
 import AdminNotice from "./components/AdminNotice";
 
+import AjaxListTable from "./components/SubPostListTable";
+
+import { addAction } from "@wordpress/hooks";
+
+
 const AJAX_CALLBACK_PREFIX = mbp_localize_script.AJAX_CALLBACK_PREFIX;
 const POST_EDITOR_DEFAULT_FIELDS = mbp_localize_script.POST_EDITOR_DEFAULT_FIELDS;
 
-let postEditor = new PostEditor(true, AJAX_CALLBACK_PREFIX, POST_EDITOR_DEFAULT_FIELDS);
+const { post_nonce, locale } = mbp_localize_script;
 
+let postEditor = new PostEditor(true, AJAX_CALLBACK_PREFIX, POST_EDITOR_DEFAULT_FIELDS, post_nonce);
+
+
+let subpostListContainer = $("#pgmb-subpost-table-container");
+let subpostListTableNonce = $("#pgmb_subpost_table_nonce");
+
+let subpostList = new AjaxListTable(subpostListContainer, subpostListTableNonce, "pgmb_subpost");
+subpostList.set_parent_id(mbp_localize_script.post_id);
+
+
+const entityTableContainer = $("#pgmb-entity-table-container");
+let entityList = new AjaxListTable(entityTableContainer, subpostListTableNonce, 'pgmb_entity');
 
 let postFormContainer = $(".mbp-post-form-container");
 const postTextField = $('#post_text');
@@ -44,10 +61,42 @@ const formDataModes = {
 let formDataMode = formDataModes.createPost;
 
 
+// To refresh the list after creating a post through the block editor
+addAction('pgmb_saving_post', 'post-to-google-my-business/saving-post',
+	function(){
+		subpostList.display();
+	}
+);
 
 let editing = false;
 
+subpostList.display();
 
+
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+
+/**
+ * Load post for editing from url parameters
+ */
+if(urlParams.has('pgmb_edit_post')){
+	const post_id = parseInt(urlParams.get('pgmb_post_id'));
+	load_post(post_id, true, function(){
+		const container = document.getElementsByClassName('mbp-post-form-container');
+		container[0].scrollIntoView({behavior: "smooth", block: "start"} );
+	});
+}
+
+/**
+ * Show created posts list from URL parameters
+ */
+if(urlParams.has('pgmb_list_posts')){
+	const post_id = parseInt(urlParams.get('pgmb_post_id'));
+	$(document).ready(function() {
+		show_created_posts(post_id);
+	});
+}
 
 /**
  * Resets the post editing form to its defaults
@@ -58,8 +107,6 @@ function reset_form(){
 	formDataMode = formDataModes.createPost;
 	formControlButtons.publishPostButton.html(mbp_localize_script.publish_button);
 	formControlButtons.draftPostButton.show();
-
-
 }
 
 function load_form_defaults(){
@@ -118,31 +165,37 @@ function load_autopost_template(){
 }
 
 function show_created_posts(post_id){
-	const createdPostDialog = $("#mbp-created-post-dialog");
-	const createdPostTable = $("#mbp-created-post-table");
-	const data = {
-		'action': 'mbp_get_created_posts',
-		'mbp_post_id': post_id,
-		'mbp_post_nonce': mbp_localize_script.post_nonce
-	};
+	entityList.set_parent_id(post_id);
 
-	$.post(ajaxurl, data, function(response) {
-		if(response.error){
-			AdminNotice(response.error, 'notice-error');
-			return;
-		}
+	entityList.display();
+	tb_show("Created posts", "#TB_inline?width=600&height=300&inlineId=mbp-created-post-dialog");
+	let ajaxContent = $('#TB_ajaxContent');
+	ajaxContent.attr("style", "");
 
-		if(response.success){
-			createdPostTable.html(response.data.table);
-			tb_show("Created posts", "#TB_inline?width=600&height=300&inlineId=mbp-created-post-dialog");
-			let ajaxContent = $('#TB_ajaxContent');
-			ajaxContent.attr("style", "");
-		}
-	});
+	// const createdPostTable = $("#mbp-created-post-table");
+	// const data = {
+	// 	'action': 'mbp_get_created_posts',
+	// 	'mbp_post_id': post_id,
+	// 	'mbp_post_nonce': mbp_localize_script.post_nonce
+	// };
+	//
+	// $.post(ajaxurl, data, function(response) {
+	// 	if(response.error){
+	// 		AdminNotice(response.error, 'notice-error');
+	// 		return;
+	// 	}
+	//
+	// 	if(response.success){
+	// 		createdPostTable.html(response.data.table);
+	// 		tb_show("Created posts", "#TB_inline?width=600&height=300&inlineId=mbp-created-post-dialog");
+	// 		let ajaxContent = $('#TB_ajaxContent');
+	// 		ajaxContent.attr("style", "");
+	// 	}
+	// });
 
 }
 
-function load_post(post_id, edit){
+function load_post(post_id, edit, onReadyCallback){
 	postEditor.resetForm();
 	formControlButtons.publishPostButton.html(mbp_localize_script.publish_button);
 	if(edit){
@@ -182,9 +235,14 @@ function load_post(post_id, edit){
 				fields: response.post.form_fields
 			});
 
-			postFormContainer.slideDown("slow");
+			postFormContainer.slideDown("slow", function(){
+				if (typeof onReadyCallback === 'function') {
+					onReadyCallback();
+				}
+			});
 			postTextField.trigger("keyup");
 		}
+
 	});
 }
 
@@ -291,12 +349,13 @@ $('#mbp-publish-post, #mbp-draft-post').click(function(event){
 		}
 
 		if(formDataMode !== formDataModes.editTemplate){
-			if(!editing){
-				$(".mbp-existing-posts tbody").prepend(response.data.row).show("slow");
-			}else{
-				$(".mbp-existing-posts tbody tr[data-postid='" + editing + "']").replaceWith(response.data.row);
-			}
-			$(".mbp-existing-posts .no-items").hide();
+			// if(!editing){
+			// 	$(".mbp-existing-posts tbody").prepend(response.data.row).show("slow");
+			// }else{
+			// 	$(".mbp-existing-posts tbody tr[data-postid='" + editing + "']").replaceWith(response.data.row);
+			// }
+			// $(".mbp-existing-posts .no-items").hide();
+			subpostList.display();
 			editing = response.data.id;
 		}
 
@@ -316,7 +375,7 @@ $('#mbp-publish-post, #mbp-draft-post').click(function(event){
 /**
  * Hook functions for editing, duplicating or deleting existing posts
  */
-$('.mbp-existing-posts').on('click', 'a.mbp-action', function(event){
+$('#pgmb-subpost-table-container').on('click', 'a.mbp-action', function(event){ //Todo: change the ID of the table
 	event.preventDefault();
 	const post_id = $(this).closest('tr').data('postid');
 	const action = $(this).data('action');

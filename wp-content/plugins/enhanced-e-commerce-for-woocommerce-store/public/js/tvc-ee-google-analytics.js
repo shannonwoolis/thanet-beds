@@ -35,7 +35,8 @@ class TVC_Enhanced {
   }
   singleProductaddToCartEventBindings(variations_data){
    // alert("call first");
-    var single_btn = document.getElementsByClassName("single_add_to_cart_button");
+    //var single_btn = document.getElementsByClassName("single_add_to_cart_button");
+    var single_btn = document.querySelectorAll("button[class*='btn-buy-shop'],button[class*='single_add_to_cart_button'], button[class*='add_to_cart']");
     if(single_btn.length > 0){
       single_btn[0].addEventListener("click", () => this.add_to_cart_click(variations_data, "Product Pages"));
     }    
@@ -320,10 +321,10 @@ class TVC_Enhanced {
       var ads_value=0;
       for(var t_item in tvc_oc){
         ads_value=ads_value + parseFloat(tvc_oc[t_item].tvc_p);
-          ads_items.push({
-            item_id: tvc_oc[t_item].tvc_i,
-            google_business_vertical: "retail"
-          });
+        ads_items.push({
+          item_id: tvc_oc[t_item].tvc_i,
+          google_business_vertical: "retail"
+        });
       }
       gtag("event","purchase", {
         "send_to":this.options.remarketing_snippet_id,

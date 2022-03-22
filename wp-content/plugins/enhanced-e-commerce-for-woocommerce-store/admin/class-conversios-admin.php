@@ -27,9 +27,8 @@ if ( ! class_exists( 'Conversios_Admin' ) ) {
     protected $version;
     public function __construct() { 
       $this->version = PLUGIN_TVC_VERSION;
-      $this->includes();                      
-      $this->url = $this->get_onboarding_page_url();
-     /*  $this->pro_plan_site = $this->get_pro_plan_site();*/
+      $this->includes();
+      $this->url = $this->get_onboarding_page_url(); // use in setting page
       $this->google_detail = $this->get_ee_options_data();
       add_action( 'admin_menu', array( $this, 'add_admin_pages' ) );
       add_action('admin_init',array($this, 'init'));     
@@ -55,19 +54,19 @@ if ( ! class_exists( 'Conversios_Admin' ) ) {
      */
     public function enqueue_styles() {
       $screen = get_current_screen();
-      if ($screen->id == 'toplevel_page_conversios'  || (isset($_GET['page']) && strpos($_GET['page'], 'conversios') !== false) ) {
+      if ($screen->id == 'toplevel_page_conversios'  || (isset($_GET['page']) && strpos(sanitize_text_field($_GET['page']), 'conversios') !== false) ) {
         //developres hook to custom css
-        do_action('add_conversios_css_'.$_GET['page']);
+        do_action('add_conversios_css_'.sanitize_text_field($_GET['page']));
         //conversios page css
-        if($_GET['page'] == "conversios"){
-          wp_register_style('conversios-slick-css', ENHANCAD_PLUGIN_URL.'/admin/css/slick.css');
+        if(sanitize_text_field($_GET['page']) == "conversios"){
+          wp_register_style('conversios-slick-css', esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/css/slick.css') );
           wp_enqueue_style('conversios-slick-css');
-          wp_register_style('conversios-daterangepicker-css', ENHANCAD_PLUGIN_URL.'/admin/css/daterangepicker.css');
+          wp_register_style('conversios-daterangepicker-css', esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/css/daterangepicker.css') );
           wp_enqueue_style('conversios-daterangepicker-css');
         }
         //all conversios page css 
-        wp_enqueue_style('conversios-style-css',ENHANCAD_PLUGIN_URL . '/admin/css/style.css', array(), $this->version, 'all');
-        wp_enqueue_style('conversios-responsive-css',ENHANCAD_PLUGIN_URL . '/admin/css/responsive.css', array(), $this->version, 'all');
+        wp_enqueue_style('conversios-style-css', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/css/style.css'), array(), esc_attr($this->version), 'all' );
+        wp_enqueue_style('conversios-responsive-css', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/css/responsive.css'), array(), esc_attr($this->version), 'all');
       }
     }
 
@@ -78,19 +77,17 @@ if ( ! class_exists( 'Conversios_Admin' ) ) {
      */
     public function enqueue_scripts() {
       $screen = get_current_screen();
-      if ($screen->id == 'toplevel_page_conversios'  || (isset($_GET['page']) && strpos($_GET['page'], 'conversios') !== false) ) {
-        if($_GET['page'] == "conversios"){
-          wp_enqueue_script( 'conversios-jquery-js', ENHANCAD_PLUGIN_URL . '/admin/js/jquery-3.5.1.min.js' );
+      if ($screen->id == 'toplevel_page_conversios'  || (isset($_GET['page']) && strpos(sanitize_text_field($_GET['page']), 'conversios') !== false) ) {
+        if(sanitize_text_field($_GET['page']) == "conversios"){
+          
+          wp_enqueue_script( 'conversios-chart-js', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/js/chart.js') );
+          wp_enqueue_script( 'conversios-chart-datalabels-js', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/js/chartjs-plugin-datalabels.js') );
+          wp_enqueue_script( 'conversios-basictable-js', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/js/jquery.basictable.min.js') );
+          wp_enqueue_script( 'conversios-moment-js', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/js/moment.min.js') );
+          wp_enqueue_script( 'conversios-daterangepicker-js', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/js/daterangepicker.js') ); 
 
-          wp_enqueue_script( 'conversios-chart-js', ENHANCAD_PLUGIN_URL . '/admin/js/chart.js' );
-          wp_enqueue_script( 'conversios-chart-datalabels-js', ENHANCAD_PLUGIN_URL . '/admin/js/chartjs-plugin-datalabels.js');
-          wp_enqueue_script( 'conversios-basictable-js', ENHANCAD_PLUGIN_URL . '/admin/js/jquery.basictable.min.js');
-          wp_enqueue_script( 'conversios-moment-js', ENHANCAD_PLUGIN_URL . '/admin/js/moment.min.js');
-          wp_enqueue_script( 'conversios-daterangepicker-js', ENHANCAD_PLUGIN_URL . '/admin/js/daterangepicker.js'); 
-
-          wp_enqueue_script( 'tvc-ee-custom-js', ENHANCAD_PLUGIN_URL . '/admin/js/tvc-ee-custom.js', array( 'jquery' ), $this->version, false );       
+          wp_enqueue_script( 'tvc-ee-custom-js', esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/js/tvc-ee-custom.js'), array( 'jquery' ), esc_attr($this->version), false );       
         }
-        do_action('add_conversios_js_'.$_GET['page']);
       }
     }
 
@@ -110,7 +107,7 @@ if ( ! class_exists( 'Conversios_Admin' ) ) {
       }  
 
       add_menu_page(
-          esc_html__('Tatvic EE Plugin','conversios'), esc_html__('Tatvic EE Plugin','conversios'), 'manage_options', "conversios", array($this, 'showPage'), plugin_dir_url(__FILE__) . 'images/tatvic_logo.png', 26
+          esc_html__('Tatvic EE Plugin','conversios'), esc_html__('Tatvic EE Plugin','conversios'), 'manage_options', "conversios", array($this, 'showPage'), esc_url_raw(plugin_dir_url(__FILE__) . 'images/tatvic_logo.png'), 26
       );
       add_submenu_page(
         'conversios', 
@@ -170,13 +167,13 @@ if ( ! class_exists( 'Conversios_Admin' ) ) {
      */
     public function showPage() {
       do_action('add_conversios_header');
-      if (!empty($_GET['page'])) {
-        $get_action = str_replace("-", "_", $_GET['page']);
+      if (!empty(sanitize_text_field($_GET['page']))) {
+        $get_action = str_replace("-", "_", sanitize_text_field($_GET['page']));
       } else {
-          $get_action = "conversios";
+        $get_action = "conversios";
       }
       if (method_exists($this, $get_action)) {
-          $this->$get_action();
+        $this->$get_action();
       }
       echo $this->get_tvc_popup_message();
       do_action('add_conversios_footer');
@@ -207,30 +204,26 @@ if ( ! class_exists( 'Conversios_Admin' ) ) {
     public function conversios_google_shopping_feed() {
         include(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');
         include(ENHANCAD_PLUGIN_DIR . 'includes/setup/google-shopping-feed.php');
-        $action_tab = (isset($_GET['tab']))?$_GET['tab']:"";
+        $action_tab = (isset($_GET['tab']))?sanitize_text_field($_GET['tab']):"";
         if($action_tab!=""){
           $this->$action_tab();
         }else{
           new GoogleShoppingFeed();
         }
     }
-    public function gaa_config_page() { 
-        //include(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');       
-        include(ENHANCAD_PLUGIN_DIR . 'includes/setup/google-shopping-feed-gaa-config.php');        
+    public function gaa_config_page() {        
+        include(ENHANCAD_PLUGIN_DIR . 'includes/setup/google-shopping-feed-gaa-config.php'); 
         new GAAConfiguration();
     }    
     public function sync_product_page() {
-        //include(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');
-        include(ENHANCAD_PLUGIN_DIR . 'includes/setup/google-shopping-feed-sync-product.php');
-        new SyncProductConfiguration();
+      include(ENHANCAD_PLUGIN_DIR . 'includes/setup/google-shopping-feed-sync-product.php');
+      new SyncProductConfiguration();
     }
     public function shopping_campaigns_page() {
-        //include(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');
         include(ENHANCAD_PLUGIN_DIR . 'includes/setup/google-shopping-feed-shopping-campaigns.php');
         new CampaignsConfiguration();
     }
     public function add_campaign_page() {
-        //include(ENHANCAD_PLUGIN_DIR . 'includes/setup/help-html.php');
         include(ENHANCAD_PLUGIN_DIR . 'includes/setup/add-campaign.php');
         new AddCampaign();
     } 

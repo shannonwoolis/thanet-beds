@@ -32,7 +32,7 @@ class Container implements \ArrayAccess {
 	 *
 	 * @param array $values
 	 */
-	public function __construct(array $values = array()){
+	public function __construct(array $values = []){
 		$this->locked = false;
 		$this->values = $values;
 	}
@@ -44,10 +44,10 @@ class Container implements \ArrayAccess {
 	 */
 	public function configure($configurations){
 		if(!is_array($configurations)){
-			$configurations = array($configurations);
+			$configurations = [ $configurations ];
 		}
 		foreach($configurations as $configuration){
-			$this->modify($configurations);
+			$this->modify($configuration);
 		}
 	}
 

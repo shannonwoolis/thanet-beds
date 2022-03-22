@@ -25,12 +25,12 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
     add_action('wp_ajax_tvcajax-update-campaign-status', array($this, 'tvcajax_update_campaign_status'));
     add_action('wp_ajax_tvcajax-delete-campaign', array($this, 'tvcajax_delete_campaign'));
     
-    add_action('wp_ajax_tvcajax-product-syncup', array($this, 'tvcajax_product_syncup'));
     add_action('wp_ajax_tvcajax-gmc-category-lists', array($this, 'tvcajax_get_gmc_categories'));
-    add_action('wp_ajax_tvcajax-custom-metrics-dimension', array($this, 'tvcajax_custom_metrics_dimension'));
+    //add_action('wp_ajax_tvcajax-custom-metrics-dimension', array($this, 'tvcajax_custom_metrics_dimension'));
     add_action('wp_ajax_tvcajax-store-time-taken', array($this, 'tvcajax_store_time_taken'));
 
     add_action('wp_ajax_tvc_call_api_sync', array($this, 'tvc_call_api_sync'));
+    add_action('wp_ajax_tvc_call_import_gmc_product', array($this, 'tvc_call_import_gmc_product'));
     add_action('wp_ajax_tvc_call_domain_claim', array($this, 'tvc_call_domain_claim'));
     add_action('wp_ajax_tvc_call_site_verified', array($this, 'tvc_call_site_verified'));
     add_action('wp_ajax_tvc_call_notice_dismiss', array($this, 'tvc_call_notice_dismiss'));
@@ -38,15 +38,19 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
     add_action('wp_ajax_tvc_call_active_licence', array($this, 'tvc_call_active_licence'));
     add_action('wp_ajax_tvc_call_add_survey', array($this, 'tvc_call_add_survey'));
 
+    add_action('wp_ajax_tvc_call_add_customer_feedback', array($this, 'tvc_call_add_customer_feedback'));
+
     add_action('wp_ajax_tvcajax_product_sync_bantch_wise', array($this, 'tvcajax_product_sync_bantch_wise'));
   }
 
   public function tvcajax_product_sync_bantch_wise(){
     global $wpdb;
+    $rs = array();
     // barch size for inser data in DB
     $product_db_batch_size = 100;
     // barch size for inser product in GMC
-    $product_batch_size = 50;
+    //$product_batch_size = 25;
+    $product_batch_size = isset($_POST['product_batch_size'])?sanitize_text_field($_POST['product_batch_size']):"25";
     if(!class_exists('CustomApi')){
       include(ENHANCAD_PLUGIN_DIR . 'includes/setup/CustomApi.php');
     }
@@ -58,24 +62,36 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
     $TVC_Admin_Helper = new TVC_Admin_Helper();
     $TVCProductSyncHelper = new TVCProductSyncHelper();
     //sleep(3);
-    $prouct_pre_sync_table = $wpdb->prefix ."ee_prouct_pre_sync_data";
+    $prouct_pre_sync_table = esc_sql( $wpdb->prefix ."ee_prouct_pre_sync_data" );
     
     $sync_produt = ""; $sync_produt_p = ""; $is_synced_up = ""; $sync_message = "";
     $sync_progressive_data = isset($_POST['sync_progressive_data'])?$_POST['sync_progressive_data']:"";
-    $sync_produt = isset($sync_progressive_data['sync_produt'])?$sync_progressive_data['sync_produt']:"";
-    $sync_step = isset($sync_progressive_data['sync_step'])?$sync_progressive_data['sync_step']:"1";
-    $total_product =isset($sync_progressive_data['total_product'])?$sync_progressive_data['total_product']:"0";
+
+    $sync_produt = isset($sync_progressive_data['sync_produt'])?sanitize_text_field($sync_progressive_data['sync_produt']):"";
+    $sync_produt = sanitize_text_field($sync_produt);
+
+    $sync_step = isset($sync_progressive_data['sync_step'])?sanitize_text_field($sync_progressive_data['sync_step']):"1";
+    $sync_step = sanitize_text_field($sync_step);
+
+    $total_product =isset($sync_progressive_data['total_product'])?sanitize_text_field($sync_progressive_data['total_product']):"0";
+    $total_product = sanitize_text_field($total_product);
+
     $last_sync_product_id =isset($sync_progressive_data['last_sync_product_id'])?$sync_progressive_data['last_sync_product_id']:"";
-    $skip_products =isset($sync_progressive_data['skip_products'])?$sync_progressive_data['skip_products']:"0";
+    $last_sync_product_id = sanitize_text_field( intval( $last_sync_product_id ) );
 
-    //print_r($_POST);
-    $merchant_id = isset($_POST['tvc_data'])?$_POST['tvc_data']:"";
-    $account_id = isset($_POST['account_id'])?$_POST['account_id']:"";
-    $customer_id = isset($_POST['customer_id'])?$_POST['customer_id']:"";
-    $subscription_id = isset($_POST['subscription_id'])?$_POST['subscription_id']:"";
-    $data = isset($_POST['tvc_data'])?$_POST['tvc_data']:"";    
-   
+    $skip_products =isset($sync_progressive_data['skip_products'])?sanitize_text_field($sync_progressive_data['skip_products']):"0";
+    $skip_products = sanitize_text_field($skip_products);
 
+    $account_id = isset($_POST['account_id'])?sanitize_text_field($_POST['account_id']):"";
+    $customer_id = isset($_POST['customer_id'])?sanitize_text_field($_POST['customer_id']):"";
+    $subscription_id = isset($_POST['subscription_id'])?sanitize_text_field($_POST['subscription_id']):"";
+    $data = isset($_POST['tvc_data'])?$_POST['tvc_data']:"";
+    parse_str($data, $formArray);    
+    if(!empty($formArray)){
+      foreach ($formArray as $key => $value) {
+        $formArray[$key] = sanitize_text_field($value);
+      }
+    }
     if( $sync_progressive_data == "" && $TVC_Admin_DB_Helper->tvc_row_count("ee_prouct_pre_sync_data") > 0 ){
       $TVC_Admin_DB_Helper->tvc_safe_truncate_table($prouct_pre_sync_table);
     }
@@ -87,7 +103,7 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
       $sync_produt = 0;
     }
     if($sync_step == 1){
-      parse_str($data, $formArray);      
+      //parse_str($data, $formArray);      
       $mappedCatsDB = [];
       $mappedCats = [];
       $mappedAttrs = [];
@@ -113,11 +129,11 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
         }
       }
       //add/update data in defoult profile
-      $profile_data = array("profile_title"=>"Default","g_attribute_mapping"=>json_encode($mappedAttrs),"update_date"=>date('Y-m-d'));
+      $profile_data = array("profile_title"=>esc_sql("Default"),"g_attribute_mapping"=>json_encode($mappedAttrs),"update_date"=>date('Y-m-d'));
       if($TVC_Admin_DB_Helper->tvc_row_count("ee_product_sync_profile") ==0){
-        $TVC_Admin_DB_Helper->tvc_add_row("ee_product_sync_profile",$profile_data);
+        $TVC_Admin_DB_Helper->tvc_add_row("ee_product_sync_profile", $profile_data, array("%s", "%s","%s"));
       }else{
-        $TVC_Admin_DB_Helper->tvc_update_row("ee_product_sync_profile",$profile_data,array("id"=>1));
+        $TVC_Admin_DB_Helper->tvc_update_row("ee_product_sync_profile", $profile_data, array("id" => 1));
       }
       update_option("ee_prod_mapped_cats", serialize($mappedCatsDB));
       update_option("ee_prod_mapped_attrs", serialize($mappedAttrs)); 
@@ -140,7 +156,8 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
                 'taxonomy' => 'product_cat',
                 'field' => 'term_id',
                 'terms' => $mc_key, /* category name */
-                'operator' => 'IN'
+                'operator' => 'IN',
+                'include_children' => false
               )
             )
           ));
@@ -149,20 +166,13 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
            */
           if(!empty($all_products)){
             foreach($all_products as $postkey => $postvalue){
-              $batch_count++;
-              $t_data = array(
-                'w_product_id'=>$postvalue->ID,
-                'w_cat_id'=>$mc_key,
-                'g_cat_id'=>$mappedCat,
-                'product_sync_profile_id'=> 1,
-                'update_date'=>date('Y-m-d')
-              );            
-              array_push( $values, $postvalue->ID, $mc_key, $mappedCat, 1, date('Y-m-d') );
+              $batch_count++;        
+              array_push( $values, esc_sql($postvalue->ID), esc_sql($mc_key), esc_sql($mappedCat), 1, date('Y-m-d') );
               $place_holders[] = "('%d', '%d', '%d','%d', '%s')";
               if($batch_count >= $product_db_batch_size){
-                $query = "INSERT INTO $prouct_pre_sync_table (w_product_id, w_cat_id, g_cat_id, product_sync_profile_id, update_date) VALUES ";
+                $query = "INSERT INTO `$prouct_pre_sync_table` (w_product_id, w_cat_id, g_cat_id, product_sync_profile_id, update_date) VALUES ";
                 $query .= implode( ', ', $place_holders );
-                $wpdb->query($wpdb->prepare( "$query", $values ));
+                $wpdb->query($wpdb->prepare( $query, $values ));
                 $batch_count = 0;
                 $values = array();
                 $place_holders = array();
@@ -174,9 +184,9 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
          * add last batch data in DB
          */
         if($batch_count > 0){
-          $query = "INSERT INTO $prouct_pre_sync_table (w_product_id, w_cat_id, g_cat_id, product_sync_profile_id, update_date) VALUES ";
+          $query = "INSERT INTO `$prouct_pre_sync_table` (w_product_id, w_cat_id, g_cat_id, product_sync_profile_id, update_date) VALUES ";
           $query .= implode( ', ', $place_holders );
-          $wpdb->query($wpdb->prepare( "$query", $values ));          
+          $wpdb->query($wpdb->prepare( $query, $values ));          
         }
 
       }//end category if
@@ -184,36 +194,52 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
       $sync_produt = $total_product;
       $sync_produt_p = ($sync_produt*100)/$total_product; 
       $is_synced_up = ($total_product <= $sync_produt)?true:false;
-      $sync_message = "Initiated, products are being synced to Merchant Center.Do not refresh..";
+      $sync_message = esc_html__("Initiated, products are being synced to Merchant Center.Do not refresh..","conversios");
       //step one end
     }else if($sync_step == 2){      
       $rs = $TVCProductSyncHelper->call_batch_wise_sync_product($last_sync_product_id, $product_batch_size);
       if(isset($rs['products_sync'])){
         $sync_produt = (int)$sync_produt + $rs['products_sync'];
       }else{
-        echo json_encode(array('status'=>'false', 'message'=> $rs['message']));
+        echo json_encode(array('status'=>'false', 'message'=> $rs['message'], "api_rs"=>$rs));
         exit;
       }
       $skip_products=(isset($rs['skip_products']))?$rs['skip_products']:0;
       $last_sync_product_id = (isset($rs['last_sync_product_id']))?$rs['last_sync_product_id']:0;
       $sync_produt_p = ($sync_produt*100)/$total_product;
       $is_synced_up = ($total_product <= $sync_produt)?true:false;
-      $sync_message = "Initiated, products are being synced to Merchant Center.Do not refresh..";
+      $sync_message = esc_html__("Initiated, products are being synced to Merchant Center.Do not refresh..","conversios");
       if($total_product <= $sync_produt){
-        $customObj->setGmcCategoryMapping($catMapRequest);
-        $customObj->setGmcAttributeMapping($attrMapRequest);
+        //$customObj->setGmcCategoryMapping($catMapRequest);
+        //$customObj->setGmcAttributeMapping($attrMapRequest);
         $TVC_Admin_Auto_Product_sync_Helper = new TVC_Admin_Auto_Product_sync_Helper();
         $TVC_Admin_Auto_Product_sync_Helper->update_last_sync_in_db();
-        $sync_message = "Initiated, products are being synced to Merchant Center.Do not refresh..";
+        $sync_message = esc_html__("Initiated, products are being synced to Merchant Center.Do not refresh..","conversios");
         $TVC_Admin_DB_Helper->tvc_safe_truncate_table($prouct_pre_sync_table);
       }
     }
     $sync_produt_p = round($sync_produt_p,0);
     $sync_progressive_data = array("sync_step"=>$sync_step, "total_product"=>$total_product, "sync_produt"=>$sync_produt, "sync_produt_p"=>$sync_produt_p, 'skip_products'=>$skip_products, "last_sync_product_id"=>$last_sync_product_id, "is_synced_up"=>$is_synced_up, "sync_message"=>$sync_message);
-    echo json_encode(array('status'=>'success', "sync_progressive_data" => $sync_progressive_data,"api_rs"=>$rs));
+    echo json_encode(array('status'=>'success', "sync_progressive_data" => $sync_progressive_data, "api_rs"=>$rs));
     exit;
   }
-
+  public function tvc_call_add_customer_feedback(){
+    if( isset($_POST['que_one']) &&  isset($_POST['que_two']) && isset($_POST['que_three']) ){
+      $formdata = array(); 
+      $formdata['business_insights_index'] = sanitize_text_field($_POST['que_one']);
+      $formdata['automate_integrations_index'] = sanitize_text_field($_POST['que_two']);
+      $formdata['business_scalability_index'] = sanitize_text_field($_POST['que_three']);
+      $formdata['subscription_id'] = isset($_POST['subscription_id'])?sanitize_text_field($_POST['subscription_id']):"";
+      $formdata['customer_id'] = isset($_POST['customer_id'])?sanitize_text_field($_POST['customer_id']):"";
+      $formdata['feedback'] = isset($_POST['feedback_description'])?sanitize_text_field($_POST['feedback_description']):"";
+      $customObj = new CustomApi();
+      unset($_POST['action']);    
+      echo json_encode($customObj->record_customer_feedback($formdata));
+      exit;
+    }else{
+      echo json_encode(array("error"=>true, "message" => esc_html__("Please answer the required questions","conversios") ));
+    }   
+  }
   public function tvc_call_add_survey(){
     if ( is_admin() ) {
       if(!class_exists('CustomApi')){
@@ -228,7 +254,7 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
   //active licence key
   public function tvc_call_active_licence(){
     if ( is_admin() ) {
-      $licence_key = isset($_POST['licence_key'])?$_POST['licence_key']:"";
+      $licence_key = isset($_POST['licence_key'])?sanitize_text_field($_POST['licence_key']):"";
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $subscription_id = $TVC_Admin_Helper->get_subscriptionId();      
       if($subscription_id!="" && $licence_key != ""){
@@ -236,9 +262,9 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
         
         if($response->error== false){
           //$key, $html, $title = null, $link = null, $link_title = null, $overwrite= false
-          $TVC_Admin_Helper->add_ee_msg_nofification("active_licence_key", "Your plan is now successfully activated.", "Congratulations!!", "", "", true);
+          //$TVC_Admin_Helper->add_ee_msg_nofification("active_licence_key", esc_html__("Your plan is now successfully activated.","conversios"), esc_html__("Congratulations!!","conversios"), "", "", true);
           $TVC_Admin_Helper->update_subscription_details_api_to_db();
-          echo json_encode(array('error' => false, "is_connect"=>true, 'message' => "The licence key has been activated."));
+          echo json_encode(array('error' => false, "is_connect"=>true, 'message' => esc_html__("The licence key has been activated.","conversios") ));
         }else{
           echo json_encode(array('error' => true, "is_connect"=>true, 'message' => $response->message));
         }       
@@ -248,7 +274,7 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);       
         echo json_encode(array('error' => true, "is_connect"=>false, 'message' => ""));
       }else{
-        echo json_encode(array('error' => true, "is_connect"=>false, 'message' => "Licence key is required."));
+        echo json_encode(array('error' => true, "is_connect"=>false, 'message' => esc_html__("Licence key is required.","conversios")));
       }      
     }
     exit;
@@ -256,7 +282,7 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
 
   public function tvc_call_notification_dismiss(){
     if($this->safe_ajax_call(filter_input(INPUT_POST, 'TVCNonce'), 'tvc_call_notification_dismiss-nonce')){      
-      $ee_dismiss_id = isset($_POST['data']['ee_dismiss_id'])?$_POST['data']['ee_dismiss_id']:"";
+      $ee_dismiss_id = isset($_POST['data']['ee_dismiss_id'])?sanitize_text_field($_POST['data']['ee_dismiss_id']):"";
       if($ee_dismiss_id != ""){
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $ee_msg_list = $TVC_Admin_Helper->get_ee_msg_nofification_list();
@@ -264,16 +290,16 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
           unset($ee_msg_list[$ee_dismiss_id]);
           $ee_msg_list[$ee_dismiss_id]["active"]=0;
           $TVC_Admin_Helper->set_ee_msg_nofification_list($ee_msg_list);
-          echo json_encode(array('status' => 'success', 'message' => $ee_additional_data));
-        }
-        
+          echo json_encode(array('status' => 'success', 'message' => ""));
+        }        
       }       
     }
     exit;
   }
   public function tvc_call_notice_dismiss(){
     if($this->safe_ajax_call(filter_input(INPUT_POST, 'apiNoticDismissNonce'), 'tvc_call_notice_dismiss-nonce')){      
-      $ee_notice_dismiss_id = $_POST['data']['ee_notice_dismiss_id'];
+      $ee_notice_dismiss_id = isset($_POST['data']['ee_notice_dismiss_id'])?sanitize_text_field($_POST['data']['ee_notice_dismiss_id']):"";
+      $ee_notice_dismiss_id = sanitize_text_field($ee_notice_dismiss_id);
       if($ee_notice_dismiss_id != ""){
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $ee_additional_data = $TVC_Admin_Helper->get_ee_additional_data();
@@ -284,14 +310,29 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
     }
     exit;
   }
+  public function tvc_call_import_gmc_product(){
+    if($this->safe_ajax_call(filter_input(INPUT_POST, 'apiSyncupNonce'), 'tvc_call_api_sync-nonce')){
+      $next_page_token = isset($_POST['next_page_token'])?sanitize_text_field($_POST['next_page_token']):"";
+      $TVC_Admin_Helper = new TVC_Admin_Helper();
+      $api_rs = $TVC_Admin_Helper->update_gmc_product_to_db($next_page_token);
+      //print_r($api_rs);
+      if( isset($api_rs['error']) ){
+        echo json_encode($api_rs);
+      }else{
+        echo json_encode(array('error' => true, 'message' => esc_html__("Please try after some time.","conversios")));
+      }
+      exit;
+    }
+    exit;
+  }
   public function tvc_call_api_sync(){
     if($this->safe_ajax_call(filter_input(INPUT_POST, 'apiSyncupNonce'), 'tvc_call_api_sync-nonce')){
         $TVC_Admin_Helper = new TVC_Admin_Helper();
         $api_rs = $TVC_Admin_Helper->set_update_api_to_db();
-        if(isset($api_rs['error']) && isset($api_rs['message']) && $api_rs['message']){
+        if(isset($api_rs['error']) && isset($api_rs['message']) && sanitize_text_field($api_rs['message'])){
           echo json_encode($api_rs);
         }else{
-          echo json_encode(array('error' => true, 'message' => "Please try after some time."));
+          echo json_encode(array('error' => true, 'message' => esc_html__("Please try after some time.","conversios")));
         }
         exit;
     }
@@ -303,9 +344,9 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
       $tvc_rs =[];
       $tvc_rs = $TVC_Admin_Helper->call_site_verified();
       if(isset($tvc_rs['error']) && $tvc_rs['error'] == 1){
-        echo json_encode(array('status' => 'error', 'message' => $tvc_rs['msg']));
+        echo json_encode(array('status' => 'error', 'message' => sanitize_text_field($tvc_rs['msg'])));
       }else{
-        echo json_encode(array('status' => 'success', 'message' => $tvc_rs['msg']));
+        echo json_encode(array('status' => 'success', 'message' => sanitize_text_field($tvc_rs['msg'])));
       }      
       exit;
     }
@@ -316,40 +357,34 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
       $TVC_Admin_Helper = new TVC_Admin_Helper();
       $tvc_rs = $TVC_Admin_Helper->call_domain_claim();
       if(isset($tvc_rs['error']) && $tvc_rs['error'] == 1){
-        echo json_encode(array('status' => 'error', 'message' => $tvc_rs['msg']));
+        echo json_encode(array('status' => 'error', 'message' => sanitize_text_field($tvc_rs['msg'])));
       }else{
-        echo json_encode(array('status' => 'success', 'message' => $tvc_rs['msg']));
+        echo json_encode(array('status' => 'success', 'message' => sanitize_text_field($tvc_rs['msg'])));
       }      
       exit;
     }
     exit;
   }
   public function get_tvc_access_token(){
-      if(!empty($this->access_token)){
-          return $this->access_token;
-      }else   if(isset($_SESSION['access_token']) && $_SESSION['access_token']){
-          $this->access_token = $_SESSION['access_token'];
-          return $this->access_token;
-      }else{
-          $TVC_Admin_Helper = new TVC_Admin_Helper();
-          $google_detail = $TVC_Admin_Helper->get_ee_options_data();          
-          $this->access_token = $google_detail['setting']->access_token;
-          return $this->access_token;
-      }
+    if(!empty($this->access_token)){
+        return $this->access_token;
+    }else{
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $google_detail = $TVC_Admin_Helper->get_ee_options_data();          
+        $this->access_token = sanitize_text_field(base64_decode($google_detail['setting']->access_token));
+        return $this->access_token;
+    }
   }
   
   public function get_tvc_refresh_token(){
-      if(!empty($this->refresh_token)){
-          return $this->refresh_token;
-      }else   if(isset($_SESSION['refresh_token']) && $_SESSION['refresh_token']){
-          $this->refresh_token = $_SESSION['refresh_token'];
-          return $this->refresh_token;
-      }else{
-          $TVC_Admin_Helper = new TVC_Admin_Helper();
-          $google_detail = $TVC_Admin_Helper->get_ee_options_data();          
-          $this->refresh_token = $google_detail['setting']->refresh_token;
-          return $this->refresh_token;
-      }
+    if(!empty($this->refresh_token)){
+        return $this->refresh_token;
+    }else{
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $google_detail = $TVC_Admin_Helper->get_ee_options_data();          
+        $this->refresh_token = sanitize_text_field(base64_decode($google_detail['setting']->refresh_token));
+        return $this->refresh_token;
+    }
   }
   /**
    * Delete the campaign
@@ -364,9 +399,9 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
 
           $url = $this->apiDomain.'/campaigns/delete';
           $data = [
-              'merchant_id' => $merchantId,
-              'customer_id' => $customerId,
-              'campaign_id' => $campaignId
+              'merchant_id' => sanitize_text_field($merchantId),
+              'customer_id' => sanitize_text_field($customerId),
+              'campaign_id' => sanitize_text_field($campaignId)
           ];
           $args = array(
               'headers' => array(
@@ -377,7 +412,7 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
               'body' => wp_json_encode($data)
           );
           // Send remote request
-          $request = wp_remote_request($url, $args);
+          $request = wp_remote_request(esc_url_raw($url), $args);
 
           // Retrieve information
           $response_code = wp_remote_retrieve_response_code($request);
@@ -408,7 +443,7 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
 
         $header = array(
             "Authorization: Bearer MTIzNA==",
-            "content-type: application/json"
+            "Content-Type" => "application/json"
         );
 
         $merchantId = filter_input(INPUT_POST, 'merchantId');
@@ -423,35 +458,35 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
         $campaignData = $shoppingObj->getCampaignDetails($campaignId);
 
         $data = [
-            'merchant_id' => $merchantId,
-            'customer_id' => $customerId,
-            'campaign_id' => $campaignId,
-            'account_budget_id' => $budgetId,
-            'campaign_name' => $campaignName,
-            'budget' => $budget,
-            'status' => $status,
-            'target_country' => $campaignData->data['data']->targetCountry,
-            'ad_group_id' => $campaignData->data['data']->adGroupId,
-            'ad_group_resource_name' => $campaignData->data['data']->adGroupResourceName
+            'merchant_id' => sanitize_text_field($merchantId),
+            'customer_id' => sanitize_text_field($customerId),
+            'campaign_id' => sanitize_text_field($campaignId),
+            'account_budget_id' => sanitize_text_field($budgetId),
+            'campaign_name' => sanitize_text_field($campaignName),
+            'budget' => sanitize_text_field($budget),
+            'status' => sanitize_text_field($status),
+            'target_country' => sanitize_text_field($campaignData->data['data']->targetCountry),
+            'ad_group_id' => sanitize_text_field($campaignData->data['data']->adGroupId),
+            'ad_group_resource_name' => sanitize_text_field($campaignData->data['data']->adGroupResourceName)
         ];
-        $postData = json_encode($data);           
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => esc_url($curl_url),
-            CURLOPT_CUSTOMREQUEST => 'PATCH',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 1000,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $postData
-        ));
-        $response = curl_exec($ch);
-        $response = json_decode($response);
+        
+        $args = array(
+          'headers' =>$header,
+          'method' => 'PATCH',
+          'body' => wp_json_encode($data)
+        );
+        $request = wp_remote_request(esc_url_raw($curl_url), $args);
+        //print_r($request);
+        // Retrieve information
+        $response_code = wp_remote_retrieve_response_code($request);
+        $response_message = wp_remote_retrieve_response_message($request);
+        $response = json_decode(wp_remote_retrieve_body($request));
         if (isset($response->error) && $response->error == false) {
           $message = $response->message;
-           echo json_encode(['status' => 'success', 'message' => $message]);
+          echo json_encode(['status' => 'success', 'message' => $message]);
         }else{
-          $message = is_array($response->errors) ? $response->errors[0] : "Face some unprocessable entity";
-            echo json_encode(['status' => 'error', 'message' => $message]);
+          $message = is_array($response->errors) ? $response->errors[0] : esc_html__("Face some unprocessable entity","conversios");
+          echo json_encode(['status' => 'error', 'message' => $message]);
         }
     }
     exit;
@@ -469,8 +504,8 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
           $url = $this->apiDomain.'/products/categories';
 
           $data = [
-              'customer_id' => $customer_id,
-              'country_code' => $country_code
+              'customer_id' => sanitize_text_field($customer_id),
+              'country_code' =>sanitize_text_field( $country_code)
           ];
 
           $args = array(
@@ -482,7 +517,7 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
           );
 
           // Send remote request
-          $request = wp_remote_post($url, $args);
+          $request = wp_remote_post(esc_url_raw($url), $args);
 
           // Retrieve information
           $response_code = wp_remote_retrieve_response_code($request);
@@ -523,9 +558,9 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
           $url = $this->apiDomain.'/products/gmc-categories';
 
           $data = [
-              'customer_id' => $customer_id,
-              'country_code' => $country_code,
-              'parent' => $parent
+              'customer_id' => sanitize_text_field($customer_id),
+              'country_code' => sanitize_text_field($country_code),
+              'parent' => sanitize_text_field($parent)
           ];
 
           $args = array(
@@ -537,7 +572,7 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
           );
 
           // Send remote request
-          $request = wp_remote_post($url, $args);
+          $request = wp_remote_post(esc_url_raw($url), $args);
 
           // Retrieve information
           $response_code = wp_remote_retrieve_response_code($request);
@@ -563,545 +598,6 @@ class TVC_Ajax_File extends TVC_Ajax_Calls {
 
       // IMPORTANT: don't forget to exit
       exit;
-  }
-
-  /**
-   * create product batch for product sync up
-   */
-  public function tvcajax_product_syncup(){
-    // make sure this call is legal
-    ini_set('max_execution_time', '0');
-    ini_set('memory_limit','-1');
-    if($this->safe_ajax_call(filter_input(INPUT_POST, 'productSyncupNonce'), 'tvcajax-product-syncup-nonce')){
-
-      if(!class_exists('CustomApi')){
-          include(ENHANCAD_PLUGIN_DIR . 'includes/setup/CustomApi.php');
-      }
-      $customObj = new CustomApi();
-      //echo "<br>1=>".round(microtime(true) * 1000);
-      $batchId = time();
-      $merchantId = filter_input(INPUT_POST, 'merchantId');
-      $customerId = filter_input(INPUT_POST, 'customerId');
-      $accountId = filter_input(INPUT_POST, 'accountId');
-      $subscriptionId = filter_input(INPUT_POST, 'subscriptionId');
-      //$platformCustomerId = filter_input(INPUT_POST, 'platformCustomerId');
-      $data = filter_input(INPUT_POST, 'data');          
-      parse_str($data, $formArray);      
-      $mappedCatsDB = [];
-      $mappedCats = [];
-      $mappedAttrs = [];
-      $skipProducts = [];
-      foreach($formArray as $key => $value){
-        if(preg_match("/^category-name-/i", $key)){
-          if($value != ''){
-            $keyArray = explode("name-", $key);
-            $mappedCatsDB[$keyArray[1]]['name'] = $value;
-          }
-          unset($formArray[$key]);
-        }else if(preg_match("/^category-/i", $key)){
-          if($value != '' && $value > 0){
-            $keyArray = explode("-", $key);
-            $mappedCats[$keyArray[1]] = $value;
-            $mappedCatsDB[$keyArray[1]]['id'] = $value;
-          }
-          unset($formArray[$key]);
-        }else{
-          if($value){
-              $mappedAttrs[$key] = $value;
-          }
-        }
-      }             
-      update_option("ee_prod_mapped_cats", serialize($mappedCatsDB));
-      update_option("ee_prod_mapped_attrs", serialize($mappedAttrs));           
-
-      if(!empty($mappedCats)){
-          $catMapRequest = [];
-          $catMapRequest['subscription_id'] = $subscriptionId;
-          $catMapRequest['customer_id'] = $customerId;
-          $catMapRequest['merchant_id'] = $merchantId;
-          $catMapRequest['category'] = $mappedCats;
-          //$catMapResponse = $customObj->setGmcCategoryMapping($catMapRequest);
-      }
-      if(!empty($mappedAttrs)){
-          $attrMapRequest = [];
-          $attrMapRequest['subscription_id'] = $subscriptionId;
-          $attrMapRequest['customer_id'] = $customerId;
-          $attrMapRequest['merchant_id'] = $merchantId;
-          $attrMapRequest['attribute'] = $mappedAttrs;
-          //$attrMapResponse = $customObj->setGmcAttributeMapping($attrMapRequest);
-      }
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $cat_list = $TVC_Admin_Helper->get_tvc_product_cat_list_with_name();
-      $tvc_currency = ((get_option('woocommerce_currency') != '')? get_option('woocommerce_currency') : 'USD');
-      $temp_product=array();
-      $fixed_att_select_list = array("gender", "age_group", "shipping", "tax", "content_language", "target_country", "condition");
-      foreach ($fixed_att_select_list as $fixed_key) {
-        if(isset($formArray[$fixed_key]) && $formArray[$fixed_key] != "" ){
-          if($fixed_key == "shipping" && $formArray[$fixed_key] != ""){
-            $temp_product[$fixed_key]['price']['value'] = $formArray[$fixed_key];
-            $temp_product[$fixed_key]['price']['currency'] = $tvc_currency;
-            $temp_product[$fixed_key]['country'] = $formArray['target_country'];
-            //$temp_product[$fixed_key] =$formArray['target_country'].'::'.$formArray[$fixed_key].' '.$tvc_currency;
-          }else if($fixed_key == "tax" && $formArray[$fixed_key] != ""){
-            //$temp_product[$fixed_key] =$formArray['target_country'].'::'.$formArray[$fixed_key];
-            $temp_product['taxes']['rate'] = $formArray[$fixed_key];
-            $temp_product['taxes']['country'] = $formArray['target_country'];
-          }else if( $formArray[$fixed_key] != ""){
-            $temp_product[$fixed_key] = $formArray[$fixed_key];
-          }          
-        }
-        unset($formArray[$fixed_key]);
-      }
-      
-      $entries = [];
-      if(!empty($mappedCats)){
-        foreach($mappedCats as $mc_key => $mappedCat){
-          $all_products = get_posts(array(
-            'post_type' => 'product',
-            'numberposts' => -1,
-            'post_status' => 'publish',
-            'tax_query' => array(
-              array(
-                'taxonomy' => 'product_cat',
-                'field' => 'term_id',
-                'terms' => $mc_key, /* category name */
-                'operator' => 'IN'
-              )
-            )
-          ));
-                 
-          foreach($all_products as $postkey => $postvalue){
-            
-            $postmeta = [];
-            $postmeta = $TVC_Admin_Helper->tvc_get_post_meta($postvalue->ID);
-            $prd = wc_get_product($postvalue->ID);
-            $postObj = (object) array_merge((array) $postvalue, (array) $postmeta);
-            
-            $product = array(
-              'offer_id'=>$postvalue->ID,
-              'channel'=>'online',
-              'link'=>get_permalink($postvalue->ID),
-              'google_product_category'=>$mappedCat
-            );
-            if(isset($cat_list[$mc_key]) && $cat_list[$mc_key]!=""){
-              //$product['product_type'] = "Home > ".str_replace(array("-","_"), array(" "," ") , $cat_list[$mc_key]);
-            }
-            $product = array_merge($temp_product,$product);
-
-            if($prd->get_type() == "variable"){             
-              $variation_attributes = $prd->get_variation_attributes();
-              $can_add_item_group_id = false;
-              $is_color_size = false;
-              if(!empty($variation_attributes)){
-                foreach($variation_attributes as $va_key => $va_value ){
-                  $va_key = str_replace("_", " ", $va_key);                  
-                  if (strpos($va_key, 'color') !== false) {
-                    $can_add_item_group_id = true;
-                    $is_color_size = true;
-                    break;
-                  }else if (strpos($va_key, 'size') !== false) {
-                    $can_add_item_group_id = true;
-                    $is_color_size = true;
-                    break;
-                  }
-                }
-              }
-              if(isset($formArray['gender']) && $formArray['gender']!= ""){
-                $can_add_item_group_id = true;
-              }else if(isset($formArray['age_group']) && $formArray['age_group']!= ""){
-                $can_add_item_group_id = true;
-              }
-              //echo "<br>".$mc_key."=>".$postvalue->ID."can_add_item_group_id=>".$can_add_item_group_id;
-              if($can_add_item_group_id == true){
-                $p_variations = $prd->get_available_variations();                
-                if(!empty($p_variations)){                  
-                  foreach ($p_variations as $v_key => $v_value) {
-                    $postmeta_var = (object)$TVC_Admin_Helper->tvc_get_post_meta($v_value['variation_id']);
-                    $product['title'] = (isset($postObj->$formArray['title']))?$postObj->$formArray['title']:get_the_title($postvalue->ID);
-                    $tvc_temp_desc_key = $formArray['description'];
-                    $product['description'] = (isset($v_value['variation_description']) && $v_value['variation_description'] != "")?$v_value['variation_description']:$postObj->$tvc_temp_desc_key;
-                    $product['offer_id'] = $v_value['variation_id'];
-                    $product['id'] = $v_value['variation_id'];
-                    $product['item_group_id'] = $postvalue->ID;
-                    $image_id = $v_value['image_id'];
-                    $product['image_link'] = wp_get_attachment_image_url($image_id, 'full');
-                    if($is_color_size == true){
-                      if(isset($v_value['attributes']) && !empty($v_value['attributes']) ){
-                        foreach($v_value['attributes'] as $va_key => $va_value ){
-                          $va_key = str_replace("_", " ", $va_key);                  
-                          if (strpos($va_key, 'color') !== false) {
-                            $product['color'] = $va_value;
-                          }else if (strpos($va_key, 'size') !== false) {
-                            $product['sizes'] = $va_value;
-                          }
-                        }
-                      }
-                    }
-                    foreach($formArray as $key => $value){
-                      if($key == 'price'){
-                        if(isset($postmeta_var->$value) && $postmeta_var->$value > 0){
-                          $product[$key]['value'] = $postmeta_var->$value;
-                        }else if(isset($postmeta_var->_regular_price) && $postmeta_var->_regular_price && $postmeta_var->_regular_price >0 ){
-                          $product[$key]['value'] = $postmeta_var->_regular_price;
-                        }else if(isset($postmeta_var->_price) && $postmeta_var->_price && $postmeta_var->_price >0 ){
-                          $product[$key]['value'] = $postmeta_var->_price;
-                        }else if(isset($postmeta_var->_sale_price) && $postmeta_var->_sale_price && $postmeta_var->_sale_price >0 ){
-                          $product[$key]['value'] = $postmeta_var->_sale_price;
-                        }
-                        if(isset($product[$key]['value']) && $product[$key]['value'] >0){
-                          $product[$key]['currency'] = $tvc_currency;
-                        }else{
-                          $skipProducts[$postmeta_var->ID] = $postmeta_var;
-                        }
-                      }else if($key == 'sale_price'){
-                        if(isset($postmeta_var->$value) && $postmeta_var->$value > 0){
-                          $product[$key]['value'] = $postmeta_var->$value;
-                        }else if(isset($postmeta_var->_sale_price) && $postmeta_var->_sale_price && $postmeta_var->_sale_price >0 ){
-                          $product[$key]['value'] = $postmeta_var->_sale_price;
-                        }
-                        if(isset($product[$key]['value']) && $product[$key]['value'] >0){
-                          $product[$key]['currency'] = $tvc_currency;
-                        }                                                
-                      }else if($key == 'availability'){
-                        $tvc_find = array("instock","outofstock","onbackorder");
-                        $tvc_replace = array("in stock","out of stock","preorder");
-                        if(isset($postmeta_var->$value) && $postmeta_var->$value != ""){
-                          $stock_status = $postmeta_var->$value;
-                          $stock_status = str_replace($tvc_find,$tvc_replace,$stock_status);
-                          $product[$key] = $stock_status;
-                        }else{
-                          $stock_status = $postmeta_var->_stock_status;
-                          $stock_status = str_replace($tvc_find,$tvc_replace,$stock_status);
-                          $product[$key] = $stock_status;
-                        }
-                      }else if(isset($postmeta_var->$value) && $postmeta_var->$value != ""){$product[$key] = $postmeta_var->$value;                        
-                      }
-                    }
-                    $entrie = [
-                      'merchant_id' => $merchantId,
-                      'batch_id' => ++$batchId,
-                      'method' => 'insert',
-                      'product' => $product
-                    ];
-                    $entries[] = $entrie;
-                  }
-                }
-              }else{
-                goto simpleproduct;
-              }
-            }else{
-              simpleproduct: 
-              $image_id = $prd->get_image_id();
-              $product['image_link'] = wp_get_attachment_image_url($image_id, 'full');     
-              foreach($formArray as $key => $value){
-                if($key == 'price'){
-                  if(isset($postObj->$value) && $postObj->$value > 0){
-                    $product[$key]['value'] = $postObj->$value;
-                  }else if(isset($postObj->_regular_price) && $postObj->_regular_price && $postObj->_regular_price >0 ){
-                    $product[$key]['value'] = $postObj->_regular_price;
-                  }else if(isset($postObj->_price) && $postObj->_price && $postObj->_price >0 ){
-                    $product[$key]['value'] = $postObj->_price;
-                  }else if(isset($postObj->_sale_price) && $postObj->_sale_price && $postObj->_sale_price >0 ){
-                    $product[$key]['value'] = $postObj->_sale_price;
-                  }
-                  if(isset($product[$key]['value']) && $product[$key]['value'] >0){
-                    $product[$key]['currency'] = $tvc_currency;
-                  }else{
-                    $skipProducts[$postObj->ID] = $postObj;
-                  }
-                }else if($key == 'sale_price'){
-                  if(isset($postObj->$value) && $postObj->$value > 0){
-                    $product[$key]['value'] = $postObj->$value;
-                  }else if(isset($postObj->_sale_price) && $postObj->_sale_price && $postObj->_sale_price >0 ){
-                    $product[$key]['value'] = $postObj->_sale_price;
-                  }
-                  if(isset($product[$key]['value']) && $product[$key]['value'] >0){
-                    $product[$key]['currency'] = $tvc_currency;
-                  }                  
-                }else if($key == 'availability'){
-                  $tvc_find = array("instock","outofstock","onbackorder");
-                  $tvc_replace = array("in stock","out of stock","preorder");
-                  if(isset($postObj->$value) && $postObj->$value != ""){
-                    $stock_status = $postObj->$value;
-                    $stock_status = str_replace($tvc_find,$tvc_replace,$stock_status);
-                    $product[$key] = $stock_status;
-                  }else{
-                    $stock_status = $postObj->_stock_status;
-                    $stock_status = str_replace($tvc_find,$tvc_replace,$stock_status);
-                    $product[$key] = $stock_status;
-                  }
-                }else if(isset($postObj->$value) && $postObj->$value != ""){
-                  //echo $key."==".$postObj->$value."<br>";
-                  $product[$key] = $postObj->$value;
-                }
-              }
-
-              $entrie = [
-                'merchant_id' => $merchantId,
-                'batch_id' => ++$batchId,
-                'method' => 'insert',
-                'product' => $product
-              ];
-              $entries[] = $entrie;
-            }
-
-            
-          }
-          wp_reset_query();
-        }
-        $data = [
-          'merchant_id' => $accountId,
-          'account_id' => $merchantId,
-          'subscription_id' => $subscriptionId,
-          'entries' => $entries
-        ];
-        $url = $this->apiDomain.'/products/batch';        
-        $args = array(
-          'timeout' => 10000,
-          'headers' => array(
-            'Authorization' => "Bearer MTIzNA==",
-            'Content-Type' => 'application/json',
-            'AccessToken' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
-          ),
-          'body' => wp_json_encode($data)
-        );
-
-
-        
-        $request = wp_remote_post($url, $args); 
-         
-        // Retrieve information
-        $response_code = wp_remote_retrieve_response_code($request);
-        $response_message = wp_remote_retrieve_response_message($request);
-        $response_body = json_decode(wp_remote_retrieve_body($request));
-        
-        if((isset($response_body->error) && $response_body->error == '')){
-          $TVC_Admin_Auto_Product_sync_Helper = new TVC_Admin_Auto_Product_sync_Helper();
-          $TVC_Admin_Auto_Product_sync_Helper->update_last_sync_in_db();
-          $customObj->setGmcCategoryMapping($catMapRequest);
-          $customObj->setGmcAttributeMapping($attrMapRequest);
-          echo json_encode(['status' => 'success', 'skipProducts' => count($skipProducts)]);
-        }else{
-          foreach($response_body->errors as $err){
-            $message = $err;
-            break;
-          }
-          echo json_encode(['status' => 'error', 'message' => $message]);
-        }
-      }else{
-          echo json_encode(['status' => 'error', 'message' => "Category mapping is null."]); 
-      }
-      
-      //   echo json_encode( $categories );
-    }
-    // IMPORTANT: don't forget to exit
-    exit;
-  }
-
-  /**
-   * create product batch for product sync up
-   */
-  public function tvcajax_custom_metrics_dimension(){
-      // make sure this call is legal
-      if($this->safe_ajax_call(filter_input(INPUT_POST, 'customMetricsDimensionNonce'), 'tvcajax-custom-metrics-dimension-nonce')){
-
-          if(!class_exists('CustomApi')){
-              include(ENHANCAD_PLUGIN_DIR . 'includes/setup/CustomApi.php');
-          }
-          $customObj = new CustomApi();
-
-          $accountId = filter_input(INPUT_POST, 'accountId');
-//                $accountId = '184918792';
-          $webPropertyId = filter_input(INPUT_POST, 'webPropertyId');
-//                $webPropertyId = 'UA-184918792-5';
-          $subscriptionId = filter_input(INPUT_POST, 'subscriptionId');
-          $data = filter_input(INPUT_POST, 'data');
-          parse_str($data, $formArray);
-          // Only for print array
-
-          $customDimension = [];
-          $customMetrics = [];
-          $dimensions = [];
-          $metrics = [];
-
-          for($i = 1; $i <= 12; $i++){
-              $dimension['id'] = "";
-              $dimension['index'] = $formArray['did-' . $i];
-              $dimension['active'] = true;
-              $dimension['kind'] = "";
-              $dimension['name'] = $formArray['dname-' . $i];
-              $dimension['scope'] = $formArray['dscope-' . $i];
-              $dimension['created'] = "";
-              $dimension['updated'] = "";
-              $dimension['self_link'] = "";
-              $dimension['parent_link']['href'] = "";
-              $dimension['parent_link']['parent_link_type'] = "";
-              $dimensions[] = $dimension;
-          }
-
-          for($i = 1; $i <= 7; $i++){
-              $metric['id'] = "";
-              $metric['index'] = $formArray['mid-' . $i];
-              $metric['active'] = true;
-              $metric['kind'] = "";
-              $metric['name'] = $formArray['mname-' . $i];
-              $metric['scope'] = $formArray['mscope-' . $i];
-              $metric['created'] = "";
-              $metric['updated'] = "";
-              $metric['self_link'] = "";
-              $metric['max_value'] = "";
-              $metric['min_value'] = "";
-              $metric['type'] = "INTEGER";
-              $metric['parent_link']['href'] = "";
-              $metric['parent_link']['parent_link_type'] = "";
-              $metrics[] = $metric;
-          }
-
-          if(!empty($dimensions)){
-              $dimenRequest = [];
-              $dimenRequest['account_id'] = $accountId;
-              $dimenRequest['web_property_id'] = $webPropertyId;
-              $dimenRequest['subscription_id'] = $subscriptionId;
-              $dimenRequest['data'] = $dimensions;
-              $dimenResponse = $customObj->createCustomDimensions($dimenRequest);
-          }
-          if(!empty($metrics)){
-              $metrRequest = [];
-              $metrRequest['account_id'] = $accountId;
-              $metrRequest['web_property_id'] = $webPropertyId;
-              $metrRequest['subscription_id'] = $subscriptionId;
-              $metrRequest['data'] = $metrics;
-              $metrResponse = $customObj->createCustomMetrics($metrRequest);
-          }
-
-
-          // Retrieve information
-          /* $response_code = wp_remote_retrieve_response_code($request);
-            $response_message = wp_remote_retrieve_response_message($request);
-            $response_body = json_decode(wp_remote_retrieve_body($request)); */
-
-
-
-
-          if((isset($dimenResponse->error) && $dimenResponse->error == '' && isset($metrResponse->error) && $metrResponse->error == '')){
-              echo json_encode(['status' => 'success']);
-//                    return new WP_REST_Response(
-//                        array(
-//                            'status' => $response_code,
-//                            'message' => $response_message,
-//                            'data' => $response_body->data
-//                        )
-//                    );
-          }else{
-              $metrError = '';
-              $dimenError = '';
-              $message = NULL;
-              if($dimenResponse->errors){
-                  
-                  $dimenError = $dimenResponse->errors[0];
-                  $message = str_replace('this entity', 'dimensions ', $dimenError);
-              }
-              if($metrResponse->errors){
-                  $metrError = str_replace('this entity', 'metrics ', $metrResponse->errors[0]);
-                  $message = is_null($message) ? $metrError : $message . ' ' . $metrError;
-              }
-              echo json_encode(['status' => 'error', 'message' => $message]);
-          }
-      }
-
-      // IMPORTANT: don't forget to exit
-      exit;
-  }
-
-  public function tvcajax_store_time_taken(){
-      // make sure this call is legal
-      if($this->safe_ajax_call(filter_input(INPUT_POST, 'campaignCategoryListsNonce'), 'tvcajax-store-time-taken-nonce')){
-          $ee_options_data = unserialize(get_option('ee_options'));
-          if(isset($ee_options_data['subscription_id'])) {
-              $ee_subscription_id = $ee_options_data['subscription_id'];
-          } else {
-              $ee_subscription_id = null;
-          }
-          $url = $this->apiDomain.'/customer-subscriptions/update-setup-time';
-          $data = [
-              'subscription_id' => $ee_subscription_id,
-              'setup_start_time' => date('Y-m-d H:i:s'),
-          ];
-          $args = array(
-              'headers' => array(
-                  'Authorization' => "Bearer MTIzNA==",
-                  'Content-Type' => 'application/json'
-              ),
-              'body' => wp_json_encode($data)
-          );
-          // Send remote request
-          $request = wp_remote_post($url, $args);
-          // Retrieve information
-          $response_code = wp_remote_retrieve_response_code($request);
-          $response_message = wp_remote_retrieve_response_message($request);
-          $response_body = json_decode(wp_remote_retrieve_body($request));
-          if((isset($response_body->error) && $response_body->error == '')){
-              echo json_encode($response_body->data);
-//                    return new WP_REST_Response(
-//                        array(
-//                            'status' => $response_code,
-//                            'message' => $response_message,
-//                            'data' => $response_body->data
-//                        )
-//                    );
-          }else{
-              echo json_encode([]);
-              // return new WP_Error($response_code, $response_message, $response_body);
-          }
-
-          //   echo json_encode( $categories );
-      }
-
-      // IMPORTANT: don't forget to exit
-      exit;
-  }
-  public function generateAccessToken($access_token, $refresh_token) {
-      $request = "https://www.googleapis.com/oauth2/v1/tokeninfo?"
-              . "access_token=" . $access_token;
-
-      $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, $request);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-      $response = curl_exec($ch);
-      $result = json_decode($response);
-
-      if (isset($result->error) && $result->error) {
-          $credentials_file = ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json';
-          $str = file_get_contents($credentials_file);
-          $credentials = $str ? json_decode($str, true) : [];
-          $url = 'https://www.googleapis.com/oauth2/v4/token';
-          $header = array("content-type: application/json");
-          $clientId = $credentials['web']['client_id'];
-          $clientSecret = $credentials['web']['client_secret'];
-          $refreshToken = $refresh_token;
-          $data = [
-              "grant_type" => 'refresh_token',
-              "client_id" => $clientId,
-              'client_secret' => $clientSecret,
-              'refresh_token' => $refreshToken,
-          ];
-
-          $postData = json_encode($data);
-          $ch = curl_init();
-          curl_setopt_array($ch, array(
-              CURLOPT_URL => $url, //esc_url($this->curl_url),
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_TIMEOUT => 0,
-              CURLOPT_HTTPHEADER => $header,
-              CURLOPT_POSTFIELDS => $postData
-          ));
-          $response = curl_exec($ch);
-          $response = json_decode($response);
-          return $response->access_token;
-      } else {
-          return $access_token;
-      }
   }
 
 }

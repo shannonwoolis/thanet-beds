@@ -4,24 +4,32 @@
 namespace PGMB\Upgrader;
 
 
+use PGMB\Admin\AdminPage;
+use PGMB\Admin\DashboardPage;
 use PGMB\FormFields;
 use PGMB\Notifications\BasicNotification;
 use PGMB\Notifications\FeatureNotification;
-use PGMB\WeDevsSettingsAPI;
+use PGMB\Notifications\NotificationManager;
+use PGMB\Vendor\WeDevsSettingsAPI;
+
 
 class Upgrade_2_2_11 implements Upgrade {
 
 	private $settings;
+	/**
+	 * @var NotificationManager
+	 */
+	private $notification_manager;
 
-	public function __construct() {
-		$this->settings = new WeDevsSettingsAPI();
+	public function __construct(WeDevsSettingsAPI $settings_API, NotificationManager $notification_manager) {
+		$this->settings = $settings_API;
+		$this->notification_manager = $notification_manager;
 	}
 
 	public function run() {
-		$notification_manager = new \PGMB\Notifications\NotificationManager('mbp');
 		$current_user = wp_get_current_user();
 		$notification = BasicNotification::create(
-			\MBP_Admin_Page_Settings::NOTIFICATION_SECTION,
+			DashboardPage::NOTIFICATION_SECTION,
 			'2_2_11_upgrade_notification',
 			esc_html__('Thanks for updating Post to Google My Business!', 'post-to-google-my-business'),
 			nl2br(sprintf(
@@ -30,7 +38,7 @@ class Upgrade_2_2_11 implements Upgrade {
 				sprintf(
 					'<a target="_blank" href="%s">%s</a>',
 					'https://wordpress.org/plugins/post-to-google-my-business/',
-					esc_html__('leave a review', 'post-to-google-my-business')
+					esc_html__('leave a rating', 'post-to-google-my-business')
 				),
 				sprintf(
 					'<strong>%s</strong><br /><i>%s</i>',
@@ -41,47 +49,47 @@ class Upgrade_2_2_11 implements Upgrade {
 			'img/koen.png',
 			esc_html__('Developer profile photo','post-to-google-my-business')
 		);
-		$notification_manager->add_notification($notification);
+		$this->notification_manager->add_notification($notification);
 
 		$autopost_feature = FeatureNotification::create(
-			\MBP_Admin_Page_Settings::NEW_FEATURES_SECTION,
+			DashboardPage::NEW_FEATURES_SECTION,
 			'2_2_11_autopost_categories',
 			esc_html__('[Pro] Auto-post only with specific tag/category', 'post-to-google-my-business'),
 			esc_html__('This allows you to limit auto-post to a specific tag or category. Your post will be auto-posted when they have a tag/category where this option is enabled.', 'post-to-google-my-business'),
 			'img/features/autopost_categories.png',
 			esc_html__('Screenshot', 'post-to-google-my-business')
 		);
-		$notification_manager->add_notification($autopost_feature);
+		$this->notification_manager->add_notification($autopost_feature);
 
 		$calendar_feature = FeatureNotification::create(
-			\MBP_Admin_Page_Settings::NEW_FEATURES_SECTION,
+			DashboardPage::NEW_FEATURES_SECTION,
 			'2_2_11_calendar',
 			esc_html__('Post calendar', 'post-to-google-my-business'),
 			esc_html__("Track your posts in time with the new post calender. For easy scheduling and planning.", 'post-to-google-my-business'),
 			'img/features/calendar.jpg',
 			esc_html__('Screenshot', 'post-to-google-my-business')
 		);
-		$notification_manager->add_notification($calendar_feature);
+		$this->notification_manager->add_notification($calendar_feature);
 
 		$calendar_feature = FeatureNotification::create(
-			\MBP_Admin_Page_Settings::NEW_FEATURES_SECTION,
+			DashboardPage::NEW_FEATURES_SECTION,
 			'2_2_11_autopost_editor',
 			esc_html__('Full editor for auto-post template', 'post-to-google-my-business'),
-			esc_html__('Fine-tune one template for all your automated posts to follow.  The new editor gives you complete control over the auto-post template.', 'post-to-google-my-business'),
+			esc_html__('Fine-tune one template for all your automated posts to follow. The new editor gives you complete control over the auto-post template.', 'post-to-google-my-business'),
 			'img/features/autopost_editor.png',
 			esc_html__('Screenshot', 'post-to-google-my-business')
 		);
-		$notification_manager->add_notification($calendar_feature);
+		$this->notification_manager->add_notification($calendar_feature);
 
 		$covid_post = FeatureNotification::create(
-			\MBP_Admin_Page_Settings::NEW_FEATURES_SECTION,
+			DashboardPage::NEW_FEATURES_SECTION,
 			'2_2_11_COVID_post',
 			esc_html__('COVID-19 alert/update post support', 'post-to-google-my-business'),
 			esc_html__("A very effective way to keep your customers up-to-date on any changes to your business due to the corona virus (COVID-19)"),
 			'img/features/covid19.png',
 			esc_html__('Screenshot', 'post-to-google-my-business')
 		);
-		$notification_manager->add_notification($covid_post);
+		$this->notification_manager->add_notification($covid_post);
 
 
 		$template = $this->settings->get_option('template', 'mbp_quick_post_settings', 'New post: %post_title% - %post_content%');
