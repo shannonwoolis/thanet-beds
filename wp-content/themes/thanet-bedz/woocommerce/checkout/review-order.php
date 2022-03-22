@@ -13,12 +13,12 @@
  *
  * @see https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce/Templates
- * @version 3.8.0
+ * @version 5.2.0
  */
 
 defined('ABSPATH') || exit;
 ?>
-<table class="shop_table woocommerce-checkout-review-order-table mb-4">
+<table class="mb-4 shop_table woocommerce-checkout-review-order-table">
   <thead>
     <tr>
       <th class="product-name"><?php esc_html_e('Product', 'woocommerce'); ?></th>

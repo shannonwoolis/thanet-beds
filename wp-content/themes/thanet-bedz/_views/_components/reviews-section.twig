@@ -1,0 +1,27 @@
+<div class="py-8 md:py-12 lg:py-16">
+    <div class="container flex flex-wrap">
+        <div class="w-full lg:w-1/3">
+            <span class="mb-6 h2">{{ options.reviews_title }}</span>
+            <div class="copy">{{ options.reviews_copy }}</div>
+            {% include "_components/button.twig" with {
+                text: "See more reviews",
+                link: "/reviews/"
+            } %}
+            <div class="mt-8 lg:mt-16">{% include "_components/logos-clients.twig" %}</div>
+        </div>
+        <div class="flex flex-wrap w-full mt-4 xs:-mx-4 lg:-mt-4 lg:mx-0 lg:w-2/3 lg:pl-8">
+            {% for item in reviews %}
+                <div class="flex flex-col items-start w-full py-4 xs:px-4 xl:px-8 xs:w-1/2 md:w-1/3">
+                    <span class="">
+                        {% for i in 1..item.stars %}
+                            {{ fn('icon','star','text-primary-bright') }}
+                        {% endfor %}
+                    </span>
+                    <span class="mt-2 text-xl font-medium">“{{ item.highlight }}”</span>
+                    <div class="mt-1 text-sm font-light leading-6">{{ item.content }}</div>
+                    <span class="mt-2 text-xs text-grey-dark">- {{ item.title }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

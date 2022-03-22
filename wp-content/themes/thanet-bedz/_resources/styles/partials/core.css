@@ -24,7 +24,7 @@ Uses IntersectionObserver to identify when the viewport has scrolled, and then s
 }
 
 .container {
-  @apply w-full px-4 mx-auto;
+  @apply w-full px-4 mx-auto md:px-6 lg:px-8 xl:px-10;
   max-width: calc(theme('screens.3xl') + theme('spacing.8'));
 }
 
@@ -55,4 +55,118 @@ SVG Icons **************************************************/
   stroke-width: 0;
   stroke: currentColor;
   fill: currentColor;
+}
+
+
+/***********************************************************
+Deals **************************************************/
+.bar-right, .bar-left {
+    @apply relative flex text-xs tracking-wider uppercase md:text-sm;
+    &:before {
+        content: '';
+        @apply absolute z-0 right-0 w-full h-[1px] transform -translate-y-1/2 bg-white top-1/2;
+    }
+    &.bar-black {
+        &:before {
+            @apply bg-black;
+        }
+    }
+    span {
+        @apply relative z-10;
+    }
+}
+
+.deal {
+    .bar-right, .bar-left {
+        font-size: 0.65rem;
+    }
+}
+
+.bar-right {
+    &:before {
+        @apply right-0;
+    }
+    span {
+        @apply pr-3;
+    }
+}
+
+.bar-left {
+    &:before {
+        @apply left-0;
+    }
+    span {
+        @apply pl-3 ml-auto;
+    }
+}
+
+.deal-text {
+    @apply text-2xl font-bold uppercase md:text-3xl text-primary-bright;
+
+    &.deal-text-lg {
+        font-size: 3.8rem;
+        line-height: 3.5rem;
+    }
+}
+
+.arrow-right {
+    border-left: 30px solid;
+    @apply w-0 h-0 border-primary-dark;
+    border-top: 0px solid transparent;
+    border-bottom: 20px solid transparent;
+}
+
+.mob-top-bar {
+    @apply right-6;
+    &.scrolled {
+        @apply text-sm right-4 top-4;
+    }
+}
+
+.text-vertical-left {
+    @apply py-2 text-sm sm:py-0;
+    @screen sm {
+        -ms-writing-mode: tb-rl;
+        -webkit-writing-mode: vertical-rl;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        text-align: right;
+
+        &.bar-right {
+            @apply px-6 py-0 my-2 lg:my-4;
+            span {
+                @apply pb-3 pr-0;
+            }
+            &:before {
+                @apply right-1/2 -translate-x-1/2 top-1/2 h-full w-[1px];
+            }
+        }
+    }
+}
+
+.text-vertical-right {
+    @apply py-2 text-sm sm:py-0;
+    @screen sm {
+        -ms-writing-mode: tb-rl;
+        -webkit-writing-mode: vertical-rl;
+        writing-mode: vertical-rl;
+        transform: rotate(0deg);
+        text-align: right;
+
+        &.bar-right {
+            @apply px-6 py-0 mb-2;
+            span {
+                @apply pb-3 pr-0;
+            }
+            &:before {
+                @apply right-1/2 -translate-x-1/2 top-1/2 h-full w-[1px];
+            }
+        }
+    }
+}
+
+/***********************************************************
+Widths **************************************************/
+.w-full-2 {
+    width: calc(100% + 1rem);
 }

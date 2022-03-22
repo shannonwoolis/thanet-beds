@@ -10,90 +10,103 @@ Desktop Navs **********************************************/
 
 			&:focus-within > .sub-menu {
 				@apply
-					block
-					opacity-100;
+					block opacity-100;
 			}
 
     }
 
     a {
       @apply
-        relative
-        block
-        p-4;
+        relative block py-1 mx-3 text-xs font-medium tracking-wider uppercase xl:text-sm;
+
+        &:after {
+            content: '';
+            @apply absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-500 bg-primary;
+        }
 
         &:hover {
-          @apply
-            text-black;
+            &:after {
+                @apply w-full;
+            }
 
           & + .sub-menu {
             @apply
-              block
-              opacity-100;
+              block opacity-100;
           }
         }
     }
 
-    .icon-angle-down {
-        @apply
-          absolute
-          bottom-0
-          left-1/2
-          transform
-          -translate-x-1/2
-          w-4
-          h-4
-          opacity-50;
+    .menu-item-has-children > a {
+        @apply pr-3;
     }
 
     .current-menu-item > a,
-    .current-menu-parent > a {
-      @apply
-        text-white;
-
-        &:hover {
-          @apply text-black;
+      .current-menu-parent > a {
+        &:after {
+            @apply w-full;
         }
+      }
+
+    .icon-caret-down, .icon-caret-down {
+        @apply
+          absolute w-3 h-3 transform -translate-y-1/2 opacity-50 -right-0.5 text-grey-dark top-1/2;
     }
 
     .sub-menu {
       @apply
-        absolute
-        top-full
-        z-40
-        opacity-0
-        hidden
-        left-1/2
-        transform
-        shadow-lg
-        bg-white
-        -translate-x-1/2;
-
+        absolute z-40 hidden transform -translate-x-1/2 bg-white shadow-lg opacity-0 top-full left-1/2;
+        
         width: 200px;
-
+        
         &:focus-within {
-          @apply
-            block
-            opacity-100
-            visible;
+            @apply
+            visible block opacity-100;
+        }
+        
+        &:hover {
+            @apply
+            visible block opacity-100;
         }
 
         a {
-          @apply
-            text-black;
-
-            &:hover {
-              @apply
-                text-gray-500;
-            }
-        }
-
-        &:hover {
-          @apply
-            block
-            opacity-100
-            visible;
+            @apply mx-3 my-4 text-xs;
         }
     }
   }
+
+
+    .menu-primary {
+  
+      a {
+          @apply text-black;
+      }
+    }
+
+    .menu-secondary {
+      a {
+            @apply text-white xl:text-xs;
+            &:after {
+                @apply bg-primary-light;
+            }
+      }
+    }
+}
+  
+
+header, .mob-nav {
+    .desktop-none {
+        @apply lg:hidden;
+    }
+}
+
+header, .mob-nav {
+    .mobile-none {
+        @apply hidden lg:inline-block;
+    }
+}
+
+footer {
+    .desktop-none {
+        @apply hidden;
+    }
 }

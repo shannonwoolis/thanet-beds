@@ -13,7 +13,7 @@
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce/Templates
- * @version 3.6.0
+ * @version 4.3.0
  */
 
 defined('ABSPATH') || exit;
@@ -68,14 +68,14 @@ if (!comments_open()) {
 
   <?php if (get_option('woocommerce_review_rating_verification_required') === 'no' || wc_customer_bought_product('', get_current_user_id(), $product->get_id())) : ?>
     <div id="review_form_wrapper">
-      <div id="review_form" class="border-t mt-3 pt-3">
+      <div id="review_form" class="pt-3 mt-3 border-t">
         <?php
         $commenter    = wp_get_current_commenter();
 
         $comment_form = array(
           'title_reply'         => have_comments() ? esc_html__('Add a review', 'woocommerce') : sprintf(esc_html__('Be the first to review &ldquo;%s&rdquo;', 'woocommerce'), get_the_title()),
           'title_reply_to'      => esc_html__('Leave a Reply to %s', 'woocommerce'),
-          'title_reply_before'  => '<b id="reply-title" class="comment-reply-title block mb-1">',
+          'title_reply_before'  => '<b id="reply-title" class="block mb-1 comment-reply-title">',
           'title_reply_after'   => '</b>',
           'comment_notes_after' => '',
           'label_submit'        => esc_html__('Submit', 'woocommerce'),

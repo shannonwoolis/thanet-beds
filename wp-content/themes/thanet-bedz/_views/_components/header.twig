@@ -1,10 +1,12 @@
-<header class="pt-10 lg:pt-0">
+<header class="">
 
-	<div class="hidden bg-primary top-bar lg:block">
+	<div class="block py-2 text-white bg-primary-dark top-bar">
 
-		<div class="container">
+		<div class="container flex flex-wrap items-center justify-between">
 
-			<nav id="menu-secondary" class="container hidden menu lg:block" aria-labelledby="secondary-navigation">
+            <div class="text-sm">{{ options.tagline }}</div>
+
+			<nav id="menu-secondary" class="hidden menu lg:block" aria-labelledby="secondary-navigation">
 				<span class="sr-only" id="secondary-navigation">Secondary Navigation</span>
 				<ul class="flex flex-wrap justify-center w-full menu-secondary">
 					{% for item in secondaryMenu.items %}
@@ -28,38 +30,56 @@
 
 	</div>
 
-	<div class="container flex-wrap items-center justify-between lg:py-4 lg:flex">
+	<div class="container flex-wrap items-center justify-between py-4 lg:flex">
 
-		<a aria-label="Go to homepage" class="block lg:inline-block" href="{{site.site_url}}">
-			<img class="mx-auto max-w-40" src="{{options.site_logo.url}}" alt="{{site.title}} Logo"/>
-		</a>
+        <div class="flex flex-wrap items-center justify-between">
 
-		{% include "_components/phone-top-right.twig" %}
+            <a aria-label="Go to homepage" class="block lg:inline-block" href="{{site.site_url}}">
+                <img class="mx-auto max-w-28 2xs:max-w-40" src="{{options.site_logo.url}}" alt="{{site.title}} Logo"/>
+            </a>
 
-	</div>
+            <nav id="menu-primary" class="hidden ml-4 xl:ml-8 lg:block menu" aria-labelledby="primary-navigation">
+                <span class="sr-only" id="primary-navigation">Primary Navigation</span>
+                <ul class="flex flex-wrap justify-center w-full menu-primary">
+                    {% for item in primaryMenu.items %}
+                        <li class="{{item.class}} {{ item.current ? 'current-menu-item' }}">
+                            <a href="{{item.link}}">{{item.name}}</a>
+                            {% if item.children %}
+                                <ul class="sub-menu">
+                                    {% for child in item.children %}
+                                        <li class="{{child.class}}">
+                                            <a href="{{child.link}}">{{child.name}}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+            
+            {% include "_components/mobile-top-bar.twig" %}
+            
+		    <div class="absolute z-50 w-full px-6 py-4 mx-auto transition-all duration-1000 bg-white 2xs:py-8 lg:left-0 lg:p-0 lg:m-0 lg:w-auto -left-full mob-search lg:ml-4 lg:relative xl:ml-8 lg:block">
+                <div class="flex flex-wrap justify-between">
+                    {% include "_components/searchform.twig" %}
+                    <div class="px-2.5 lg:hidden py-1.5 mob-search-close bg-grey-light">
+                        {{ fn('icon','times','text-lg') }}
+                        <span class="sr-only">Close Search</span>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
 
-	<div class="hidden bg-secondary lg:block">
-
-		<nav id="menu-primary" class="container menu" aria-labelledby="primary-navigation">
-			<span class="sr-only" id="primary-navigation">Primary Navigation</span>
-			<ul class="flex flex-wrap justify-center w-full menu-primary">
-				{% for item in primaryMenu.items %}
-					<li class="{{item.class}} {{ item.current ? 'current-menu-item' }}">
-						<a href="{{item.link}}">{{item.name}}</a>
-						{% if item.children %}
-							<ul class="sub-menu">
-								{% for child in item.children %}
-									<li class="{{child.class}}">
-										<a href="{{child.link}}">{{child.name}}</a>
-									</li>
-								{% endfor %}
-							</ul>
-						{% endif %}
-					</li>
-				{% endfor %}
-			</ul>
-		</nav>
+        <div class="flex-wrap justify-between hidden w-16 lg:flex">
+            <a href="/my-account/" class="text-black hover:text-primary"><span class="sr-only">My Account</span>{{ fn('icon', 'user') }}</a>
+            <a href="/wishlist/" class="text-black hover:text-primary"><span class="sr-only">Wishlist</span>{{ fn('icon', 'heart') }}</a>
+            <a href="/basket/" class="text-lg text-black hover:text-primary mt-[-2px]"><span class="sr-only">Basket</span>{{ fn('icon', 'basket') }}</a>
+        </div>
 
 	</div>
 
 </header>
+
+{% include "_components/sticky-delivery-badge.twig" %}

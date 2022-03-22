@@ -5,8 +5,8 @@
 	// add all of your code within here, not above or below
 	$(function() {
 
-		var iconAngleUp = "<svg class='icon icon-angle-up'><use xlink:href='"+themeURL.themeURL+"/_resources/images/icons-sprite.svg#icon-angle-up'></use></svg>";
-		var iconAngleDown = "<svg class='icon icon-angle-down'><use xlink:href='"+themeURL.themeURL+"/_resources/images/icons-sprite.svg#icon-angle-down'></use></svg>";
+		var iconAngleUp = "<svg class='icon icon-caret-up'><use xlink:href='"+themeURL.themeURL+"/_resources/images/icons-sprite.svg#icon-caret-up'></use></svg>";
+		var iconAngleDown = "<svg class='icon icon-caret-down'><use xlink:href='"+themeURL.themeURL+"/_resources/images/icons-sprite.svg#icon-caret-down'></use></svg>";
 
 		// --------------------------------------------------------------------------------------------------
 		// Toggle Location Numbers
@@ -14,6 +14,47 @@
 		$('.js-toggle-location-numbers').click(function(){
 			$('.location-numbers').toggleClass('hidden');
 		});
+
+
+        // --------------------------------------------------------------------------------------------------
+		// Search Focus
+		// --------------------------------------------------------------------------------------------------
+        $(".search-field").focus(function(){
+            $(".search-field").parent().parent().addClass('focus');
+        });
+
+        $(".search-field").focusout(function(){
+            $(".search-field").parent().parent().removeClass('focus');
+        });
+
+
+        // --------------------------------------------------------------------------------------------------
+		// Mob Search Toggle
+		// --------------------------------------------------------------------------------------------------
+        $(".mob-search-close").on('click',function() {
+            $(".mob-search").removeClass('left-0');
+            $(".mob-search").addClass('-left-full');
+            // $(".mob-search").fadeOut();
+        });
+
+        $(".mob-search-btn").on('click',function() {
+            $(".mob-search").removeClass('-left-full');
+            $(".mob-search").addClass('left-0');
+            // $(".mob-search").fadeIn();
+        });
+
+
+        // --------------------------------------------------------------------------------------------------
+		// Mob Top Bar
+		// --------------------------------------------------------------------------------------------------
+        $(window).scroll(function() {
+            if ($(document).scrollTop() > 50) {
+                $('.mob-top-bar').addClass('scrolled');
+            }
+            else {
+                $('.mob-top-bar').removeClass('scrolled');
+            }
+        });
 
 
 		// --------------------------------------------------------------------------------------------------
@@ -27,7 +68,7 @@
 
 		// Add dropdown arrow to links with sub-menus
         $( "<span class='sub-arrow'>"+iconAngleDown+iconAngleUp+"</span>" ).insertAfter( ".mob-nav .menu-item-has-children > a" );
-        $(".sub-arrow .icon-angle-down").addClass('active');
+        $(".sub-arrow .icon-caret-down").addClass('active');
 
 	    // Show sub-menu when dropdown arrow is clicked
 	    $('.sub-arrow').click(function() {

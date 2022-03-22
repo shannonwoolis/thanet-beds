@@ -31,7 +31,7 @@ Timber::$autoescape = false;
 require_once(__DIR__ . '/_functions/BaseSite.php');
 require_once(__DIR__ . '/_functions/Cleanup.php');
 require_once(__DIR__ . '/_functions/Scripts.php');
-// require_once(__DIR__ . '/_functions/CustomPostTypes.php');
+require_once(__DIR__ . '/_functions/CustomPostTypes.php');
 require_once(__DIR__ . '/_functions/Image.php');
 require_once(__DIR__ . '/_functions/CustomFieldBlocks.php');
 require_once(__DIR__ . '/_functions/Adtrak.php');
@@ -75,7 +75,8 @@ function get_adtrak_logo($colour = null, $icon = false)
  * Adding icon function.
  */
 function icon($iconName, $classes = null) {
-    return Icons::getIcon($iconName, $classes);
+    $icon = new Icons();
+    return $icon->getIcon($iconName, $classes);
 }
 
 

@@ -1,10 +1,14 @@
+<div class="container flex flex-wrap justify-around 2xs:!px-12 py-6 bg-white xs:!px-6 lg:py-8">
 
-{{ options.why_header ? options.why_header }}
-   
-{% for item in options.why_choose_us %}
+    {% for item in options.why_choose_us %}
 
-  {{ function('icon', item.icon) }}
+        <div class="flex items-center w-full my-2 lg:my-0 lg:mx-2 lg:w-auto sm:w-1/2">
 
-  {{item.reason}}
-  
-{% endfor %}
+            {{ function('icon', item.icon, 'text-primary-lightest mr-3 text-4xl') }}
+            {{item.reason}}
+
+        </div>
+    
+    {% endfor %}
+
+</div>

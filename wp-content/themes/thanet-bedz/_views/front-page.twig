@@ -2,28 +2,50 @@
 
 {% block content %}
 
-<div class="container flex-wrap flex-grow my-8 lg:flex lg:my-16">
+    {% include "_components/why-choose-us.twig" %}
 
-	<main class="lg:w-2/3 lg:pr-16">
+    {% include "_components/category-buckets.twig" with {
+        title: "Shop by category",
+        buckets: topProductCats,
+    } %}
 
-		<article class="copy">
+    {% include "_components/reviews-section.twig" %}
+    
+    {% include "_components/products.twig" with {
+        title: "Some title here about <span class='font-bold text-primary-bright'>how good</span> our products are",
+        sideTitle: "Featured products",
+        products: featured,
+        btnText: "Shop all",
+        btnLink: "/product-category/featured/"
+    } %}
 
-			<h1>{{post.title}}</h1>
+    {% include "_components/category-buckets.twig" with {
+        title: "Shop by room",
+        buckets: roomProductCats,
+    } %}
 
-			{{post.content}}
+    {# <div class="container flex-wrap flex-grow my-8 lg:flex lg:my-16">
 
-			{{ responsive_image_from_thumb(post.id) }}
+        <main class="lg:w-2/3 lg:pr-16">
 
-			{% include "_components/logos-clients.twig" %}
+            <article class="copy">
 
-		</article>
+                <h1>{{post.title}}</h1>
 
-	</main>
+                {{post.content}}
 
-	<aside class="bg-gray-100 lg:w-1/3">
-		{% include "_components/sidebar.twig" %}
-	</aside>
+                {{ responsive_image_from_thumb(post.id) }}
 
-</div>
+                {% include "_components/logos-clients.twig" %}
+
+            </article>
+
+        </main>
+
+        <aside class="bg-gray-100 lg:w-1/3">
+            {% include "_components/sidebar.twig" %}
+        </aside>
+
+    </div> #}
 
 {% endblock %}

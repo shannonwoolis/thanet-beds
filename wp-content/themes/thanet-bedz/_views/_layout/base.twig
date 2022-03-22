@@ -5,10 +5,18 @@
 {% endblock %}
 
 {% block hero %}
-	{% include "_components/hero.twig" %}
+	{% include "_components/hero.twig" with {
+        image: post.thumbnail,
+        subtitle: post.meta('hero_subtitle'),
+        title: post.meta('hero_title')|default(post.title),
+        copy: post.meta('hero_copy')|default(false),
+        btns: post.meta('hero_buttons')|default(false),
+        deals: post.meta('hero_deals')|default(false)
+    }%}
 {% endblock %}
 
 {% block content %}
+    {% include "_components/why-choose-us.twig" %}
 {% endblock %}
 
 {% block footer %}

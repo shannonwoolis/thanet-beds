@@ -13,7 +13,7 @@
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce/Templates
- * @version 3.7.0
+ * @version 4.6.0
  */
 
 defined('ABSPATH') || exit;
@@ -43,7 +43,7 @@ if ($show_downloads) {
 
   <h2 class="woocommerce-order-details__title"><?php esc_html_e('Order details', 'woocommerce'); ?></h2>
 
-  <table class="woocommerce-table woocommerce-table--order-details shop_table order_details mb-4">
+  <table class="mb-4 woocommerce-table woocommerce-table--order-details shop_table order_details">
     <thead>
       <tr>
         <th class="woocommerce-table__product-name product-name"><?php esc_html_e('Product', 'woocommerce'); ?></th>

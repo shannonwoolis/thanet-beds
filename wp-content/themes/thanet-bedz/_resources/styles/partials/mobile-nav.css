@@ -6,22 +6,22 @@ $menuTitleHeight :    59px;
 
 /* Colours */
 
-$linkText :           theme('colors.primary.DEFAULT');
+$linkText :           theme('colors.black');
 $linkBg :             transparent;
-$linkBorder :         theme('colors.gray.600');
+$linkBorder :         theme('colors.gray.200');
 
-$linkTextActive :     theme('colors.primary.light');
+$linkTextActive :     theme('colors.primary.DEFAULT');
 $linkBgActive :       transparent;
 
 $dropdownArrowBg :    transparent;
 $dropdownArrowText :  inherit;
 
 $closeText :          theme('colors.white');
-$closeTextBg :        theme('colors.red.600');
+$closeTextBg :        theme('colors.secondary.DEFAULT');
 
 .mob-nav {
   @apply
-    fixed top-0 bottom-0 right-0 w-4/5 h-full duration-300 bg-gray-900;
+    fixed top-0 bottom-0 right-0 w-4/5 h-full text-sm font-medium tracking-wider uppercase duration-300 bg-white ;
   
     -webkit-transform: translateX(100%);
     transform: translateX(100%);
@@ -35,7 +35,7 @@ $closeTextBg :        theme('colors.red.600');
     content: "Menu";
 
     @apply
-      block w-full p-4 text-center text-gray-200 bg-gray-500;
+      block w-full p-4 text-center text-white bg-primary-dark;
 
     border-bottom: 1px solid $linkBorder;
   }
@@ -83,10 +83,11 @@ $closeTextBg :        theme('colors.red.600');
     .sub-arrow {
         @apply
         absolute top-0 right-0 z-10 px-0 text-center cursor-pointer;
-        padding-top: 14px;
-        padding-bottom: 14px;
+        padding-top: 16px;
+        padding-bottom: 16px;
         border-left: 1px solid $linkBorder;
         width: 45px;
+        height: 53px;
         color: $linkText;
         background-color: $linkBg;
 
@@ -155,7 +156,7 @@ $closeTextBg :        theme('colors.red.600');
     @apply
     fixed top-0 bottom-0 left-0 right-0 invisible w-full h-full opacity-0;
     display: block !important; /* override critical css */
-    background-color: rgba(#000,.4);
+    background-color: rgba(0,0,0,.4);
     z-index: 999999;
     transition: .3s;
 

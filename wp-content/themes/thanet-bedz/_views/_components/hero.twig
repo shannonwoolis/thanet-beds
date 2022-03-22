@@ -1,4 +1,4 @@
-<div class="w-full bg-center bg-cover hero min-h-128">
+<div class="w-full bg-center bg-cover hero">
     {% set hero_small = post.thumbnail.src|resize('800') %}
     {% set hero_medium = post.thumbnail.src|resize('1200') %}
     {% set hero_large = post.thumbnail.src|resize('2000') %}
@@ -17,4 +17,42 @@
         }
       }
     </style>
+    
+    <div class="container">
+        <div class="py-12 pr-8 md:px-0 {{ deals ? 'md:pb-0 lg:-mb-4 md:pt-16 lg:pt-24' : 'md:py-16 lg:py-24' }}">
+            <div class="relative w-full px-8 pb-20 bg-white border-l-8 pt-14 2xs:py-10 border-primary-dark lg:px-12 lg:py-16 md:w-3/5 lg:w-1/2 xl:w-2/5">
+                <span class="">{{ subtitle }}</span><span class="text-primary-light"></span>
+                <span class="block mt-1 text-3xl font-medium 2xl:text-4xl">{{ title }}</span>
+                <div class="block mt-5 text-sm font-light leading-6">{{ copy }}</div>
+                {% for btn in btns %}
+                    {% include "_components/button.twig" with {
+                        link: btn.button.url,
+                        text: btn.button.title,
+                        target: btn.button.target,
+                        tracking: false,
+                        colour: (loop.index is odd ? 'primary-light' : 'primary'),
+                        classes: 'mt-5 mr-2'
+                    } only %}
+                {% endfor %}
+
+                {% include "_components/hero-delivery-badge.twig" %}
+
+                {% if fn('is_front_page') %}
+                    <img src="{{ theme.link }}/_resources/images/trustpilot.svg" class="absolute w-24 sm:w-28 bottom-5 right-5">
+                {% endif %}
+            </div>
+        </div>
+
+        {% if deals %}
+            <div class="justify-end hidden md:flex">
+                {% for deal in deals %}
+                    <a href="{{ deal.deal_link }}" class="deal block px-4 hover:pb-4 transition-all hover:-mt-4 duration-500 py-3 text-white {{ loop.index is odd ? 'bg-primary' : 'bg-primary-dark' }} ">
+                        <div class="{{ loop.index is odd ? 'bg-primary' : 'bg-primary-dark' }} bar-right"><span class="{{ loop.index is odd ? 'bg-primary' : 'bg-primary-dark' }}">{{ deal.deal_top_text }}</span></div>
+                        <div class="-my-1 deal-text deal-text-lg">{{ deal.deal_middle_text }}</div>
+                        <div class="bar-left {{ loop.index is odd ? 'bg-primary' : 'bg-primary-dark' }}"><span class="{{ loop.index is odd ? 'bg-primary' : 'bg-primary-dark' }}">{{ deal.deal_bottom_text }}</span></div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 </div>

@@ -1,18 +1,4 @@
-@font-face {
-  font-family: 'Source Sans Pro';
-  src: url('/wp-content/themes/adtrak-woocommerce/_resources/fonts/SourceSansPro-Regular.ttf') format('truetype');
-  font-display: swap;
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Source Sans Pro';
-  src: url('/wp-content/themes/adtrak-woocommerce/_resources/fonts/SourceSansPro-Bold.ttf') format('truetype');
-  font-display: swap;
-  font-weight: 700;
-  font-style: bold;
-}
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap');
 
 /***********************************************************
 Headings **************************************************/
@@ -24,19 +10,19 @@ h4, .h4,
 h5, .h5,
 h6, .h6 {
   @apply
-    mb-4 font-bold leading-snug;
+    inline-block mb-4 font-medium leading-snug;
 }
 
-h1 {
+h1, .h1 {
+  @apply text-4xl;
+}
+
+h2, .h2 {
   @apply text-3xl;
 }
 
-h2 {
+h3, .h3 {
   @apply text-2xl;
-}
-
-h3 {
-  @apply text-xl;
 }
 
 /***********************************************************
@@ -45,7 +31,7 @@ Copy ******************************************************/
 .copy {
   > p {
     @apply
-      mb-6 leading-relaxed;
+      mb-6 font-light leading-6;
   }
 
   a {
@@ -104,4 +90,23 @@ Copy ******************************************************/
       @apply float-right mt-1 mb-1 ml-1;
     }
   }
+}
+
+.search-field {
+    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        @apply text-grey-dark;
+    }
+    &::-moz-placeholder { /* Firefox 19+ */
+        @apply text-grey-dark;
+    }
+    &:-ms-input-placeholder { /* IE 10+ */
+        @apply text-grey-dark;
+    }
+    &:-moz-placeholder { /* Firefox 18- */
+        @apply text-grey-dark;
+    }
+}
+
+.focus {
+    @apply border-2 ml-[-2px] border-primary-lightest;
 }

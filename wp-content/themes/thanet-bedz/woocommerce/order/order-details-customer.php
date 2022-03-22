@@ -13,15 +13,15 @@
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce/Templates
- * @version 3.4.4
+ * @version 5.6.0
  */
 
 defined('ABSPATH') || exit;
 
 $show_shipping = !wc_ship_to_billing_address_only() && $order->needs_shipping_address();
 ?>
-<section class="woocommerce-customer-details flex flex-wrap row">
-  <div class="column w-full md:w-6/12">
+<section class="flex flex-wrap woocommerce-customer-details row">
+  <div class="w-full column md:w-6/12">
     <h4 class="mb-3"><?php esc_html_e('Billing address', 'woocommerce'); ?></h4>
     <address>
       <?php echo wp_kses_post($order->get_formatted_billing_address(esc_html__('N/A', 'woocommerce'))); ?>
@@ -37,7 +37,7 @@ $show_shipping = !wc_ship_to_billing_address_only() && $order->needs_shipping_ad
   </div>
 
   <?php if ($show_shipping) : ?>
-    <div class="column w-full md:w-6/12">
+    <div class="w-full column md:w-6/12">
       <h4 class="mb-3"><?php esc_html_e('Shipping address', 'woocommerce'); ?></h4>
       <address>
         <?php echo wp_kses_post($order->get_formatted_shipping_address(esc_html__('N/A', 'woocommerce'))); ?>

@@ -1,13 +1,9 @@
-{{ options.logos_header ? options.logos_header }}
-
 {% if options.logos %}
-  {% for logo in options.logos %}
-
-    {{logo.name}}
-    <img class="lazyload" src="" data-src="{{logo.image.url|letterbox('150', '150','#fff')}}" alt="{{logo.name}} Logo">
-    {{logo.link}}
-
-  {% endfor %}
+    <div class="flex flex-wrap -mx-4">
+        {% for logo in options.logos %}
+            <img class="w-1/2 p-4 sm:mx-4 sm:my-2 xs:w-1/3 sm:w-28 sm:p-0 2xl:w-32 lazyload" src="" data-src="{{logo.image.url|resize(300)}}" alt="{{logo.name}} Logo">
+        {% endfor %}
+    </div>
 {% endif %}
 
 

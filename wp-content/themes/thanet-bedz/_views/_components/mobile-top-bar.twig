@@ -1,18 +1,30 @@
-<div class="fixed z-50 flex flex-wrap w-full bg-primary z lg:hidden">
+<div class="fixed z-50 flex flex-wrap py-2 transition-all mob-top-bar bg-grey-light lg:hidden">
 
- {#<div class="w-1/2 p-2 text-center bg-gray-500">
-    {% do action('ld_default', false) %}
-</div>#}
+    <div class="flex items-center justify-center px-5 py-3 text-center border-r xs:px-7 hover:text-grey-dark border-grey-dark menu-btn">
+        {{ function('icon', 'bars', '2xs:text-lg') }}
+        <span class="sr-only">Menu</span>
+    </div>
 
-<div class="w-1/2 p-2 text-center bg-secondary">
-  {% do action('ald_default', false) %}
-</div>
+    <div class="flex items-center justify-center px-5 py-3 text-center border-r xs:px-7 hover:text-grey-dark border-grey-dark mob-search-btn">
+        {{ function('icon', 'search', '2xs:text-lg') }}
+        <span class="sr-only">Search</span>
+    </div>
 
-<div class="absolute left-0 z-10 hidden w-full p-4 bg-secondary location-numbers top-10 ">
-  {% do action('ald_default', false) %}
-</div>
+    <a href="/basket/" class="flex items-center justify-center px-5 py-3 text-center xs:px-7 hover:text-grey-dark basket-btn">
+        {{ function('icon', 'basket', '2xs:text-xl') }}
+        <span class="sr-only">Basket</span>
+    </a>
 
-<div class="flex items-center justify-center w-1/2 p-2 text-center menu-btn bg-primary">{# {{ function('icon', 'bars') }} #}<span
-    class="ml-2">Menu</span></div>
+    {#<div class="w-1/2 p-2 text-center bg-gray-500">
+        {% do action('ld_default', false) %}
+    </div>#}
+    {# 
+    <div class="w-1/2 p-2 text-center bg-secondary">
+    {% do action('ald_default', false) %}
+    </div>
+
+    <div class="absolute left-0 z-10 hidden w-full p-4 bg-secondary location-numbers top-10 ">
+    {% do action('ald_default', false) %}
+    </div> #}
 
 </div>

@@ -16,7 +16,7 @@ module.exports = {
       "4xl": "1900px",
     },
     fontFamily: {
-      sans: ["Source Sans Pro", "sans-serif"],
+      sans: ["Work Sans", "sans-serif"],
     },
     filter: {
       none: "none",
@@ -24,16 +24,23 @@ module.exports = {
     },
     extend: {
       colors: {
+        black: "#404040",
         primary: {
-          light: "#eee",
-          DEFAULT: "#ccc",
-          dark: "#666",
+          bright: "#3CDC78",
+          lightest: "#68CD8E",
+          light: "#2FA65C",
+          DEFAULT: "#218848",
+          dark: "#326F49",
         },
         secondary: {
-          light: "#f83",
-          DEFAULT: "#d0dfe5",
-          dark: "#c0ced3",
+          DEFAULT: "#C21F1E",
+          dark: "#B01108",
         },
+        grey: {
+          light: "#F6F6F6",
+          DEFAULT: "#CECECE",
+          dark: "#909090",
+        }
       },
       spacing: {
         72: "18rem",
