@@ -63,6 +63,33 @@ class BaseSite extends Timber\Site
             $context['secondaryMenu'] = new Timber\Menu('Secondary Menu');
         }
         $context['footerMenu'] = new Timber\Menu('Footer Menu');
+
+        // Top Categories 
+        $top_args = array(
+            'hide_empty' => false,
+            'parent' => 0,
+            'exclude'  => array(15),
+        );
+        $topProductCats = get_terms( 'product_cat', $top_args);
+        $context['topProductCats'] = $topProductCats;
+
+        // Room Categories 
+        $cat_args = array(
+            'hide_empty' => false,
+            'parent' => 27,
+            'exclude'  => array(15),
+        );
+        $roomProductCats = get_terms( 'product_cat', $cat_args);
+        $context['roomProductCats'] = $roomProductCats;
+        
+        // Stores
+        $stores = array(
+            'post_type'           => 'stores',
+            'post_status'         => 'publish',
+            'posts_per_page'      => 6,
+        );
+        $context['stores'] = new Timber\PostQuery($stores);
+
         return $context;
     }
 

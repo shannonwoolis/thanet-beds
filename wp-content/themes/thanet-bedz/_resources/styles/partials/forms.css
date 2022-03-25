@@ -5,7 +5,7 @@ input,
 textarea,
 select {
     @apply
-    w-full px-4 py-3 text-sm text-gray-900 bg-white border border-gray-300 border-solid sm:px-6;
+    w-full px-4 py-3 text-sm text-gray-900 bg-white border-none sm:px-6;
 
     &[aria-invalid="true"] {
         background-color: #f3e2e2;
@@ -35,29 +35,29 @@ textarea {
 
 /*The below placeholder selectors don't work when comma separated*/
 input::-webkit-input-placeholder {
-    @apply text-gray-700;
+    @apply text-grey-dark;
 }
 input::-ms-input-placeholder {
-    @apply text-gray-700;
+    @apply text-grey-dark;
 }
 input::-moz-placeholder {
-    @apply text-gray-700;
+    @apply text-grey-dark;
 }
 input::placeholder {
-    @apply text-gray-700;
+    @apply text-grey-dark;
 }
 
 textarea::-webkit-input-placeholder {
-    @apply text-gray-700;
+    @apply text-grey-dark;
 }
 textarea::-ms-input-placeholder {
-    @apply text-gray-700;
+    @apply text-grey-dark;
 }
 textarea::-moz-placeholder {
-    @apply text-gray-700;
+    @apply text-grey-dark;
 }
 textarea::placeholder {
-    @apply text-gray-700;
+    @apply text-grey-dark;
 }
 
 input[type="button"],

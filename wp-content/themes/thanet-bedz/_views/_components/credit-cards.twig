@@ -1,7 +1,5 @@
-{{ options.cc_header ? options.cc_header }}
-
-{% for item in options.credit_cards %}
-
-<img class="lazyload" src="" data-src="{{item.card.url|resize('25', '25')}}" alt="Credit Card Logo" />
-
-{% endfor %}
+<div class="flex-row flex-wrap items-center justify-end w-full sm:flex opacity-70">
+    {% for item in options.credit_cards %}
+        <img class="w-16 my-3 sm:my-0 sm:mx-2 lazyload" src="" data-src="{{ item.card.url }}" alt="Credit Card Logo">
+    {% endfor %}
+</div>

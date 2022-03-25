@@ -1,0 +1,21 @@
+<div class="py-8 bg-grey-light md:py-12 lg:py-12">
+    <div class="container relative flex flex-wrap sm:flex-nowrap">
+        <div class="w-full sm:w-auto text-vertical-left bar-right bar-black bg-grey-light"><span class="bg-grey-light">{{ fn('icon','instagram', 'mr-[0.45rem]') }} Instagram</span></div>
+        
+        <div class="flex flex-wrap justify-between -mx-2 w-full-2 sm:w-auto lg:-mx-4">
+            {% for item in buckets %}
+                <div class="w-1/2 p-2 lg:p-4 md:w-1/4">
+                    {% set thumbID = fn('get_term_meta',item.term_id,'thumbnail_id',true) %}
+                    {% set thumb = fn('wp_get_attachment_url',thumbID) %}
+                    <div class="relative block overflow-hidden transition-all duration-500 group">
+                        <span class="block transition-all duration-500 transform"><img class="lazyload" data-src="{{ thumb|resize(600,600) }}"></span>
+                        <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full text-2xl text-white transition-all duration-500 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
+                            <a class="hover:opacity-60" href="{{ thumb }}" data-fslightbox="gallery">{{ fn('icon','magnify','mx-2') }}<span class="sr-only">Magnify</span></a>
+                            <a class="hover:opacity-60" href="">{{ fn('icon','open','mx-2') }}<span class="sr-only">Open post</span></a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

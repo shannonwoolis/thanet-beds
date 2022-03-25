@@ -108,6 +108,15 @@
 		}
         window.addEventListener('resize', addDropdownIcon);
 
+        // --------------------------------------------------------------------------------------------------
+		// Map
+		// --------------------------------------------------------------------------------------------------
+        $('.map').click(function(e) {
+            $(this).find('iframe').css('pointer-events', 'all');
+        }).mouseleave(function(e) {
+            $(this).find('iframe').css('pointer-events', 'none');
+        });
+
 		// --------------------------------------------------------------------------------------------------
 		// Contact form 7 tracking
 		// ** To use this replace the FORMID with the id of your contact form and then replace the FORM NAME with the form name.
