@@ -1,4 +1,4 @@
-<div class="py-8 md:py-12 lg:py-16">
+<div class="py-8 md:py-12 lg:py-16 bg-{{ background }}">
     <div class="container relative flex flex-wrap sm:flex-row-reverse sm:flex-nowrap">
         <div class="w-full text-black bg-white bar-black sm:w-auto text-vertical-right bar-right"><span class="text-black bg-white">Our stores</span></div>
         <div class="w-full">
@@ -16,7 +16,7 @@
                 <div class="flex flex-wrap w-full -mx-4 lg:mr-4 w-full-4 lg:-ml-4 lg:w-2/3">
                     {% for item in stores %}
                         <div class="w-full p-4 md:w-1/2">
-                            <div class="flex flex-col items-start h-full p-8 border-l-8 bg-grey-light border-primary">
+                            <div class="flex flex-col items-start h-full p-8 border-l-8 border-primary {{ background == 'white' ? 'bg-grey-light' : 'bg-white' }}">
                                 <span class="block">Kent Beds & Sofas</span>
                                 <span class="h2">{{ item.title }}</span>
                                 <span class="flex text-sm my-1.5">{{ fn('icon','map-marker-alt','text-lg min-w-6 mr-2') }} {{ item.address }}</span>

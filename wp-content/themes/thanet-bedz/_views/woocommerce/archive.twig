@@ -1,41 +1,104 @@
 {% extends '_layout/base.twig' %}
 
 {% block hero %}
+    {% if fn('is_shop') %}
+        {% set hero_title = 'Shop All' %}
+        {% set hero_copy = 'Our wide selection of different models means we can offer exactly what you’re looking for to create your perfect home.' %}
+        {% set thumb = 'http://thanet-bedz.vm/wp-content/uploads/2022/03/metal-bed.jpeg' %}
+    {% else %}
+        {% set hero_title = post.meta('hero_title')|default(post.title) %}
+        {% set hero_copy = post.meta('hero_copy')|default(false) %}
+        {% set thumbID = fn('get_term_meta',post.term_id,'thumbnail_id',true) %}
+        {% set thumb = fn('wp_get_attachment_url',thumbID) %}
+    {% endif %}
+    {% include "_components/hero.twig" with {
+        image: thumb,
+        subtitle: false,
+        title: hero_title,
+        copy: hero_copy,
+        badge: false,
+        btns: false,
+        deals: false
+    }%}
 {% endblock %}
 
 {% block content %}
 
-<div class="container">
+    {% include "_components/why-choose-us.twig" %}
 
-	<div class="mt-4 text-sm">
-		{# breadcrumbs #}
-		{% do action('woocommerce_before_main_content') %}
-	</div>
+    {% if fn('is_shop') %}
+        {% include "_components/category-buckets.twig" with {
+            title: "Shop by category",
+            buckets: topProductCats,
+        } %}
+    {% endif %}
 
-	<div class="before-shop-loop">
-		<h1>Shop</h1>
-		{% do action('woocommerce_before_shop_loop') %}
-	</div>
+    <div class="py-8 text-white bg-primary-dark md:py-12 lg:py-16">
+        <div class="container relative flex flex-wrap sm:flex-row-reverse sm:flex-nowrap">
 
-	<section class="flex flex-wrap">
+            <div class="w-full text-white sm:w-auto text-vertical-right bar-right bg-primary-dark"><span class="text-white bg-primary-dark">Products</span></div>
 
-		<div class="w-full md:w-8/12 lg:w-9/12">
-			<div class="flex flex-wrap products">
-				{% for post in products %}
-					{% include ["_shop/tease-product.twig"] %}
-				{% endfor %}
-			</div>
-		</div>
+            <div class="w-full">
+            
+                <div class="before-shop-loop">
+                    {% do action('woocommerce_before_shop_loop') %}
+                </div>
 
-		<aside class="w-full md:w-4/12 md:p-6 lg:w-3/12">
-			{% do action('woocommerce_sidebar') %}
-		</aside>
+                <section class="flex flex-wrap">
 
-	</section>
+                    <div class="w-full">
+                        <div class="flex flex-wrap -mx-4 -mb-2 products">
+                            {% for post in products %}
+                                {% include ["_shop/tease-product.twig"] %}
+                            {% endfor %}
+                        </div>
+                    </div>
 
-	{% do action('woocommerce_after_shop_loop') %}
-	{% do action('woocommerce_after_main_content') %}
+                </section>
 
-</div>
+                {% do action('woocommerce_after_shop_loop') %}
+                {% do action('woocommerce_after_main_content') %}
+
+            </div>
+
+        </div>
+    </div>
+
+    {% if fn('is_shop') %}
+        {% include "_components/category-buckets.twig" with {
+            title: "Shop by room",
+            buckets: roomProductCats,
+        } %}
+    {% endif  %}
+
+    {% if childCategories %}
+        {% include "_components/category-buckets.twig" with {
+            title: "Shop by category",
+            buckets: childCategories,
+        } %}
+    {% endif %}
+
+    {% if post.description %}
+
+        {% set thumbID = fn('get_term_meta',post.term_id,'thumbnail_id',true) %}
+        {% set thumb = fn('wp_get_attachment_url',thumbID) %}
+        {% include "_components/main-content.twig" with {
+            title: post.meta('h1')|default(post.title),
+            content: post.description|default(false),
+            buttons: post.meta('copy_buttons')|default(false),
+            utility_links: false,
+            thumb: thumb
+        } %}
+
+        {% include "_components/stores.twig" with {
+            background: 'grey-light'
+        } %}
+
+    {% else %}
+        {% include "_components/stores.twig" with {
+            background: 'white'
+        } %}
+    {% endif %}
+
 
 {% endblock  %}
