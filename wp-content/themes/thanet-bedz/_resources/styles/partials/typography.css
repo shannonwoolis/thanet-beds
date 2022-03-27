@@ -32,6 +32,10 @@ Copy ******************************************************/
   > p {
     @apply
       mb-6 font-light leading-8;
+
+      &:last-of-type {
+          @apply mb-0;
+      }
     }
 
     h1, h2, h3, h4, h5, h6 {

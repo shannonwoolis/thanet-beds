@@ -31,7 +31,7 @@ $product_tabs = apply_filters('woocommerce_product_tabs', array());
 
 if (!empty($product_tabs)) : ?>
 
-    <nav class="flex justify-center w-full" role="tablist">
+    <nav class="flex w-full mt-8" role="tablist">
       <?php $i = 0;
       foreach ($product_tabs as $key => $product_tab) : ?>
         <a class="product-tab-link <?= ($i == 0) ? 'active' : ''; ?>" href="#tab-<?= esc_attr($key); ?>">
@@ -41,7 +41,7 @@ if (!empty($product_tabs)) : ?>
       endforeach; ?>
     </nav>
 
-  <div class="flex justify-between mb-10">
+  <div class="flex justify-between">
     
 
     <?php

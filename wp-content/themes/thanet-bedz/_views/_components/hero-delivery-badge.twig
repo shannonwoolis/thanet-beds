@@ -1,6 +1,6 @@
-<div class="w-[147px] md:w-[178px] absolute right-[-30px] -top-8 md:-top-12 px-4 py-3 text-white bg-primary ">
+<div class="w-[147px] md:w-[178px] absolute z-40 px-4 py-3 text-white bg-primary right-[-30px] -top-8 md:-top-12 {{ position == 'left' ? 'transform origin-right scale-75 md:scale-100 right-[2px] -top-4 md:right-auto md:left-[-30px] md:-top-4' }}">
     <div class="bg-primary bar-right"><span class="bg-primary">Same day</span></div>
     <div class="-my-1 deal-text">Delivery</div>
     <div class="bar-left bg-primary"><span class="bg-primary">Available</span></div>
-    <div class="absolute right-0 w-8 h-6 top-full arrow-right"></div>
+    <div class="absolute w-8 h-6 top-full right-0 arrow-right {{ position == 'left' ? 'md:left-0 arrow-left' }}"></div>
 </div>

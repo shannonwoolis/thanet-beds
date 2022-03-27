@@ -22,9 +22,12 @@ class CommerceOverrides
     {
         remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_price', 10);
         remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
+        remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
 
-        add_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 21);
+        remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
+
         add_action('woocommerce_single_product_summary', 'woocommerce_template_single_price', 29);
+        add_action( 'woocommerce_single_product_summary', 'woocommerce_output_product_data_tabs', 50 );
     }
 
     /**
@@ -40,4 +43,15 @@ class CommerceOverrides
         $args['columns'] = 1;
         return $args;
     }
+}
+
+
+/**
+* Change the breadcrumb separator
+*/
+add_filter( 'woocommerce_breadcrumb_defaults', 'wcc_change_breadcrumb_delimiter' );
+function wcc_change_breadcrumb_delimiter( $defaults ) {
+// Change the breadcrumb delimeter from '/' to '>'
+$defaults['delimiter'] = ' | ';
+return $defaults;
 }

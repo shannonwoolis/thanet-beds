@@ -5,32 +5,44 @@
 
 {% block content %}
 
-<div class="container">
-	
-	<div class="my-4 text-sm md:my-8">
-		{# breadcrumbs #}
-		{% do action('woocommerce_before_main_content') %}
-	</div>
+<div class="py-8 bg-grey-light md:py-12 lg:py-16">
+    <div class="container">
 
-	{% do action('woocommerce_before_single_product') %}
+        {% do action('woocommerce_before_single_product') %}
 
-	<article itemscope itemtype="http://schema.org/Product" class="{{ post.class }}">
-		<div class="flex flex-wrap mb-10">
+        <article itemscope itemtype="http://schema.org/Product" class="{{ post.class }}">
+            <div class="flex flex-wrap justify-between md:flex-row-reverse">
+                
+                <div class="relative w-full md:p-0 pr-[24.5px] md:w-6/12 lg:w-[55%] entry-images">
+                    {% include "_components/hero-delivery-badge.twig" with {
+                        position: 'left'
+                    } %}
+                    {% do action('woocommerce_before_single_product_summary') %}
+                </div>
 
-			<div class="relative w-full md:w-6/12 entry-images">
-				{% do action('woocommerce_before_single_product_summary') %}
-			</div>
+                <div class="w-full mt-8 md:mt-0 md:w-6/12 lg:w-2/5 md:pr-8 copy">  
+                    <span class="text-sm">{% do action('woocommerce_before_main_content') %}</span>{# breadcrumbs #}
+                    {% do action('woocommerce_single_product_summary') %}
+                </div>
 
-			<div class="w-full md:w-6/12 md:px-8 xl:p-12 copy">
-				{% do action('woocommerce_single_product_summary') %}
-			</div>
-		</div>
+            </div>
 
-		{% do action('woocommerce_after_single_product_summary') %}
+            <meta itemprop="url" content="{{ post.link }}"/>
+        </article>
 
-		<meta itemprop="url" content="{{ post.link }}"/>
-	</article>
-
-	{% do action('woocommerce_after_single_product') %}
+        {% do action('woocommerce_after_single_product') %}
+    </div>
 </div>
+
+{% include "_components/why-choose-us.twig" %}
+
+{% do action('woocommerce_after_single_product_summary') %}
+
+{% include "_components/category-buckets.twig" with {
+    title: "Shop by room",
+    buckets: roomProductCats,
+} %}
+
+{% include "_components/stores.twig" %}
+
 {% endblock  %}

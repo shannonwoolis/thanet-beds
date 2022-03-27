@@ -116,6 +116,13 @@ Deals **************************************************/
     border-bottom: 20px solid transparent;
 }
 
+.arrow-left {
+    @screen md {
+        border-right: 30px solid theme('colors.primary.dark');
+        border-left: 0px solid transparent;
+    }
+}
+
 .mob-top-bar {
     @apply right-6;
     &.scrolled {

@@ -20,4 +20,4 @@ if (!defined('ABSPATH')) {
   exit;
 }
 ?>
-<div class="products flex flex-wrap row">
+<div class="flex flex-wrap products">
