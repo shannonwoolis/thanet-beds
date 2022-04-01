@@ -1,11 +1,11 @@
-<div class="relative flex flex-col p-8 border-l-8 lg:flex-none lg:flex-row bg-grey-light border-primary-dark">
+<a href="{{ link }}" class="relative flex flex-col p-8 border-l-8 lg:flex-none group hover:border-primary lg:flex-row info-card border-primary-dark">
     {{ fn('icon',icon,'min-w-8 mb-4 lg:mb-0 lg:mr-4 text-4xl text-primary-light') }}
     <div class="flex flex-col">
         <span class="h3">{{ title }}</span>
         <span class="text-sm font-light lg:pr-10">{{ copy }}</span>
     </div>
-    <a href="{{ link }}" class="absolute bottom-0 right-0 flex items-center justify-center w-10 h-10 bg-primary-dark text-primary-bright">
+    <span class="absolute bottom-0 right-0 flex items-center justify-center w-10 h-10 transition group-hover:bg-primary bg-primary-dark text-primary-bright">
         {{ fn('icon','caret-right' ) }}
         <span class="sr-only">{{ title }}</span>
-    </a>
-</div>
+    </span>
+</a>

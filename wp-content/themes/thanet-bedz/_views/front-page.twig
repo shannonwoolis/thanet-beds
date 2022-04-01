@@ -24,10 +24,12 @@
         buckets: roomProductCats,
     } %}
 
-    {% include "_components/stores.twig" %}
+    {% include "_components/stores.twig" with {
+        background: 'white'
+    } %}
 
-    {% include "_components/instagram-feed.twig" with {
-        buckets: topProductCats,
+    {% include "_components/gallery.twig" with {
+        gallery: topProductCats,
     } %}
 
     {% include "_components/main-content.twig" with {

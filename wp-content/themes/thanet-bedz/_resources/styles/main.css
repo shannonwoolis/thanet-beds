@@ -10,6 +10,7 @@
 @import   'partials/forms.css';
 @import   'partials/mobile-nav.css';
 @import   'partials/typography.css';
+@import   'partials/video.css';
 
 @import 'woocommerce/single-product.css'; 
 @import 'woocommerce/mini-cart.css';

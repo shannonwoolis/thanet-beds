@@ -1,0 +1,60 @@
+{% extends "_layout/base.twig" %}
+
+{% block content %}
+
+    {% if post.meta('videos') %}
+        {% include "_components/video-gallery.twig" with {
+            videos: post.meta('videos')
+        } %}
+    {% endif %}
+
+    {% if post.content %}
+        {% include "_components/main-content.twig" with {
+            title: post.meta('h1')|default(post.title),
+            content: post.content|default(false),
+            buttons: post.meta('copy_buttons')|default(false),
+            utility_links: true,
+            thumb: false
+        } %}
+    {% endif %}
+
+    {% if post.meta('team') %}
+        <section class="py-8 md:py-12 lg:py-16 bg-grey-light">
+            <div class="container relative flex flex-wrap sm:flex-row-reverse sm:flex-nowrap">
+                <div class="w-full text-black bg-grey-light bar-black sm:w-auto text-vertical-right bar-right"><span class="text-black bg-grey-light">Meet the team</span></div>
+                <div class="w-full">
+                    <div class="flex flex-wrap justify-between w-full sm:flex-nowrap">
+                        <span class="h2">Meet our <span class="font-bold text-primary-light">friendly team</span></span>
+                        <div class="hidden text-right sm:block sm:mt-0 sm:w-48">
+                            {% include "_components/button.twig" with {
+                                text: "Contact us",
+                                link: "/contact/",
+                                colour: 'primary-light'
+                            } %}
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap -mx-2 w-full-2 sm:w-auto lg:-mx-4">
+                        {% for item in post.meta('team') %}
+                            <div class="w-full p-4 md:w-1/2 lg:w-1/4">
+                                <div class="w-full h-full bg-white">
+                                    <img class="w-full lazyload" data-src="{{ item.photo.url|resize(600,600) }}">
+                                    <div class="flex flex-col p-4 bg-white border-l-8 border-primary md:p-6">
+                                        <span class="mb-1 text-2xl font-medium">{{ item.name }}</span>
+                                        <span class="">{{ item.position }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    {% include "_components/reviews-section.twig" %}
+
+    {% include "_components/stores.twig" with {
+        background: 'grey-light'
+    } %}
+
+{% endblock %}

@@ -90,6 +90,14 @@ class BaseSite extends Timber\Site
         );
         $context['stores'] = new Timber\PostQuery($stores);
 
+        // Reviews
+        $reviews = array(
+            'post_type'           => 'reviews',
+            'post_status'         => 'publish',
+            'posts_per_page'      => 6,
+        );
+        $context['reviews'] = new Timber\PostQuery($reviews);
+
         return $context;
     }
 

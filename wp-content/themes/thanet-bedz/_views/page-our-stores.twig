@@ -1,0 +1,25 @@
+{% extends "_layout/base.twig" %}
+
+{% block content %}
+
+    {% include "_components/stores.twig" with {
+        background: 'grey-light'
+    } %}
+
+    {% if post.content %}
+        {% include "_components/main-content.twig" with {
+            title: post.meta('h1')|default(post.title),
+            content: post.content|default(false),
+            buttons: post.meta('copy_buttons')|default(false),
+            utility_links: false,
+            thumb: post.thumbnail.src
+        } %}
+    {% endif %}
+
+    {% include "_components/gallery.twig" with {
+        gallery: post.meta('gallery'),
+    } %}
+
+    {% include "_components/reviews-section.twig" %}
+
+{% endblock %}

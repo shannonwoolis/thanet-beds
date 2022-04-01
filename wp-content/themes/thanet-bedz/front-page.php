@@ -20,12 +20,4 @@ $query = array(
 $posts = Timber::get_posts($query);
 $context['featured'] = $posts;
 
-// Reviews
-$reviews = array(
-    'post_type'           => 'reviews',
-    'post_status'         => 'publish',
-    'posts_per_page'      => 6,
-);
-$context['reviews'] = new Timber\PostQuery($reviews);
-
 Timber::render( [ 'front-page.twig' ], $context );

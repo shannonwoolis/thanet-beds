@@ -21,7 +21,12 @@
                     {% set price = post.custom._price %}
                     <span class="inline-block px-5 font-medium bg-grey-light">
                         {% if price %}
-                            £{{ '.' in price ? price : (price ~ '.00') }}
+                            {% if price is iterable %}
+                                <span class="block -mb-2 text-[0.6rem] uppercase">From</span>
+                                £{{ '.' in price.0 ? price.0 : (price.0 ~ '.00') }}
+                            {% else %}
+                                £{{ '.' in price ? price : (price ~ '.00') }}
+                            {% endif %}
                         {% else %}
                             {% do action( 'woocommerce_after_shop_loop_item_title' ) %}
                         {% endif %}

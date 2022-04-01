@@ -1,6 +1,6 @@
-<div class="py-8 md:py-12 lg:py-16 bg-{{ background }}">
+<section class="py-8 md:py-12 lg:py-16 bg-{{ background }}">
     <div class="container relative flex flex-wrap sm:flex-row-reverse sm:flex-nowrap">
-        <div class="w-full text-black bg-white bar-black sm:w-auto text-vertical-right bar-right"><span class="text-black bg-white">Our stores</span></div>
+        <div class="w-full text-black bg-{{ background }} bar-black sm:w-auto text-vertical-right bar-right"><span class="text-black bg-{{ background }}">Our stores</span></div>
         <div class="w-full">
             <div class="flex flex-wrap justify-between w-full sm:flex-nowrap">
                 <span class="h2">Some title here about <span class="font-bold text-primary-light">our stores</span></span>
@@ -20,7 +20,7 @@
                                 <span class="block">Kent Beds & Sofas</span>
                                 <span class="h2">{{ item.title }}</span>
                                 <span class="flex text-sm my-1.5">{{ fn('icon','map-marker-alt','text-lg min-w-6 mr-2') }} {{ item.address }}</span>
-                                <span class="flex text-sm my-1.5">{{ fn('icon','phone-flipped','text-lg min-w-6 mr-1 ml-1') }} {% do action('ald_single', item.ld_name, false) %}</span>
+                                <span class="flex text-sm my-1.5 transition hover:text-primary">{{ fn('icon','phone-flipped','text-lg min-w-6 mr-1 ml-1') }} {% do action('ald_single', item.ld_name, false) %}</span>
                                 {% include "_components/button.twig" with {
                                     text: "Find out more",
                                     link: item.link,
@@ -37,4 +37,4 @@
             </div>
         </div>
     </div>
-</div>
+</section>
