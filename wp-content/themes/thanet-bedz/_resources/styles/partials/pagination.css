@@ -1,0 +1,45 @@
+.tool-pagination {
+	@apply flex flex-wrap items-center justify-center w-full mt-6;
+
+	a {
+		@apply mx-1 font-medium text-center text-white transition-all duration-500;
+		transition: .3s;
+		padding: .35rem 0.65rem;
+        /* width: 70px; */
+        background-image: linear-gradient(90deg,theme('colors.primary.DEFAULT') 50%,theme('colors.primary.light') 50%);
+        background-size: 200%;
+        background-position: 100%;
+
+        .icon {
+            @apply -mt-1 text-lg text-primary-bright;
+        }
+
+        &:hover {
+            background-position: 0%;
+        }
+	}
+
+	.pages {
+		@apply flex flex-wrap items-center justify-center;
+
+		li {
+			a {
+				@apply mx-1 text-white transition-all duration-500;
+				transition: .3s;
+                padding: .55rem 0.9rem;
+                background-image: linear-gradient(90deg,theme('colors.primary.DEFAULT') 50%,theme('colors.primary.light') 50%);
+                background-size: 200%;
+                background-position: 100%;
+
+                &:hover {
+                    background-position: 0%;
+                }
+			}
+
+			.current {
+				@apply text-black;
+                padding: .6rem 1rem;
+			}
+		}
+	}
+}

@@ -36,9 +36,9 @@
                     <div class="flex flex-wrap -mx-2 w-full-2 sm:w-auto lg:-mx-4">
                         {% for item in post.meta('team') %}
                             <div class="w-full p-4 md:w-1/2 lg:w-1/4">
-                                <div class="w-full h-full bg-white">
+                                <div class="w-full h-full bg-white border-t-8 border-primary">
                                     <img class="w-full lazyload" data-src="{{ item.photo.url|resize(600,600) }}">
-                                    <div class="flex flex-col p-4 bg-white border-l-8 border-primary md:p-6">
+                                    <div class="flex flex-col p-4 bg-white md:p-6">
                                         <span class="mb-1 text-2xl font-medium">{{ item.name }}</span>
                                         <span class="">{{ item.position }}</span>
                                     </div>

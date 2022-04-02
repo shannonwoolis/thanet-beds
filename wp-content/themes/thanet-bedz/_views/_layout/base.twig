@@ -11,7 +11,7 @@
         title: post.meta('hero_title')|default(post.title),
         copy: post.meta('hero_copy')|default(false),
         address: post.meta('address')|default(false),
-        badge: (fn('is_singular','stores') ? false : true),
+        badge: false,
         btns: post.meta('hero_buttons')|default(false),
         deals: post.meta('hero_deals')|default(false)
     } %}

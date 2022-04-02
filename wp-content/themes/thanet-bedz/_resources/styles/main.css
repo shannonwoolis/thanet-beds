@@ -11,6 +11,7 @@
 @import   'partials/mobile-nav.css';
 @import   'partials/typography.css';
 @import   'partials/video.css';
+@import   'partials/pagination.css';
 
 @import 'woocommerce/single-product.css'; 
 @import 'woocommerce/mini-cart.css';

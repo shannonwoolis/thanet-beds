@@ -20,6 +20,16 @@ input[type="button"],
   &:hover {
     background-position: 0%;
   }
+
+  &.active {
+    background-position: 0;
+    .icon {
+        @apply hidden;
+    }
+    &:hover {
+        background-position: 0;
+    }
+  }
 }
 
 .bucket-btn {

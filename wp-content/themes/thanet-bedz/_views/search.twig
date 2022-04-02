@@ -1,0 +1,82 @@
+{% extends "_layout/base.twig" %}
+
+{% block hero %}
+	{% include "_components/hero.twig" with {
+        image: post.thumbnail.src,
+        subtitle: false,
+        title: 'Search results for: ' ~ query,
+        copy: false,
+        address: false,
+        badge: false,
+        btns: false,
+        deals: false
+    } %}
+{% endblock %}
+
+{% block content %}
+    {% include "_components/why-choose-us.twig" %}
+
+    <section class="py-8 text-white bg-primary-dark md:py-12 lg:py-16">
+        <div class="container relative flex flex-wrap sm:flex-row-reverse sm:flex-nowrap">
+
+            <div class="w-full text-white sm:w-auto text-vertical-right bar-right bg-primary-dark"><span class="text-white bg-primary-dark">Products</span></div>
+
+            <div class="w-full">
+                <div class="flex flex-wrap w-full sm:flex-nowrap">
+                    <span class="h2">Product results for <span class="font-bold text-primary-bright">{{ query }}</span></span>
+                </div>
+
+                <div class="before-shop-loop">
+                    {% do action('woocommerce_before_shop_loop') %}
+                </div>
+
+                <section class="flex flex-wrap">
+
+                    <div class="w-full">
+                        <div class="flex flex-wrap -mx-4 -mb-2 products">
+                            {% for post in posts %}
+                                {% if post.post_type == 'product' %}
+                                    {% include ["_shop/tease-product.twig"] %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </section>
+
+                {% do action('woocommerce_after_shop_loop') %}
+                {% do action('woocommerce_after_main_content') %}
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-8 bg-grey-light md:py-12 lg:py-16">
+        <div class="container relative flex flex-wrap sm:flex-row-reverse sm:flex-nowrap">
+            <div class="w-full text-black bg-grey-light bar-black sm:w-auto text-vertical-right bar-right"><span class="text-black bg-grey-light">Blog</span></div>
+            <div class="w-full">
+                <div class="flex flex-wrap w-full sm:flex-nowrap">
+                    <span class="h2">Blog results for <span class="font-bold text-primary-light">{{ query }}</span></span>
+                </div>
+                <div class="flex flex-wrap mt-4 -mx-2 w-full-2 sm:w-auto lg:-mx-4">
+                    {% for post in posts %}
+                        {% if post.post_type == 'post' %}
+                            <div class="w-full p-4 md:w-1/2 lg:w-1/4">
+                                <a href="{{ post.link }}" class="block w-full h-full bg-white border-t-8 group border-primary-dark">
+                                    <img class="w-full lazyload" data-src="{{ post.thumbnail.src|resize(600,400) }}">
+                                    <div class="flex flex-col items-start p-4 bg-white md:p-6">
+                                        <span class="mb-1 text-2xl font-medium">{{ post.name }}</span>
+                                        <span class="text-sm">{{ post.content|truncate(15) }}</span>
+                                        <span class="mt-4 btn btn-primary group-hover:bg-left">Read more {{ fn('icon','caret-right') }}</span>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
