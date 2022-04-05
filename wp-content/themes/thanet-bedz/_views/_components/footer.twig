@@ -26,7 +26,7 @@
 			<span class="mb-3 text-base font-bold text-primary-lightest">Contact</span>
             <span class="my-1">{% do action('ald_default', false) %}</span>
 			<a class="my-1" href="mailto:{{options.site_email}}">{{options.site_email}}</a>
-            <div class="my-1 text-lg">{% include "_components/social-links.twig" %}</div>
+            <div class="my-1 text-lg">{% include "_components/social-links.twig" with {linkClasses:'hover:text-primary-lightest'} %}</div>
 		</div>
 
         <div class="flex flex-col w-1/2 mb-8 text-sm font-light lg:w-1/6 sm:w-1/3">

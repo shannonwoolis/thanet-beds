@@ -1,74 +1,73 @@
 /***********************************************************
 Base form styles*******************************************/
-
-input,
-textarea,
-select {
-    @apply
-    w-full px-4 py-3 text-sm text-gray-900 bg-white border-none sm:px-6;
-
-    &[aria-invalid="true"] {
-        background-color: #f3e2e2;
+.hf-form {
+    .form-cont {
+        @apply justify-start -mx-1;
     }
-}
 
-select {
-    -webkit-appearance: none;
-    background-image:
-      linear-gradient(45deg, transparent 50%, gray 50%),
-      linear-gradient(135deg, gray 50%, transparent 50%),
-      linear-gradient(to right, #ccc, #ccc);
-    background-position:
-      calc(100% - 20px) calc(1.5em + 2px),
-      calc(100% - 15px) calc(1.5em + 2px),
-      calc(100% - 2.5em) 1em;
-    background-size:
-      5px 5px,
-      5px 5px,
-      1px 1.5em;
-    background-repeat: no-repeat;
-}
-
-textarea {
-    height: 150px;
-}
-
-/*The below placeholder selectors don't work when comma separated*/
-input::-webkit-input-placeholder {
-    @apply text-grey-dark;
-}
-input::-ms-input-placeholder {
-    @apply text-grey-dark;
-}
-input::-moz-placeholder {
-    @apply text-grey-dark;
-}
-input::placeholder {
-    @apply text-grey-dark;
-}
-
-textarea::-webkit-input-placeholder {
-    @apply text-grey-dark;
-}
-textarea::-ms-input-placeholder {
-    @apply text-grey-dark;
-}
-textarea::-moz-placeholder {
-    @apply text-grey-dark;
-}
-textarea::placeholder {
-    @apply text-grey-dark;
-}
-
-input[type="button"],
-input[type="submit"] {
-    @apply
-    inline-block w-auto text-base font-semibold text-white bg-black cursor-pointer;
-    transition: .3s;
-    
-    &:hover {
+    input,
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea,
+    select {
         @apply
-        bg-red-700;
+        w-full px-4 py-3 text-sm text-black border-none bg-grey-light sm:px-6;
+
+        &[aria-invalid="true"] {
+            background-color: #f3e2e2;
+        }
+    }
+
+    label, .submit-cont {
+        @apply p-1;
+    }
+
+    select {
+        -webkit-appearance: none;
+        background-image:
+        linear-gradient(45deg, transparent 50%, gray 50%),
+        linear-gradient(135deg, gray 50%, transparent 50%),
+        linear-gradient(to right, #ccc, #ccc);
+        background-position:
+        calc(100% - 20px) calc(1.5em + 2px),
+        calc(100% - 15px) calc(1.5em + 2px),
+        calc(100% - 2.5em) 1em;
+        background-size:
+        5px 5px,
+        5px 5px,
+        1px 1.5em;
+        background-repeat: no-repeat;
+    }
+
+    textarea {
+        height: 150px;
+    }
+
+    /*The below placeholder selectors don't work when comma separated*/
+    input::-webkit-input-placeholder {
+        @apply text-grey-dark;
+    }
+    input::-ms-input-placeholder {
+        @apply text-grey-dark;
+    }
+    input::-moz-placeholder {
+        @apply text-grey-dark;
+    }
+    input::placeholder {
+        @apply text-grey-dark;
+    }
+
+    textarea::-webkit-input-placeholder {
+        @apply text-grey-dark;
+    }
+    textarea::-ms-input-placeholder {
+        @apply text-grey-dark;
+    }
+    textarea::-moz-placeholder {
+        @apply text-grey-dark;
+    }
+    textarea::placeholder {
+        @apply text-grey-dark;
     }
 }
-

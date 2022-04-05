@@ -1,0 +1,56 @@
+{% extends "_layout/base.twig" %}
+
+{% block content %}
+    <div class="bg-grey-light">
+        {% include "_components/why-choose-us.twig" %}
+    </div>
+
+    <main class="py-8 md:py-12 lg:py-16">
+        <div class="container flex flex-wrap items-start">
+            <div class="w-full mb-6 lg:w-2/3 lg:pr-16 copy">
+                <h1 class="block">{{ post.meta('h1')|default(post.title) }}</h1>
+                {{ post.content }}
+                <div class="mt-8">
+                    {% filter shortcodes %}
+                        [hf_form slug="contact-form"]
+                    {% endfilter %}
+                </div>
+            </div>
+            <div class="flex flex-wrap items-start -mx-4 lg:-my-4 lg:w-1/3">
+                <div class="w-full p-4 lg:w-full md:w-1/3">
+                    <div class="flex flex-col p-8 border-l-8 bg-grey-light border-primary-dark">
+                        {# <span class="h3">Contact</span> #}
+                        <span class="my-1 hover:text-primary-light">{% do action('ald_default', false) %}</span>
+                        <a class="my-1 hover:text-primary-light" href="mailto:{{options.site_email}}">{{options.site_email}}</a>
+                        <div class="my-1 text-lg">{% include "_components/social-links.twig" with { linkClasses: 'hover:text-primary-light' } %}</div>
+                    </div>
+                </div>
+
+                <div class="w-full p-4 lg:w-full md:w-1/3">
+                    {% include "_components/info-card.twig" with {
+                        title: 'Delivery',
+                        copy: 'Donec sollicitudin molestie malesuada. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit amet quam vehicula.',
+                        link: '/delivery/',
+                        icon: 'box',
+                    } %}
+                </div>
+                
+                <div class="w-full p-4 lg:w-full md:w-1/3">
+                    {% include "_components/info-card.twig" with {
+                        title: 'Returns',
+                        copy: 'Donec sollicitudin molestie malesuada. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit amet quam vehicula.',
+                        link: '/returns/',
+                        icon: 'return',
+                    } %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {% include "_components/category-buckets.twig" with {
+        title: "Shop by category",
+        buckets: topProductCats,
+    } %}
+
+    {% include "_components/reviews-section.twig" %}
+{% endblock %}

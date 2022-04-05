@@ -18,7 +18,9 @@
 {% endblock %}
 
 {% block content %}
-    {% include "_components/why-choose-us.twig" %}
+    <div class="{{ post.meta('gallery') ? 'bg-white' : 'bg-grey-light' }}">
+        {% include "_components/why-choose-us.twig" %}
+    </div>
 
     {% include "_components/gallery.twig" with {
         gallery: post.meta('gallery'),

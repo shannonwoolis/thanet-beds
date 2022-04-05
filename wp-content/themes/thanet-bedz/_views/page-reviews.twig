@@ -1,0 +1,47 @@
+{% extends "_layout/base.twig" %}
+
+{% block content %}
+    <div class="bg-grey-light">
+        {% include "_components/why-choose-us.twig" %}
+    </div>
+
+    <main class="py-8 md:py-12 lg:py-16">
+        <div class="container">
+            <div class="w-full mb-6 lg:w-2/3 lg:pr-16 copy">
+                <h1 class="block">{{ post.meta('h1')|default(post.title) }}</h1>
+                {{ post.content }}
+            </div>
+            <div class="flex flex-wrap w-full xs:-mx-4 xl:-mx-8">
+                {% for item in reviewsAll %}
+                    {% include "_components/review.twig" with {
+                        stars: item.stars,
+                        highlight: item.highlight,
+                        content: item.content,
+                        title: item.title
+                    } %}
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    {# {% if post.content %}
+        <div class="py-8 md:py-12 lg:py-16 bg-grey-light">
+            <div class="container flex flex-wrap">
+                <div class="w-full lg:w-2/3 lg:pr-16 copy">
+                    <h1 class="block">{{ post.meta('h1')|default(post.title) }}</h1>
+                    {{ post.content }}
+                </div>
+                <div class="flex flex-wrap -mx-4 lg:-my-4 lg:w-1/3">
+                    <div class="p-4"><img class="lazyload" src="" data-src="{{ post.thumbnail.src|resize(800,330) }}"></div>
+                </div>
+            </div>
+        </div>
+    {% endif %} #}
+
+    {% include "_components/category-buckets.twig" with {
+        title: "Shop by category",
+        buckets: topProductCats,
+    } %}
+
+    {# {% include "_components/reviews-section.twig" %} #}
+{% endblock %}
