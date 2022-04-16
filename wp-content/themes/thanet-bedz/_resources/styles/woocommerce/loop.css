@@ -69,7 +69,7 @@
   @apply flex flex-wrap items-center justify-between mb-3;
 
   select {
-      @apply pr-12;
+      @apply pr-12 text-grey-dark;
   }
 }
 

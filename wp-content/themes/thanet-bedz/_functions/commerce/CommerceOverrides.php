@@ -55,3 +55,12 @@ function wcc_change_breadcrumb_delimiter( $defaults ) {
 $defaults['delimiter'] = ' | ';
 return $defaults;
 }
+
+/**
+* Change the "Cart Totals" text
+*/
+function change_cart_totals($translated){
+    $translated = str_ireplace('Cart Totals', 'Order Summary', $translated);
+    return $translated;
+  }
+  add_filter('gettext', 'change_cart_totals' );

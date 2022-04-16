@@ -113,7 +113,7 @@
 
 /* Notice that appears after product added to cart */
 .woocommerce-message {
-  @apply p-4 mb-4 text-sm font-bold text-center rounded-md bg-secondary md:mb-8 md:text-left;
+  @apply p-4 mb-4 text-sm font-bold text-center bg-grey-light md:mb-8 md:text-left;
 
   a {
     @apply block p-4 mb-2 text-center bg-white md:inline-block md:mr-8 md:mb-0;

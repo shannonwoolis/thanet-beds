@@ -27,7 +27,7 @@ class Scripts
         add_filter('script_loader_tag', [$this, 'async_scripts'], 10, 2);
         add_filter('woocommerce_enqueue_styles', '__return_empty_array');
         // add_action('wp_enqueue_scripts', [$this, 'enable_scripts']);
-        // add_action('wp_enqueue_scripts', [$this, 'disable_scripts']);
+        add_action('wp_enqueue_scripts', [$this, 'disable_scripts']);
     }
 
     /**
@@ -80,6 +80,9 @@ class Scripts
      */
     public function disable_scripts()
     {
+        // foreach ($this->dequeueStyles as $script) {
+        //     return wp_dequeue_style( $script );
+        // }
     }
 
     /**

@@ -17,7 +17,7 @@
 /* Edit Account Details */
 .edit-account {
   input {
-    @apply w-full block;
+    @apply block w-full;
     @apply mb-3;
   }
 }
@@ -30,7 +30,7 @@
 
   input:not([type='checkbox']),
   label {
-    @apply w-full block;
+    @apply block w-full;
   }
 }
 
@@ -38,14 +38,114 @@
   @apply flex items-center mt-4 text-sm;
   
   input {
-    @apply mr-4 w-auto;
+    @apply w-auto mr-4;
   }
 }
 
 .woocommerce-form-login__submit {
-  @apply block bg-secondary font-bold mt-4 text-center;
+    @apply mt-4 transition-all duration-500;
+    background-size: 200%;
+    background-position: 100%;
+
+    &:hover {
+        background-position: 0%;
+    }
+
+    &.active {
+        background-position: 0;
+        .icon {
+            @apply hidden;
+        }
+        &:hover {
+            background-position: 0;
+        }
+    }
+    background-image: linear-gradient(90deg,theme('colors.primary.dark') 50%,theme('colors.primary.DEFAULT') 50%);
 }
 
 .lost_password {
-  @apply text-sm mt-4;
+  @apply mt-4 text-sm;
+
+  a {
+      @apply text-primary hover:underline;
+  }
+}
+
+.woocommerce-MyAccount-navigation-link {
+    a {
+        @apply block px-4 py-3 my-1;
+        @apply transition-all duration-500;
+        background-size: 200%;
+        background-position: 100%;
+
+        &:hover {
+            background-position: 0%;
+        }
+
+        &.active {
+            background-position: 0;
+            .icon {
+                @apply hidden;
+            }
+            &:hover {
+                background-position: 0;
+            }
+        }
+        background-image: linear-gradient(90deg, #eee 50%, theme('colors.grey.light') 50%);
+    }
+}
+
+.woocommerce-page {
+    /* header {
+        @apply my-2;
+    }  */
+    .woocommerce-Addresses {
+        h3 {
+            @apply mb-0;
+        }
+    }
+    .edit {
+        @apply block px-4 py-3 ml-3 text-sm text-white uppercase;
+        @apply transition-all duration-500;
+        background-size: 200%;
+        background-position: 100%;
+
+        &:hover {
+            background-position: 0%;
+        }
+
+        &.active {
+            background-position: 0;
+            .icon {
+                @apply hidden;
+            }
+            &:hover {
+                background-position: 0;
+            }
+        }
+        background-image: linear-gradient(90deg,theme('colors.primary.dark') 50%,theme('colors.primary.DEFAULT') 50%);
+    }
+}
+
+.woocommerce-MyAccount-content {
+    p {
+        a {
+            @apply text-primary hover:underline;
+        }
+    }
+}
+
+#customer_login {
+    button {
+        @apply relative pl-5 pr-8;
+        &:after {
+            content: '';
+            @apply absolute ml-2 transform -translate-y-1/2 top-1/2;
+            width: 0; 
+            height: 0; 
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 5px solid theme('colors.primary.bright');
+        }
+    }
 }

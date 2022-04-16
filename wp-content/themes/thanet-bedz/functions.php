@@ -134,3 +134,5 @@ add_action('wp_enqueue_scripts', function () {
         )
     );
 });
+
+require_once(__DIR__ . '/_functions/Wishlist.php');

@@ -133,6 +133,11 @@
 			}
 		}, false);
 
+        // --------------------------------------------------------------------------------------------------
+		// Wishlist
+		// --------------------------------------------------------------------------------------------------
+        $(".add_to_wishlist").prepend('<svg class="icon icon-heart"><use href="https://thanet-bedz.vm/wp-content/themes/thanet-bedz/_resources/images/icons-sprite.svg#icon-heart"></use></svg>');
+
 
 	});
 

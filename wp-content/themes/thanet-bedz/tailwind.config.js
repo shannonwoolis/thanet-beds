@@ -1,7 +1,7 @@
 module.exports = {
   mode: 'jit',
   purge: {
-    content: ["./_views/**/*.twig", './safelist.txt'],
+    content: ["./_views/**/*.twig", './safelist.txt', "./woocommerce/**/*.php"],
   },
   theme: {
     screens: {

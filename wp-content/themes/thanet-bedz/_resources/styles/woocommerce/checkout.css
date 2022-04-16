@@ -37,7 +37,7 @@
   @apply pb-2 mb-2 border-b;
 
   label {
-    @apply flex-grow flex justify-between items-center;
+    @apply flex items-center justify-between flex-grow;
 
     span {
       @apply block;
@@ -69,5 +69,73 @@
 }
 
 .place-order button {
-  @apply bg-secondary font-bold;
+  @apply font-bold bg-secondary;
+}
+
+.woocommerce-checkout.woocommerce-page {
+    .woocom-form .woocommerce {
+        @apply flex flex-wrap -mx-4;
+
+        .woocommerce-form-login-toggle, .woocommerce-form-coupon-toggle {
+            @apply w-1/2 px-4;
+
+            .woocommerce-info {
+                @apply p-8 bg-white;
+
+                a {
+                    @apply text-primary hover:underline;
+                }
+            }
+        }
+
+        .woocommerce-form, .woocommerce-form-coupon {
+            @apply p-8 mx-auto mb-8 bg-white;
+            width: calc(100% - 2rem);
+
+            button {
+                @apply relative pl-5 pr-7;
+                &:after {
+                    content: '';
+                    @apply absolute ml-2 transform -translate-y-1/2 top-1/2;
+                    width: 0; 
+                    height: 0; 
+                    border-top: 5px solid transparent;
+                    border-bottom: 5px solid transparent;
+                    border-left: 5px solid theme('colors.primary.bright');
+                }
+            }
+        }
+
+        .woocommerce-form-coupon {
+            input {
+                @apply w-3/4;
+            }
+            button {
+                @apply w-1/4;
+            }
+        }
+    }
+}
+
+#place_order {
+    @apply relative pl-5 pr-8;
+    &:after {
+        content: '';
+        @apply absolute ml-2 transform -translate-y-1/2 top-1/2;
+        width: 0; 
+        height: 0; 
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid theme('colors.primary.bright');
+    }
+}
+
+.shop_table {
+    td, th {
+        @apply px-3 py-3;
+    }
+}
+
+.cart-empty {
+    @apply px-4;
 }

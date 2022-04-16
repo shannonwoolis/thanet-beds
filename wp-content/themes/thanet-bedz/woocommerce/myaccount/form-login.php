@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) {
 do_action('woocommerce_before_customer_login_form'); ?>
 
 <div class="flex flex-wrap row" id="customer_login">
-  <div class="column w-full md:w-6/12">
+  <div class="w-full column md:w-6/12">
 
     <h2 class="mb-3"><?php esc_html_e('Login', 'woocommerce'); ?></h2>
 
@@ -63,7 +63,7 @@ do_action('woocommerce_before_customer_login_form'); ?>
   </div>
 
   <?php if ('yes' === get_option('woocommerce_enable_myaccount_registration')) : ?>
-    <div class="column w-full md:w-6/12">
+    <div class="w-full column md:w-6/12">
       <h2 class="mb-3"><?php esc_html_e('Register', 'woocommerce'); ?></h2>
 
       <form method="post" class="woocommerce-form woocommerce-form-register register" <?php do_action('woocommerce_register_form_tag'); ?>>

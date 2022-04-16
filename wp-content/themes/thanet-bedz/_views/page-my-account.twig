@@ -4,20 +4,27 @@
 {% endblock %}
 
 {% block content %}
+<div class="py-8 bg-grey-light md:py-12 lg:py-16">
 
-<div class="container my-8 lg:my-16">
+    <div class="container">
 
-  <main class="w-full">
+        {% do action('woocommerce_before_main_content') %}
 
-    <article class="copy">
+        <main class="w-full">
 
-      <h1>{{post.title}}</h1>
+            <article class="">
 
-      {{post.content}}
+            <h1 class="text-primary">{{post.title}}</h1>
 
-    </article>
+            <div class="p-8 mt-8 bg-white woocom-form">
+                {{post.content}}
+            </div>
 
-  </main>
+            </article>
+
+        </main>
+
+    </div>
 
 </div>
 

@@ -18,12 +18,12 @@
 
 defined('ABSPATH') || exit; ?>
 
-<section class="flex flex-wrap row">
+<section class="flex flex-wrap">
   <div class="w-full md:w-3/12 xl:w-2/12 column">
     <?php do_action('woocommerce_account_navigation'); ?>
   </div>
 
-  <div class="woocommerce-MyAccount-content column w-full md:w-9/12 xl:w-10/12">
+  <div class="w-full woocommerce-MyAccount-content column md:w-9/12 xl:w-10/12">
     <?php do_action('woocommerce_account_content'); ?>
   </div>
 </section>

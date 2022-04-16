@@ -1,0 +1,16 @@
+{% extends "_layout/base.twig" %}
+
+{% block content %}
+
+    <div class="bg-grey-light">{% include "_components/why-choose-us.twig" %}</div>
+
+    <div class="container flex-wrap items-start pt-8 md:pt-12 lg:pt-16 lg:flex">
+        <main class="w-full">
+            <article class="copy">
+                {{ post.content }}
+            </article>
+        </main>
+    </div>
+
+    {% include "_components/reviews-section.twig" %}
+{% endblock %}

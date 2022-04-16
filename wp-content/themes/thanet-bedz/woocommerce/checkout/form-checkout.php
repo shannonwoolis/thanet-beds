@@ -30,25 +30,27 @@ if (!$checkout->is_registration_enabled() && $checkout->is_registration_required
 
 ?>
 
-<form name="checkout" method="post" class="flex flex-wrap checkout woocommerce-checkout row" action="<?php echo esc_url(wc_get_checkout_url()); ?>" enctype="multipart/form-data">
+<form name="checkout" method="post" class="flex flex-wrap checkout woocommerce-checkout" action="<?php echo esc_url(wc_get_checkout_url()); ?>" enctype="multipart/form-data">
 
   <?php if ($checkout->get_checkout_fields()) : ?>
     <?php do_action('woocommerce_checkout_before_customer_details'); ?>
-    <div class="w-full column lg:w-7/12 billing-shipping">
-      <div>
-        <?php do_action('woocommerce_checkout_billing'); ?>
-      </div>
+    <div class="w-full py-4 column lg:w-1/2 lg:px-4 billing-shipping">
+        <div class="p-8 bg-white woocom-form">
+            <div>
+                <?php do_action('woocommerce_checkout_billing'); ?>
+            </div>
 
-      <div>
-        <?php do_action('woocommerce_checkout_shipping'); ?>
-      </div>
+            <div>
+                <?php do_action('woocommerce_checkout_shipping'); ?>
+            </div>
+        </div>
     </div>
 
     <?php do_action('woocommerce_checkout_after_customer_details'); ?>
   <?php endif; ?>
 
-  <div class="w-full column lg:w-5/12">
-    <div class="p-3 border">
+  <div class="w-full py-4 column lg:w-1/2 lg:px-4">
+    <div class="p-8 bg-white ">
       <?php do_action('woocommerce_checkout_before_order_review_heading'); ?>
 
       <h3 id="order_review_heading" class="mb-3"><?php esc_html_e('Your order', 'woocommerce'); ?></h3>
