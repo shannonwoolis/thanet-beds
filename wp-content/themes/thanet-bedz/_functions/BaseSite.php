@@ -68,7 +68,7 @@ class BaseSite extends Timber\Site
         $top_args = array(
             'hide_empty' => false,
             'parent' => 0,
-            'exclude'  => array(15),
+            'exclude'  => array(15,206),
         );
         $topProductCats = get_terms( 'product_cat', $top_args);
         $context['topProductCats'] = $topProductCats;
