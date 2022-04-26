@@ -15,7 +15,7 @@
 
                 <div class="p-4 md:p-6">
                     <a href="{{ post.link }}" class="block font-medium leading-tight hover:text-primary">{{ post.title }}</a>
-                    <div class="block mt-2 text-sm font-light leading-5 text-grey-dark">{{ post.post_excerpt|truncate(15) }}</div>
+                    <div class="block mt-2 text-sm font-light leading-5 text-grey-dark">{{ post.post_excerpt|truncate(15)|striptags }}</div>
                 </div>
                 <div class="flex items-center justify-between mt-auto bg-grey-light">
                     {% set price = post.custom._price %}

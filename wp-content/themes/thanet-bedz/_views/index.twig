@@ -5,7 +5,7 @@
         image: post.thumbnail.src,
         subtitle: false,
         title: (fn('is_home') ? post.meta('hero_title')|default(post.title) : ('news' in tax.name|lower ? tax.name : (tax.name ~ ' News')) ),
-        copy: false,
+        copy: post.meta('hero_copy')|default(false),
         address: false,
         badge: false,
         btns: false,
@@ -19,6 +19,12 @@
         <div class="container relative flex flex-wrap sm:flex-row-reverse sm:flex-nowrap">
             <div class="w-full text-black bg-grey-light bar-black sm:w-auto text-vertical-right bar-right"><span class="text-black bg-grey-light">Blog</span></div>
             <div class="w-full">
+                {% if fn('is_home') %}
+                    <h1>{{ post.meta('h1')|default(post.title) }}</h1>
+                    <div class="max-w-screen-lg mb-6">
+                        {{ post.content }}
+                    </div>
+                {% endif %}
                 <div class="flex flex-wrap w-full sm:flex-nowrap">
                     {# <span class="h2">Keep up-to-date with <span class="font-bold text-primary-light">Thanet Bedz</span></span> #}
                     {# <div class="hidden text-right sm:block sm:mt-0 sm:w-48"> #}
@@ -31,7 +37,7 @@
                     {% for item in categories %}
                         {% include "_components/button.twig" with {
                             text: item.name,
-                            link: '/category/' ~ item.slug,
+                            link: '/news-category/' ~ item.slug,
                             colour: 'primary-light',
                             classes: 'mr-2 ' ~ (fn('is_category',item.slug) ? 'active order-1' : 'order-2')
                         } %}

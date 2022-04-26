@@ -31,11 +31,11 @@
                 <span class="text-primary-light"></span>
                 <span class="block mt-1 text-3xl font-medium 2xl:text-4xl {{ fn('is_front_page') ? 'text-black' : 'text-primary-dark' }}">{{ title }}</span>
                 <div class="block mt-5 text-sm font-light leading-6">
-                    {% if address %}
-                        <span class="flex my-1.5">{{ fn('icon','map-marker-alt','text-lg min-w-6 mt-1') }} {{ address }}</span>
-                        <span class="flex my-1.5 transition hover:text-primary">{{ fn('icon','phone-flipped','text-lg min-w-6 ml-1 mt-1') }} {% do action('ald_single', post.meta('ld_name'), false) %}</span>
-                    {% endif %}
                     {{ copy }}
+                    {% if address %}
+                        <span class="flex -ml-1.5 my-1.5">{{ fn('icon','map-marker-alt','text-lg min-w-6 mt-1') }} {{ address }}</span>
+                        <span class="flex -ml-1.5 my-1.5 transition hover:text-primary">{{ fn('icon','phone-flipped','text-lg min-w-6 ml-1 mt-1') }} {% do action('ald_single', post.meta('ld_name'), false) %}</span>
+                    {% endif %}
                 </div>
                 {% for btn in btns %}
                     {% include "_components/button.twig" with {
