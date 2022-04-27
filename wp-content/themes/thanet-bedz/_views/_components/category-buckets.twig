@@ -2,7 +2,7 @@
     <div class="container relative flex flex-wrap sm:flex-nowrap">
         <div class="w-full sm:w-auto text-vertical-left bar-right bar-black bg-grey-light"><span class="bg-grey-light">{{ title }}</span></div>
         
-        <div class="flex flex-wrap -mx-2 w-full-2 sm:w-auto lg:-mx-4">
+        <div class="flex flex-wrap -mx-2 w-full-2 lg:-mx-4">
             {% for item in buckets %}
                 {% set thumbID = fn('get_term_meta',item.term_id,'thumbnail_id',true) %}
                 {% set thumb = fn('wp_get_attachment_url',thumbID) %}

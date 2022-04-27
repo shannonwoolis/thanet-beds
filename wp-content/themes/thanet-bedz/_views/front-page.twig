@@ -29,7 +29,7 @@
     } %}
 
     {% include "_components/gallery.twig" with {
-        gallery: topProductCats,
+        gallery: post.meta('gallery'),
     } %}
 
     {% include "_components/main-content.twig" with {
