@@ -169,7 +169,18 @@ a.product-tab-link {
 }
 
 .product-tab-panel {
-  @apply px-6 py-6 text-sm leading-5 bg-white;
+  @apply px-6 py-6 text-sm leading-5 bg-white max-h-[400px] overflow-y-scroll;
+
+  &::-webkit-scrollbar {
+      @apply bg-grey;
+    -webkit-appearance: none;
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    @apply bg-black;
+    box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+  }
 
   h2 {
       @apply sr-only;
@@ -196,6 +207,14 @@ a.product-tab-link {
         background-position: 0%;
     }
   }
+
+    .gallery {
+        @apply flex flex-wrap mt-4 -mx-2;
+
+        .gallery-item {
+                @apply my-1.5 mx-2;
+        }
+    }
 }
 
 /* Related products */

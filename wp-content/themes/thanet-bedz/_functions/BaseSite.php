@@ -133,3 +133,17 @@ class BaseSite extends Timber\Site
         ]);
     }
 }
+
+
+// Product video shortcode
+function video($atts) {
+    shortcode_atts(array(
+        'url' => false,
+    ), $atts);
+    ob_start();
+    $url = str_replace("watch?v=","embed/",$atts['url']);
+    $a = '<iframe width="560" height="315" class="max-w-full" src=' . $url . ' title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    ob_get_clean();
+    return $a;
+}
+add_shortcode('ux_video', 'video');

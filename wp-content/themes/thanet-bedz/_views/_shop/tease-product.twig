@@ -11,7 +11,11 @@
                 {# <a href="{{ post.link }}" class="block"> #}
                     {# {% do action('woocommerce_before_shop_loop_item_title') %} #}
                 {# </a> #}
-                <a href="{{ post.link }}" class="block transition-all duration-500 transform hover:scale-110"><img class="object-contain object-center w-full h-48 px-4 pt-4 lazyload" data-src="{{ thumb|resize(500) }}"></a>
+                <div class="h-48 px-4 pt-4 bg-blue-200">
+                    <a href="{{ post.link }}" class="block w-auto h-auto max-w-full max-h-full overflow-hidden bg-red-200 group">
+                        <img class="object-contain object-center w-full h-full !transition-all !duration-500 transform group-hover:scale-110 lazyload" data-src="{{ thumb|resize(500) }}">
+                    </a>
+                </div>
 
                 <div class="p-4 md:p-6">
                     <a href="{{ post.link }}" class="block font-medium leading-tight hover:text-primary">{{ post.title }}</a>
