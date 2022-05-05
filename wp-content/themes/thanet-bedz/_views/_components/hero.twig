@@ -19,8 +19,8 @@
     </style>
     
     <div class="container">
-        <div class="py-12 pr-8 md:px-0 {{ deals ? 'md:pb-0 lg:-mb-4 md:pt-16 lg:pt-24' : 'md:py-12 lg:py-16' }}">
-            <div class="relative w-full px-8 pb-20 bg-white border-l-8 pt-14 2xs:py-10 border-primary-dark lg:px-12 lg:py-16 md:w-3/5 lg:w-1/2 xl:w-2/5">
+        <div class="py-4 pr-8 md:px-0 md:pt-16 lg:pt-24 {{ deals ? 'pt-12 pb-8 py-12 md:pb-0 lg:-mb-4' : '2xs:pb-8 2xs:pt-12 md:pb-10 lg:pb-16' }}">
+            <div class="relative w-full px-6 bg-white border-l-8 md:px-8 border-primary-dark lg:px-12 py-6 lg:py-16 md:w-3/5 lg:w-1/2 xl:w-2/5 2xs:py-10 {{ deals ? 'pb-20 pt-14' : 'sm:w-3/4' }}">
                 <span class="text-sm xl:text-base">
                     {% if subtitle %}
                         {{ subtitle }}
@@ -29,8 +29,8 @@
                     {% endif %}
                 </span>
                 <span class="text-primary-light"></span>
-                <span class="block mt-1 text-3xl font-medium 2xl:text-4xl {{ fn('is_front_page') ? 'text-black' : 'text-primary-dark' }}">{{ title }}</span>
-                <div class="block mt-5 text-sm font-light leading-6">
+                <span class="block mt-1 text-xl sm:text-2xl lg:text-3xl font-medium 2xl:text-4xl {{ fn('is_front_page') ? 'text-black' : 'text-primary-dark' }}">{{ title }}</span>
+                <div class="block mt-3 text-xs font-light leading-4 md:mt-5 md:leading-6 md:text-sm">
                     {{ copy }}
                     {% if address %}
                         <span class="flex -ml-1.5 my-1.5">{{ fn('icon','map-marker-alt','text-lg min-w-6 mt-1') }} {{ address }}</span>
@@ -48,7 +48,13 @@
                     } only %}
                 {% endfor %}
 
-                {% if badge %}{% include "_components/hero-delivery-badge.twig" %}{% endif %}
+                {% if badge %}
+                    {% if fn('is_front_page') %}
+                        {% include "_components/hero-delivery-badge.twig" %}
+                    {% else %}
+                        <div class="hidden 2xs:block">{% include "_components/hero-delivery-badge.twig" %}</div>
+                    {% endif %}
+                {% endif %}
 
                 {% if fn('is_front_page') %}
                     <img src="{{ theme.link }}/_resources/images/trustpilot.svg" class="absolute w-24 sm:w-28 bottom-5 right-5">

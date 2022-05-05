@@ -1,5 +1,18 @@
 {% extends "_layout/base.twig" %}
 
+{% block hero %}
+	{% include "_components/hero.twig" with {
+        image: post.thumbnail.src,
+        subtitle: post.meta('hero_subtitle'),
+        title: post.meta('hero_title')|default(post.title),
+        copy: post.meta('hero_copy')|default(false),
+        address: post.meta('address')|default(false),
+        badge: true,
+        btns: post.meta('hero_buttons')|default(false),
+        deals: post.meta('hero_deals')|default(false)
+    } %}
+{% endblock %}
+
 {% block content %}
 
     {% include "_components/why-choose-us.twig" %}
