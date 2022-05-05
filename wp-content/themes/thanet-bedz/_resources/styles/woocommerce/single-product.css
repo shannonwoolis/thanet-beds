@@ -169,7 +169,7 @@ a.product-tab-link {
 }
 
 .product-tab-panel {
-  @apply px-6 py-6 text-sm leading-5 bg-white max-h-[400px] overflow-y-scroll;
+  @apply px-6 py-6 text-sm leading-5 bg-white max-h-[350px] xl:max-h-[400px] 2xl:max-h-[500px] overflow-y-scroll;
 
   &::-webkit-scrollbar {
       @apply bg-grey;
