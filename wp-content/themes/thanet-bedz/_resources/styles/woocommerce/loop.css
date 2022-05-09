@@ -69,10 +69,14 @@
   @apply flex flex-wrap items-center justify-between mb-3;
 
   select {
-      @apply pr-12 text-grey-dark;
+      @apply pr-12 text-grey-dark w-[250px];
   }
 }
 
 .woocommerce-notices-wrapper {
   @apply w-full;
+}
+
+.woocommerce-ordering {
+    @apply ml-auto mr-4;
 }

@@ -42,6 +42,15 @@
             
                 <div class="before-shop-loop">
                     {% do action('woocommerce_before_shop_loop') %}
+
+                    {% if post.children %}
+                        <select class="product-cat-sort">
+                            <option>Filter by category</option>
+                            {% for item in post.children %}
+                                <option value="{{ item.slug }}" data-link="{{ item.link }}">{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
                 </div>
 
                 <section class="flex flex-wrap">

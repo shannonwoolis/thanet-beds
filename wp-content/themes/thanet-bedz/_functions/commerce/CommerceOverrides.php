@@ -62,5 +62,5 @@ return $defaults;
 function change_cart_totals($translated){
     $translated = str_ireplace('Cart Totals', 'Order Summary', $translated);
     return $translated;
-  }
-  add_filter('gettext', 'change_cart_totals' );
+}
+add_filter('gettext', 'change_cart_totals' );

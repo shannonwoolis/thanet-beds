@@ -36,7 +36,11 @@
                         {% endif %}
                     </span>
                     {# {% do action( 'woocommerce_after_shop_loop_item' ) %} #}
-                    <a href="{{ site.link }}/?add-to-cart={{ post.id }}&quantity=1" data-quantity="1" class="button btn btn-primary-light product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow" class="btn btn-primary-light">Add to basket {{ fn('icon','plus') }}</a>
+                    {% if post._stock_status == "outofstock" %}
+                        <a href="{{ post.link }}" class="button btn btn-primary-light product_type_simple" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">View details {{ fn('icon','plus') }}</a>
+                    {% else %}
+                        <a href="{{ site.link }}/?add-to-cart={{ post.id }}&quantity=1" data-quantity="1" class="button btn btn-primary-light product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">Add to basket {{ fn('icon','plus') }}</a>
+                    {% endif %}
                     {# <a href="{{ site.link }}/?add-to-cart={{ item.id }}&quantity=1" class="btn btn-primary-light">Add to basket {{ fn('icon','plus') }}</a> #}
                 </div>
             </div>

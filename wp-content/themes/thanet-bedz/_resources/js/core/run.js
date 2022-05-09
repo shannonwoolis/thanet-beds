@@ -139,6 +139,14 @@
         $(".add_to_wishlist").prepend('<svg class="icon icon-heart"><use href="https://thanet-bedz.vm/wp-content/themes/thanet-bedz/_resources/images/icons-sprite.svg#icon-heart"></use></svg>');
 
 
+        // --------------------------------------------------------------------------------------------------
+		// Product category filter
+		// --------------------------------------------------------------------------------------------------
+        $('.product-cat-sort').change(function(){
+            var link = $(this).children('option:selected').data('link');
+            window.location.href = link;
+        });
+
 	});
 
 }(jQuery));
