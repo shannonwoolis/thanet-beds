@@ -16,7 +16,7 @@
                     </a>
                 </div>
             {% endfor %}
-            {% if buckets|length is odd %}
+            {% if buckets|length != 4 and buckets|length != 8 and buckets|length != 12 %}
                 <div class="w-1/2 p-2 lg:p-4 md:w-1/4">
                     <div class="flex flex-col items-start h-full p-4 text-white 2xs:p-6 md:p-4 xl:p-6 bg-primary">
                         <span class="font-bold leading-5 2xs:text-lg sm:leading-6 md:leading-6 lg:leading-5 xl:leading-7 md:text-lg xl:text-xl 2xl:text-2xl sm:text-xl">Can’t find what you’re looking for?</span>

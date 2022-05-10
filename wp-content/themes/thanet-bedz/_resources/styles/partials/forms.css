@@ -11,8 +11,7 @@ Base form styles*******************************************/
     input[type="tel"],
     textarea,
     select {
-        @apply
-        w-full px-4 py-3 text-sm text-black border-none bg-grey-light sm:px-6;
+        @apply w-full px-4 py-3 text-sm text-black border-none bg-grey-light sm:px-6;
 
         &[aria-invalid="true"] {
             background-color: #f3e2e2;

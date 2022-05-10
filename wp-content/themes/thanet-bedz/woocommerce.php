@@ -25,13 +25,27 @@ if (is_singular('product')) {
     if (is_product_category()) {
         $queried_object = get_queried_object();
         $term_id = $queried_object->term_id;
+        $context['termID'] = $term_id;
         $context['category'] = get_term($term_id, 'product_cat');
         $context['title'] = single_term_title('', false);
 
         $cat_args = array(
             'hide_empty' => false,
             'parent' => $term_id,
-            'exclude'  => array(15),
+        );
+        $childCategories = get_terms( 'product_cat', $cat_args);
+
+        $hiddenChildren = array();
+        foreach($childCategories as $term) {
+            if(get_field('hidden_category',$term) == true) {
+                array_push($hiddenChildren,$term->term_id);
+            }
+        }
+
+        $cat_args = array(
+            'hide_empty' => false,
+            'parent' => $term_id,
+            'exclude'  => $hiddenChildren,
         );
         $childCategories = get_terms( 'product_cat', $cat_args);
         $context['childCategories'] = $childCategories;

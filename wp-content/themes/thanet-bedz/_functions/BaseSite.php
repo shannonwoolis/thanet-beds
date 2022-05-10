@@ -68,7 +68,20 @@ class BaseSite extends Timber\Site
         $top_args = array(
             'hide_empty' => false,
             'parent' => 0,
-            'exclude'  => array(15,206),
+        );
+        $topProductCats = get_terms( 'product_cat', $top_args);
+        
+        $hidden = array();
+        foreach($topProductCats as $term) {
+            if(get_field('hidden_category',$term) == true) {
+                array_push($hidden,$term->term_id);
+            }
+        }
+
+        $top_args = array(
+            'hide_empty' => false,
+            'parent' => 0,
+            'exclude'  => $hidden,
         );
         $topProductCats = get_terms( 'product_cat', $top_args);
         $context['topProductCats'] = $topProductCats;
@@ -76,8 +89,21 @@ class BaseSite extends Timber\Site
         // Room Categories 
         $cat_args = array(
             'hide_empty' => false,
-            'parent' => 27,
-            'exclude'  => array(15),
+            'parent' => 758,
+        );
+        $roomProductCats = get_terms( 'product_cat', $cat_args);
+
+        $hiddenRooms = array();
+        foreach($roomProductCats as $term) {
+            if(get_field('hidden_category',$term) == true) {
+                array_push($hiddenRooms,$term->term_id);
+            }
+        }
+
+        $cat_args = array(
+            'hide_empty' => false,
+            'parent' => 758,
+            'exclude'  => $hiddenRooms,
         );
         $roomProductCats = get_terms( 'product_cat', $cat_args);
         $context['roomProductCats'] = $roomProductCats;
