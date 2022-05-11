@@ -25,10 +25,41 @@
     @apply max-w-[100px];
   }
 
+  input[type="radio"] {
+      @apply w-[16px] p-0 inline-block mr-2;
+  }
+
   .screen-reader-text {
     @apply sr-only;
   }
 
+}
+
+.woocommerce-checkout-review-order-table {
+    th {
+        @apply w-3/5;
+    }
+    td {
+        @apply w-2/5;
+
+        li {
+            @apply flex my-2;
+
+            input {
+                @apply mt-0.5;
+            }
+
+            label {
+                @apply m-0;
+            }
+        }
+    }
+}
+
+.woocommerce-shipping-methods {
+    label {
+        @apply inline-block;
+    }
 }
 
 .shop_table.cart {

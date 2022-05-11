@@ -6,7 +6,7 @@ $context = Timber::context();
 $timber_post = new Timber\Post();
 $context['post'] = $timber_post;
 
-if(is_page('reviews')) {
+if(is_page('customer-reviews')) {
     // Reviews
     $reviews = array(
         'post_type'           => 'reviews',

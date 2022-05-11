@@ -64,3 +64,48 @@ function change_cart_totals($translated){
     return $translated;
 }
 add_filter('gettext', 'change_cart_totals' );
+
+
+/**
+* Change "Cart" to "Basket"
+*/
+add_filter('gettext', 
+           
+           function ($translated_text, $text, $domain) {
+            if ($domain == 'woocommerce') {
+                switch ($translated_text) {
+                    case 'Cart totals':
+                        $translated_text = __('Order summary', 'woocommerce');
+                        break;
+                    case 'Update cart':
+                        $translated_text = __('Update basket', 'woocommerce');
+                        break;
+                    case 'Add to cart':
+                        $translated_text = __('Add to basket', 'woocommerce');
+                        break;
+                    case 'View cart':
+                        $translated_text = __('View basket', 'woocommerce');
+                        break;
+                }
+            }
+            return $translated_text;
+        }, 
+20, 3);
+
+
+
+/**
+* Change the "Shipping" to "Delivery"
+*/
+add_filter( 'woocommerce_shipping_package_name', 'custom_shipping_package_name' );
+function custom_shipping_package_name( $name ) {
+return 'Delivery';
+}
+ 
+function fix_woocommerce_strings( $translated, $text) {
+// STRING 1
+$translated = str_ireplace( 'Shipping', 'Delivery charge', $translated );
+ 
+return $translated;
+}
+add_filter( 'gettext', 'fix_woocommerce_strings', 999, 3 );
