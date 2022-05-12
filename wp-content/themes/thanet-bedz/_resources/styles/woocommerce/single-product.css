@@ -18,6 +18,12 @@
     }
 }
 
+.single-product.single {
+    .onsale {
+        @apply md:mt-20 md:ml-1 lg:text-lg;
+    }
+}
+
 /* Ratings */
 .woocommerce-product-rating {
   @apply flex items-center;

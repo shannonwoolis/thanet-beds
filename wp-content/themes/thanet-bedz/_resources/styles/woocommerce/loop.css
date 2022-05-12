@@ -38,7 +38,7 @@
   @apply absolute z-20 top-4 left-4;
   @apply px-2 py-1;
   @apply text-sm font-bold text-white uppercase;
-  @apply bg-red-500;
+  @apply bg-red-600;
 }
 
 .size-woocommerce_thumbnail {
@@ -59,6 +59,12 @@
     @apply block;
     @apply mb-3;
   }
+}
+
+.product-loop-image {
+    img {
+        @apply object-contain object-center w-full h-full p-0 transition-all duration-500 transform hover:scale-110;
+    }
 }
 
 /**

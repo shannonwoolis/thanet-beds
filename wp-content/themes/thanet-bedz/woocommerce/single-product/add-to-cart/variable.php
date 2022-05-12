@@ -37,13 +37,14 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 					<tr class="flex my-1.5">
 						<th class="sr-only label"><label for="<?php echo esc_attr( sanitize_title( $attribute_name ) ); ?>"><?php echo wc_attribute_label( $attribute_name ); // WPCS: XSS ok. ?></label></th>
 						<td class="w-full value">
-							<?php
+                            <?php
+                                $name = ucwords(str_replace(["pa_","-"],[""," "],$attribute_name));
 								wc_dropdown_variation_attribute_options(
 									array(
 										'options'   => $options,
 										'attribute' => $attribute_name,
 										'product'   => $product,
-                                        'show_option_none' => __( ('Select ' . $attribute_name), 'woocommerce' ),
+                                        'show_option_none' => __( ('Select ' . $name), 'woocommerce' ),
 									)
 								);
 								echo end( $attribute_keys ) === $attribute_name ? wp_kses_post( apply_filters( 'woocommerce_reset_variations_link', '<a class="reset_variations" href="#">' . esc_html__( 'Clear', 'woocommerce' ) . '</a>' ) ) : '';
