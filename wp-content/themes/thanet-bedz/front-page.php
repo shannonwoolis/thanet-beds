@@ -16,8 +16,8 @@ $query = array(
     'posts_per_page'      => 8,
     'tax_query'           => $tax_query
 );
-// $context['featured'] = new Timber\PostQuery($query);
-$posts = Timber::get_posts($query);
-$context['featured'] = $posts;
+$context['featured'] = new Timber\PostQuery($query);
+// $posts = Timber::get_posts($query);
+// $context['featured'] = $posts;
 
 Timber::render( [ 'front-page.twig' ], $context );

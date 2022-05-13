@@ -97,7 +97,7 @@ function timber_set_product($post)
 {
     global $product;
 
-    if (is_woocommerce()) {
+    if (is_woocommerce() || is_front_page()) {
         $product = wc_get_product($post->ID);
     }
 }
