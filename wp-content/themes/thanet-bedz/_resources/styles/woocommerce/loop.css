@@ -63,7 +63,7 @@
 
 .product-loop-image {
     img {
-        @apply object-contain object-center w-full h-full p-0 transition-all duration-500 transform hover:scale-110;
+        @apply w-full h-auto p-0 transition-all duration-500 transform hover:scale-110;
     }
 }
 

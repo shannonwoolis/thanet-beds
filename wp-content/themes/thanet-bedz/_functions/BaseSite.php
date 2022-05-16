@@ -110,9 +110,9 @@ class BaseSite extends Timber\Site
         
         // Stores
         $stores = array(
-            'post_type'           => 'stores',
-            'post_status'         => 'publish',
-            'posts_per_page'      => 6,
+            'post_type'  => 'stores',
+            'post_status' => array('publish', 'private'),
+            'posts_per_page' => 6,
         );
         $context['stores'] = new Timber\PostQuery($stores);
 

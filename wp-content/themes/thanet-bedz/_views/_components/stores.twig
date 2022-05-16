@@ -20,13 +20,15 @@
                                 <span class="block">Kent Beds & Sofas</span>
                                 <span class="h2">{{ item.title }}</span>
                                 <span class="flex text-sm my-1.5">{{ fn('icon','map-marker-alt','text-lg min-w-6 mr-2') }} {{ item.address }}</span>
-                                <span class="flex text-sm my-1.5 transition hover:text-primary">{{ fn('icon','phone-flipped','text-lg min-w-6 mr-1 ml-1') }} {% do action('ald_single', item.ld_name, false) %}</span>
-                                {% include "_components/button.twig" with {
-                                    text: "Find out more",
-                                    link: item.link,
-                                    colour: 'primary-light',
-                                    classes: 'mt-4'
-                                } %}
+                                <span class="flex text-sm my-1.5 transition hover:text-primary">{{ fn('icon','phone-flipped','text-lg min-w-6 mr-1 ml-1') }} {% if item.ld_name %}{% do action('ald_single', item.ld_name, false) %}{% else %}{% do action('ld_default', false) %}{% endif %}</span>
+                                {% if item.status == "publish" %}
+                                    {% include "_components/button.twig" with {
+                                        text: "Find out more",
+                                        link: item.link,
+                                        colour: 'primary-light',
+                                        classes: 'mt-4'
+                                    } %}
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
