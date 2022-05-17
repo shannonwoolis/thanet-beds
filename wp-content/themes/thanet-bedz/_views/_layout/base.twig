@@ -33,7 +33,7 @@
             buttons: post.meta('copy_buttons')|default(false),
             utility_links: false,
             map: post.meta('map'),
-            thumb: post.thumbnail.src,
+            thumb: post.meta('copy_image').url|default(post.thumbnail.src)
         } %}
     {% endif %}
 
