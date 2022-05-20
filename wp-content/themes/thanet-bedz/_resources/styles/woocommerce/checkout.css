@@ -144,3 +144,20 @@
         @apply px-0 mb-4;
     }
 }
+
+.woocommerce_checkout_place_order {
+    @apply mt-4;
+}
+
+.woocommerce-order-received {
+    .woocommerce {
+        @apply p-4;
+    }
+    .woocommerce-order {
+        @apply p-8 bg-white;
+    }
+}
+
+.woocommerce-NoticeGroup {
+    @apply w-full;
+}
