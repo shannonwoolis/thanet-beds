@@ -49,7 +49,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
   protected $ga_imTh;
 
   protected $ga_IPA; 
-  protected $ga_OPTOUT; 
+  //protected $ga_OPTOUT; 
 
   protected $ads_ert;
   protected $ads_edrt;
@@ -65,8 +65,10 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
   protected $remarketing_snippets;
   protected $conversio_send_to;
   protected $tvc_conversion_tracking_type;
-
+  protected $tvc_product_detail_tracking_type;
+  protected $tvc_checkout_tracking_type;
   protected $ee_options;
+  protected $fb_pixel_id;
 
   /**
    * Enhanced_Ecommerce_Google_Analytics_Public constructor.
@@ -80,6 +82,8 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
     $this->version  = sanitize_text_field($version);
     $this->ee_options = $this->TVC_Admin_Helper->get_ee_options_settings();
     $this->tvc_conversion_tracking_type = sanitize_text_field($this->get_option("tvc_conversion_tracking_type"));
+    $this->tvc_product_detail_tracking_type = sanitize_text_field($this->get_option("tvc_product_detail_conversion_tracking_type"));
+    $this->tvc_checkout_tracking_type = sanitize_text_field($this->get_option("tvc_checkout_conversion_tracking_type"));
     $this->tvc_call_hooks();
 
     $this->ga_Dname = "auto";
@@ -97,7 +101,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
     $this->ga_gUser = sanitize_text_field($this->get_option("ga_gUser") == "on" ? true : false); //guest checkout
     $this->ga_DF = sanitize_text_field($this->get_option("ga_DF") == "on" ? true : false);
     $this->ga_imTh = sanitize_text_field($this->get_option("ga_Impr") == "" ? 6 : $this->get_option("ga_Impr"));
-    $this->ga_OPTOUT = sanitize_text_field($this->get_option("ga_OPTOUT") == "on" ? true : false); //Google Analytics Opt Out
+    //$this->ga_OPTOUT = sanitize_text_field($this->get_option("ga_OPTOUT") == "on" ? true : false); //Google Analytics Opt Out
     $this->ga_PrivacyPolicy = sanitize_text_field($this->get_option("ga_PrivacyPolicy") == "on" ? true : false);
     $this->ga_IPA = sanitize_text_field($this->get_option("ga_IPA") == "on" ? true : false); //IP Anony.
     $this->ads_ert = get_option('ads_ert'); //Enable remarketing tags
@@ -111,7 +115,10 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
       $this->remarketing_snippets = base64_decode($remarketing['snippets']);
       $this->remarketing_snippet_id = sanitize_text_field(isset($remarketing['id'])?esc_attr($remarketing['id']):"");
     }
-    
+
+    /*facebook pixel*/
+    $this->fb_pixel_id = sanitize_text_field($this->get_option('fb_pixel_id'));
+
     $this->ga_LC = get_woocommerce_currency(); //Local Currency from Back end
     $this->wc_version_compare("tvc_lc=" . json_encode(esc_js($this->ga_LC)) . ";");
     /*
@@ -142,7 +149,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
       "o_log_step_gest_user"=>esc_js($this->ga_gUser),
       "o_impression_thresold"=>esc_js($this->ga_imTh),
       "o_ip_anonymization"=>esc_js($this->ga_IPA),
-      "o_ga_OPTOUT"=>esc_js($this->ga_OPTOUT),
+      //"o_ga_OPTOUT"=>esc_js($this->ga_OPTOUT),
       "ads_tracking_id"=>esc_js($this->ads_tracking_id),
       "remarketing_tags"=>esc_js($this->ads_ert),
       "dynamic_remarketing_tags"=>esc_js($this->ads_edrt),
@@ -153,6 +160,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
       "user_type"=>esc_js($user_type),
       "day_type"=>esc_js($this->add_day_type()),
       "remarketing_snippet_id"=>esc_js($this->remarketing_snippet_id),
+      "fb_pixel_id"=>esc_js($this->fb_pixel_id),
       "tvc_ajax_url"=>esc_url_raw(admin_url( 'admin-ajax.php' ))
     );
     /*
@@ -172,20 +180,29 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
       add_action("wp_head", array($this, "ecommerce_tracking_code"));
     }else{
       add_action("woocommerce_thankyou", array($this, "ecommerce_tracking_code"));
-    }    
-    //add_action("woocommerce_after_single_product", array($this, "product_detail_view"));
-    add_action("wp_head", array($this, "product_detail_view"));
-    add_action("woocommerce_after_cart", array($this, "remove_cart_tracking"));
+    } 
+    if($this->tvc_product_detail_tracking_type == "on-product-detail-page"){
+        add_action("wp_head", array($this, "product_detail_view"));
+        add_action("wp_footer", array($this, "single_add_to_cart"));
+    }else{
+        // var int
+        add_action("woocommerce_after_single_product", array($this, "product_detail_view"));     
+        // event tigger
+        add_action("woocommerce_after_add_to_cart_button", array($this, "single_add_to_cart"));
+    }
+    add_action("woocommerce_after_cart", array($this, "remove_cart_tracking"));  
+    
     //check out step 1,2,3
-    //add_action("woocommerce_before_checkout_form", array($this, "checkout_step_1_tracking"));
-    //add_action("woocommerce_before_checkout_form", array($this, "checkout_step_2_tracking"));
-    //add_action("woocommerce_before_checkout_form", array($this, "checkout_step_3_tracking"));
-    add_action("wp_head", array($this, "checkout_step_1_tracking"));
-    add_action("wp_head", array($this, "checkout_step_2_tracking"));
-    add_action("wp_head", array($this, "checkout_step_3_tracking"));
-    add_action("woocommerce_after_add_to_cart_button", array($this, "add_to_cart"));
-    //add version details in footer
-    add_action("wp_footer", array($this, "add_plugin_details"));
+    if($this->tvc_checkout_tracking_type == "on-checkout-page"){
+        add_action("wp_head", array($this, "checkout_step_1_tracking"));
+        add_action("wp_head", array($this, "checkout_step_2_tracking"));
+        add_action("wp_head", array($this, "checkout_step_3_tracking"));
+    }else{
+        add_action("woocommerce_before_checkout_form", array($this, "checkout_step_1_tracking"));
+        add_action("woocommerce_before_checkout_form", array($this, "checkout_step_2_tracking"));
+        add_action("woocommerce_before_checkout_form", array($this, "checkout_step_3_tracking"));
+    }
+    
     //Add Dev ID
     add_action("wp_head", array($this, "add_dev_id"));
     add_action("wp_footer", array($this, "tvc_store_meta_data"));
@@ -302,6 +319,9 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
       return $this->ee_options[$key];
     }
   }
+  public function get_tvc_product_data($product_id){
+
+  }
   /**
    * Get store meta data for trouble shoot
    * @access public
@@ -326,7 +346,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
           't_UAen' => esc_js($this->ga_ST),
           't_thr' => esc_js($this->ga_imTh),
           't_IPA' => esc_js($this->ga_IPA),
-          't_OptOut' => esc_js($this->ga_OPTOUT),
+          //'t_OptOut' => esc_js($this->ga_OPTOUT),
           't_PrivacyPolicy' => esc_js($this->ga_PrivacyPolicy)
       ),
       'tvc_sub_data'=> array(
@@ -338,6 +358,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
         'ga_measurement_id' => esc_js(isset($googleDetail->measurement_id)?sanitize_text_field($googleDetail->measurement_id):""),
         'ga_ads_id' => esc_js(isset($googleDetail->google_ads_id)?sanitize_text_field($googleDetail->google_ads_id):""),
         'ga_gmc_id' => esc_js(isset($googleDetail->google_merchant_center_id)?sanitize_text_field($googleDetail->google_merchant_center_id):""),
+        'ga_gmc_id_p' => esc_js(isset($googleDetail->merchant_id)?sanitize_text_field($googleDetail->merchant_id):""),
         'op_gtag_js' => esc_js(isset($googleDetail->add_gtag_snippet)?sanitize_text_field($googleDetail->add_gtag_snippet):""),
         'op_en_e_t' => esc_js(isset($googleDetail->enhanced_e_commerce_tracking)?sanitize_text_field($googleDetail->enhanced_e_commerce_tracking):""),
         'op_rm_t_t' => esc_js(isset($googleDetail->remarketing_tags)?sanitize_text_field($googleDetail->remarketing_tags):""),
@@ -346,7 +367,8 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
         'gmc_is_product_sync' => esc_js(isset($googleDetail->is_product_sync)?sanitize_text_field($googleDetail->is_product_sync):""),
         'gmc_is_site_verified' => esc_js(isset($googleDetail->is_site_verified)?sanitize_text_field($googleDetail->is_site_verified):""),
         'gmc_is_domain_claim' => esc_js(isset($googleDetail->is_domain_claim)?sanitize_text_field($googleDetail->is_domain_claim):""),
-        'gmc_product_count' => esc_js(isset($googleDetail->product_count)?sanitize_text_field($googleDetail->product_count):"")
+        'gmc_product_count' => esc_js(isset($googleDetail->product_count)?sanitize_text_field($googleDetail->product_count):""),
+        'fb_pixel_id' => esc_js($this->fb_pixel_id)
       )
     );
     $this->wc_version_compare("tvc_smd=" . json_encode($tvc_sMetaData) . ";");
@@ -371,16 +393,6 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
       ?>
       <script>(window.gaDevIds=window.gaDevIds||[]).push('5CDcaG');</script>
       <?php
-    }
-
-    /**
-     * display details of plugin
-     *
-     * @access public
-     * @return void
-     */
-    function add_plugin_details() {
-        printf("<!--%s %s-->",esc_html__("Enhanced Ecommerce Google Analytics Plugin for Woocommerce by Tatvic Plugin Version:","conversios"),esc_attr($this->tvc_eeVer));
     }
 
     /**
@@ -434,7 +446,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
         var ads_edrt = '<?php echo esc_js($this->ads_edrt)?>';
       </script>
       <?php
-      if($this->ga_OPTOUT) {
+      /*if($this->ga_OPTOUT) {
         ?>
       <script>
         // Set to the same value as the web property used on the site
@@ -452,9 +464,10 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
           window[disableStr] = true;
         }</script>
        <?php
-      }
+      }*/
       //add gtag js snippets
       if( $this->tracking_option == "BOTH" && $this->gm_id && $this->ga_id){ ?>
+        <!--Conversios.io – Google Analytics and Google Shopping plugin for WooCommerce-->
         <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_js($this->gm_id); ?>"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -486,6 +499,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
         </script>
       <?php
       }else if($this->tracking_option == "GA4" && $this->gm_id){ ?>
+        <!--Conversios.io – Google Analytics and Google Shopping plugin for WooCommerce-->
         <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_js($this->gm_id); ?>"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -516,6 +530,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
         </script>
       <?php
       }else if($this->ga_id){ ?>
+        <!--Conversios.io – Google Analytics and Google Shopping plugin for WooCommerce-->
         <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_js($this->ga_id); ?>"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -557,6 +572,29 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
             echo  html_entity_decode(str_replace("&#039;", "'",esc_html($googleDetail->google_ads_snippets)) );
           }
         }
+      }
+
+      /*facebook pixel*/
+      if($this->fb_pixel_id != ""){
+        ?>
+<!-- Conversios.io - Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '<?php echo esc_js($this->fb_pixel_id); ?>');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=<?php echo esc_js($this->fb_pixel_id); ?>&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+        <?php
       }
     }
     protected function tvc_get_order_with_url_order_key(){
@@ -615,7 +653,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
       $order = new WC_Order($order_id);
     }
     if ($this->disable_tracking($this->ga_eeT) || current_user_can("manage_options") || get_post_meta($order_id, "_tracked", true) == 1 || !is_order_received_page() ){
-     return;
+      return;
     }    
     get_post_meta($order_id, "_tracked", true);    
     // Doing eCommerce tracking so unhook standard tracking from the footer
@@ -743,12 +781,12 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
    * @access public
    * @return void
    */
-  function add_to_cart() {
+  function single_add_to_cart() {
     if ($this->disable_tracking($this->ga_eeT)){
       return;
     }
     //return if not product page
-    if (!is_single()){
+    if (!is_single() || !is_product() ){
       return;
     }
     global $product,$woocommerce;
@@ -1069,6 +1107,10 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
                       
                           if(t_prod_data_json.hasOwnProperty(t_prod_url_key)){
                                   t_call_fired=true;
+                              /*facebook pixel */
+                              tvc_js = new TVC_Enhanced('.json_encode($this->tvc_options).');
+                              tvc_js.add_to_cart_click_fb(t_prod_data_json[t_prod_url_key], t_qty);
+                              
                               // Enhanced E-commerce Add to cart clicks
                                   gtag("event", "add_to_cart", {
                                       "event_category":"Enhanced-Ecommerce",
@@ -1198,6 +1240,10 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
               function prod_ATC_link_exists(t_url,t_ATC_json_name,t_prod_data_json,t_qty){
                   t_prod_url_key=t_ATC_json_name[t_url]["ATC-link"];
                       if(t_prod_data_json.hasOwnProperty(t_prod_url_key)){
+                        /*facebook pixel */
+                        tvc_js = new TVC_Enhanced('.json_encode($this->tvc_options).');
+                        tvc_js.add_to_cart_click_fb(t_prod_data_json[t_prod_url_key], t_qty);
+
                               t_call_fired=true;
                           // Enhanced E-commerce Add to cart clicks
                               gtag("event", "add_to_cart", {
@@ -1230,9 +1276,8 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
                           t_call_fired=false;
                       }    
                        return t_call_fired;
-              }
-              ';
-              }
+              }';
+      }
       if(is_home() || is_front_page()){
           $hmpg_impressions_jQ .='
               if(tvc_fp.length !== 0){
@@ -1276,8 +1321,18 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
                    //cat page prod call for click
                    prod_exists_in_JSON(t_url,tvc_pgc,"srch");
                    });
-              
           ';
+        $keyword = get_search_query();
+        ?>
+        <script>           
+          window.addEventListener('load', call_search_page,true);
+          function call_search_page(){
+            tvc_js = new TVC_Enhanced(<?php echo json_encode($this->tvc_options); ?>);
+            tvc_js.search_page(<?php echo json_encode($catpage_json); ?>, <?php echo json_encode($keyword); ?>);
+          }
+        </script>
+        <?php 
+
       }else if (is_product()) {
           //product page releted products
           $hmpg_impressions_jQ .='
@@ -1456,54 +1511,21 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
     if ($this->disable_tracking($this->ga_eeT) || !is_checkout()  || is_order_received_page() ) {
       return;
     }
-    //call fn to make json
-    $this->get_ordered_items();
-      if($this->ga_id || $this->tracking_option == "UA" || $this->tracking_option == "BOTH") {
-          $code= '
-                  var items = [];
-                  gtag("set", {"currency": tvc_lc});
-                  for(var t_item in tvc_ch){
-                      items.push({
-                          "id": tvc_ch[t_item].tvc_i,
-                          "name": tvc_ch[t_item].tvc_n,
-                          "category": tvc_ch[t_item].tvc_c,
-                          "attributes": tvc_ch[t_item].tvc_attr,
-                          "price": tvc_ch[t_item].tvc_p,
-                          "quantity": tvc_ch[t_item].tvc_q
-                      });
-                      }';
-
-          $code_step_1 = $code . 'gtag("event", "begin_checkout", {"event_category":"Enhanced-Ecommerce",
-                          "event_label":"checkout_step_1","items":items,"non_interaction": true });';
-
-          //check woocommerce version and add code
-          $this->wc_version_compare($code_step_1);
-      }
-
-      if( $this->gm_id && $this->tracking_option == "GA4") {
-          $code = '
-              var items = [];
-              for(var t_item in tvc_ch){
-                  items.push({
-                      "item_id": tvc_ch[t_item].tvc_i,
-                      "item_name": tvc_ch[t_item].tvc_n,
-                      "item_category": tvc_ch[t_item].tvc_c,
-                      "item_variant": tvc_ch[t_item].tvc_attr,
-                      "price": tvc_ch[t_item].tvc_p,
-                      "quantity": tvc_ch[t_item].tvc_q
-                  });
-                  }';
-
-          $code_step_1 = $code . 'gtag("event", "begin_checkout", {
-              "event_category":"Enhanced-Ecommerce",
-              "event_label":"checkout_step_1",
-              "items":items,
-              "non_interaction": true
-          });';
-
-          //check woocommerce version and add code
-          $this->wc_version_compare($code_step_1);
-      }
+    if($this->ga_id || $this->tracking_option == "UA" || $this->tracking_option == "BOTH" || $this->tracking_option == "GA4" || $this->gm_id) {
+      //call fn to make json
+      $chkout_json = $this->get_ordered_items();
+      $cart_total = WC()->cart->total;
+      //$amount2 = floatval($cart_total );
+      ?>
+      <script>           
+        window.addEventListener('load', call_checkout_step_1_tracking,true);
+        function call_checkout_step_1_tracking(){
+          tvc_js = new TVC_Enhanced(<?php echo json_encode($this->tvc_options); ?>);
+          tvc_js.checkout_step_1_tracking(<?php echo json_encode($chkout_json); ?>, <?php echo json_encode($cart_total); ?>);
+        }
+      </script>
+      <?php
+    }
   }
 
     /**
@@ -1516,7 +1538,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
         if ($this->disable_tracking($this->ga_eeT) || !is_checkout()  || is_order_received_page() ) {
           return;
         }
-        if($this->ga_id || $this->tracking_option == "UA" || $this->tracking_option == "BOTH" || $this->gm_id) {
+        if($this->ga_id || $this->tracking_option == "UA" || $this->tracking_option == "BOTH" || $this->tracking_option == "GA4" || $this->gm_id) {
             $code= '
                    var items = [];
                     gtag("set", {"currency": tvc_lc});
@@ -1556,7 +1578,7 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
         if ($this->disable_tracking($this->ga_eeT) || !is_checkout()  || is_order_received_page() ) {
           return;
         }
-        if($this->ga_id || $this->tracking_option == "UA" || $this->tracking_option == "BOTH" || $this->gm_id) {
+        if($this->ga_id || $this->tracking_option == "UA" || $this->tracking_option == "BOTH" || $this->tracking_option == "GA4" || $this->gm_id) {
             $code= '
              var items = [];
                 for(var t_item in tvc_ch){
@@ -1625,5 +1647,6 @@ class Enhanced_Ecommerce_Google_Analytics_Public {
     //return $code;
     //make product data json on check out page
     $this->wc_version_compare("tvc_ch=" . json_encode($chkout_json) . ";");
+    return $chkout_json;
   }
 }

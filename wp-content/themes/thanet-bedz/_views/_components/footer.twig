@@ -48,7 +48,11 @@
         <div class="flex flex-col w-1/2 mb-8 text-sm font-light lg:w-1/6 sm:w-1/3">
 			<span class="mb-3 text-base font-bold text-primary-lightest">Stores</span>
             {% for item in stores %}
-                <a class="my-1" href="{{ item.link }}">{{ item.title }}</a>
+                {% if item.status == "publish" %}
+                    <a class="my-1" href="{{ item.link }}">{{ item.title }}</a>
+                {% else %}
+                    <span class="my-1">{{ item.title }}</a>
+                {% endif %}
             {% endfor %}
 		</div>
 

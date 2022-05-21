@@ -30,7 +30,10 @@ class Enhanced_Ecommerce_Google_Analytics_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-		if (!current_user_can('activate_plugins'))
+		if (!current_user_can('activate_plugins')){
 			return;    
+    }
+    $TVC_Admin_Helper = new TVC_Admin_Helper();
+    $TVC_Admin_Helper->update_app_status("0");
 	}
 }

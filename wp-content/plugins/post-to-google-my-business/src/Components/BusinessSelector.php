@@ -99,18 +99,24 @@ class BusinessSelector {
 	protected function group_rows($account_key){
 		try{
 			$this->api->set_user_id($account_key);
-			$accounts = $this->api->list_accounts( $this->flush_cache );
+			$accounts = [];
+			do{
+				$response = $this->api->list_accounts( $this->flush_cache );
+				$accounts = isset($response->accounts) && is_array($response->accounts) ? array_merge($accounts, $response->accounts) : $accounts;
+				$nextPageToken = isset($response->nextPageToken) ? $response->nextPageToken : null;
+			}while($nextPageToken);
+
 		}catch(\Exception $exception){
 			return $this->notice_row(sprintf(__('Could not retrieve account or location groups from Google My Business: %s', 'post-to-google-my-business'), $exception->getMessage()));
 		}
 
-		if(!is_object($accounts) || count($accounts->accounts) < 1) {
+		if(!is_array($accounts) || count($accounts) < 1) {
 			return $this->notice_row(__('No user account or location groups found. Did you log in to the correct Google account?', 'post-to-google-my-business'));
 		}
 
 		$rows = '';
-		$accounts->accounts = apply_filters('mbp_business_selector_groups', $accounts->accounts, $account_key);
-		foreach($accounts->accounts as $account){
+		$accounts = apply_filters('mbp_business_selector_groups', $accounts, $account_key);
+		foreach($accounts as $account){
 			$rows .= sprintf( "<tr><td colspan=\"2\"><strong>%s</strong></td></tr>", $account->accountName );
 			$rows .= $this->location_rows($account_key, $account->name);
 		}
@@ -166,12 +172,13 @@ class BusinessSelector {
 			 * $location->metadata->canOperateLocalPost should indicate whether localposts can be used but the variable isn't sent by Google regardless of the permission
 			 */
 			$disabled = !isset($location->metadata->hasVoiceOfMerchant) || !$location->metadata->hasVoiceOfMerchant;
-			$normalized_name = NormalizeLocationName::from_without_account($location->name, $account_key)->with_account_id();
+			//$normalized_name = NormalizeLocationName::from_group_and_location($account_name, $location->name)->with_account_id();
+			$normalized_name = "{$account_name}/{$location->name}";
 			$checked = isset($this->selected[$account_key]) && (is_array($this->selected[$account_key]) && in_array($normalized_name, $this->selected[$account_key]) || $normalized_name == $this->selected[$account_key]);
 
 			$rows .= sprintf( '<tr class="mbp-business-item%s">', $disabled ? ' mbp-business-disabled' : '' );
 
-			$rows .= '<td class="mbp-checkbox-container">'.$this->get_input($account_key, $location, $checked, $disabled).'</td>';
+			$rows .= '<td class="mbp-checkbox-container">'.$this->get_input($account_key, $normalized_name, $checked, $disabled).'</td>';
 
 			$rows .= $this->location_data_column($location);
 
@@ -180,12 +187,12 @@ class BusinessSelector {
 		return $rows;
 	}
 
-	protected function get_input($account_key, $location, $checked, $disabled){
+	protected function get_input($sub_id, $normalized_name, $checked, $disabled){
 		return sprintf(
 			'<input type="radio" name="%s[%s]"  value="%s"%s%s>',
 			esc_attr($this->field_name),
-			esc_attr($account_key),
-			NormalizeLocationName::from_without_account(esc_attr($location->name), $account_key)->with_account_id(),
+			esc_attr($sub_id),
+			$normalized_name,
 			disabled($disabled, true, false),
 			checked($checked, true, false)
 		);

@@ -15,7 +15,7 @@
  * Plugin Name:       Conversios.io - Google Analytics and Google Shopping plugin for WooCommerce
  * Plugin URI:        https://www.tatvic.com/tatvic-labs/woocommerce-extension/
  * Description:       Automates eCommerce tracking in Google Analytics, dynamic remarkting in Google Ads, and provides complete Google Shopping features.
- * Version:           4.6.8
+ * Version:           4.7.3
  * Author:            Tatvic
  * Author URI:        www.tatvic.com
  * License:           GPL-2.0+
@@ -23,7 +23,7 @@
  * Text Domain:       www.tatvic.com
  * Domain Path:       /languages
  * WC requires at least: 3.5.0
- * WC tested up to: 6.2.1
+ * WC tested up to: 6.5.0
  */
 
 /**
@@ -37,7 +37,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'PLUGIN_TVC_VERSION', '4.6.8' );
+define( 'PLUGIN_TVC_VERSION', '4.7.3' );
 $fullName = plugin_basename( __FILE__ );
 $dir = str_replace('/enhanced-ecommerce-google-analytics.php','',$fullName);
 if ( ! defined( 'ENHANCAD_PLUGIN_NAME' ) ) {
@@ -61,6 +61,18 @@ if ( ! defined( 'TVC_AUTH_CONNECT_URL' ) ) {
 
 if(!defined('TVC_Admin_Helper')){
     include(ENHANCAD_PLUGIN_DIR . '/admin/class-tvc-admin-helper.php');
+}
+
+add_action( 'upgrader_process_complete', 'tvc_upgrade_function',10, 2);
+function tvc_upgrade_function( $upgrader_object, $options ) {
+  if ($options['action'] == 'update' && $options['type'] == 'plugin' ) {
+    foreach($options['plugins'] as $each_plugin) {
+      if ($each_plugin==$fullName) {         
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $TVC_Admin_Helper->update_app_status();
+      }
+    }    
+  }
 }
 
 /**

@@ -6,10 +6,10 @@ Tags: Google Analytics tracking, Dynamic Remarketing, Google Shopping automation
 Author URI: https://conversios.io/
 Author: Tatvic
 Requires at least: 3.5.0
-Tested up to: 5.9.1
+Tested up to: 5.9.3
 Requires PHP: 5.6 or Higher
-Stable tag: 4.6.8
-Version: 4.6.8
+Stable tag: 4.7.3
+Version: 4.7.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -44,6 +44,19 @@ Check the recent release of the Enhanced Ecommerce Google Analytics plugin for W
 * Seamless product sync from your WooCommerce stores. 
 * Link Google Ads and Google Merchant Center account, Smart Shopping Campaign management, and Shopping Campaign report.
 
+###USER MANUAL
+<a target="_blank" href="https://conversios.io/help-center/Installation-Manual.pdf">Here is how you can configure the plugin without any hassle and start scaling your eCommerce business faster.</a>
+
+###Plugin Compatibility
+
+* Perfect Brands for WooCommerce
+* YITH WooCommerce Brands️
+* WooCommerce Brands
+* Multi Currency plugins
+  - WOOCS: Currency Switcher for WooCommerce
+  - CURCY: Multi Currency for WooCommerce
+  - WBW Currency Switcher for WooCommerce
+
 ###YOU GET BIG BENEFITS 
 
 eCommerce businesses can -
@@ -56,7 +69,6 @@ Achieve all this by connecting Google Analytics, Google Ads, and Google Merchant
 
 * NO CODING REQUIRED or NO NEED TO HIRE A DEVELOPER for the setup. You can configure the plugin instantly in under 5 minutes and with a few clicks from your WordPress backend.
 
-<a target="_blank" href="https://conversios.io/help-center/Installation-Manual.pdf">Here is how you can configure the plugin without any hassle and start scaling your eCommerce business faster.</a>
 
 New users can get $500 in Ad Credits when they spend their first $500 on Google Ads within 60 days. (amount differs based on the country you are in) <a target="_blank" href ="https://conversios.io/help-center/new-google-spend-match.pdf">See terms and condition.</a>
 
@@ -132,9 +144,10 @@ Enhanced eCommerce Google analytics plugin tracks the entire user journey on you
 13. Automatic site verification and domain claim for Google Merchant Center account
 14. Seamless product sync from wordpress backend to Google Merchant Center account in order to opt for Surfaces across Google and Google Shopping.
 15. Automatic price and inventory update for your WooCommerce products to Merchant Center account
-15. Smart Shopping Campaign creation and management from Wordpress backend
-16. Shopping campaign performance dashboard
-17. Product Sync dashboard 
+16. Smart Shopping Campaign creation and management from Wordpress backend
+17. Shopping campaign performance dashboard
+18. Product Sync dashboard 
+19. Facebook Pixel Conversion Tracking (Basic ecommerce events)
 
 <strong><a target="_blank" href="https://conversios.io/pricings/?utm_source=EE+Plugin+Wordpress+Listing&utm_medium=Below+Free+Features&utm_campaign=Upsell+at+Conversios"> Fast track and scale your eCommerce business to new heights by unlocking more advanced tracking and enabling complete google shopping solutions for your WooCommerce store. Give a try to our pro version.</a></strong>
 
@@ -167,7 +180,7 @@ Enhanced eCommerce Google analytics plugin tracks the entire user journey on you
 * Consultation with Google Shopping expert to set up and enhance campaigns
 * CRO consulatation (Boost your eCommerce conversation with proven hypothesis) (Paid)
 * Customization as per your requirements(Paid)
-
+* Facebook Pixel Conversion Tracking
 <strong><a target="_blank" href="https://conversios.io/?utm_source=EE+Plugin+WordPress+Listing&utm_medium=Reach+out+to+us+with+your+query+Link&utm_campaign=Raise+query+at+Conversios#wpforms-form-11056">Reach out to us with your query here for a faster solution.</a></strong>
 
 
@@ -379,6 +392,26 @@ You can resolve the duplication of data by removing the manually implemented GA 
 
 
 == Changelog ==
+
+= 4.7.3 - 12/05/2022 =
+* Update: Google Ads API Libraries
+* Fix: Fetch GA4 measurement id list on the onboarding page, the issue for some users.
+* Fix: GA4 tracking - Checkout steps issue has been fixed.
+
+= 4.7.2 - 21/04/2022 =
+* Tweak: Now, Customer can choose the tracking trigger for addTocart (product detail), checkout steps and thenkyou page.
+* New: (PRO) Now compatible with WooCommerce custom attribute mapping for the brands (product) in the product sync.
+
+= 4.7.1 - 13/04/2022 =
+*  New: (PRO) Product sync feture now compatible with various Brand plugins like Perfect Brands for WooCommerce, YITH WooCommerce Brands️ and WooCommerce Brands.
+
+= 4.7.0 - 05/04/2022 =
+*  New: Facebook Pixel conversion tracking for major ecommerce events like Page view, Add to Cart, Initiate checkout, Purchase, View Content and Search events.
+*  New: Compatible with Multi Currency plugins like "WOOCS", "CURCY – Multi-Currency for WooCommerce" and "WBW Currency Switcher for WooCommerce"
+
+= 4.6.9 - 21/03/2022 =
+* Fix: - Site verification issue for some users.
+
 = 4.6.8 - 17/03/2022 =
 * New: In this release, we have add GA4 dashboard with important e-commerce reports.
 

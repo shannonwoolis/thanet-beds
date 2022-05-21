@@ -247,6 +247,12 @@ class GoogleShoppingFeed {
         </div>
         <div class="col-md-6 col-lg-4">
           <?php echo get_tvc_help_html(); ?>
+          <div class="tvc-youtube-video">
+            <span>Video tutorial:</span>
+            <a href="https://www.youtube.com/watch?v=FAV4mybKogg" target="_blank">Walkthrough about Onboarding</a>
+            <a href="https://www.youtube.com/watch?v=4pb-oPWHb-8" target="_blank">Walkthrough about Product Sync</a>
+            <a href="https://www.youtube.com/watch?v=_C9cemX6jCM" target="_blank">Walkthrough about Smart Shopping Campaign</a>
+          </div> 
         </div>
       </div>
     </div>

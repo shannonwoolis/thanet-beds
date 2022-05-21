@@ -129,8 +129,7 @@ jQuery(document).ready(function () {
       event.stopPropagation();
   })
 
-
-  jQuery(".google_analytics_sel").on( "change", function() {
+/*jQuery(".google_analytics_sel").on( "change", function() {
     is_validate_step("step_1");
     jQuery(".onbrdstep-1").removeClass('selectedactivestep');
     jQuery(".onbrdstep-3").removeClass('selectedactivestep');
@@ -138,7 +137,7 @@ jQuery(document).ready(function () {
     jQuery("[data-id=step_1]").attr("data-is-done",0);
     jQuery("[data-id=step_2]").attr("data-is-done",0);
     jQuery("[data-id=step_3]").attr("data-is-done",0);
-  }); 
+  }); */
   //step-2
   jQuery(".google_ads_sel").on( "change", function() {
     //jQuery(".onbrdstep-1").removeClass('selectedactivestep');
@@ -261,7 +260,7 @@ function save_analytics_web_properties(tracking_option, tvc_data, subscription_i
         conversios_onboarding_nonce:conversios_onboarding_nonce
       };
       //console.log(data);
-      $.ajax({
+      jQuery.ajax({
         type: "POST",
         dataType: "json",
         url: tvc_ajax_url,
@@ -307,7 +306,7 @@ function save_google_ads_data(google_ads_id, tvc_data, subscription_id, is_skip=
       tvc_data:tvc_data,
       conversios_onboarding_nonce:conversios_onboarding_nonce
     };
-    $.ajax({
+    jQuery.ajax({
       type: "POST",
       dataType: "json",
       url: tvc_ajax_url,
@@ -321,11 +320,8 @@ function save_google_ads_data(google_ads_id, tvc_data, subscription_id, is_skip=
           //jQuery("#ads-account").val(google_ads_id);
           let tracking_option = jQuery('input:radio[name=analytic_tag_type]:checked').val();
           var s_tracking_option = tracking_option.toLowerCase();
-          if(plan_id != 1){
-            check_oradd_conversion_list(google_ads_id, tvc_data);
-          }
           
-          if (jQuery("#link_google_analytics_with_google_ads").is(':checked')) {          
+          if (jQuery("#link_google_analytics_with_google_ads").is(':checked')) {         
             if(tracking_option == "UA" || tracking_option == "BOTH"){
               if(tracking_option == "BOTH"){
                 s_tracking_option = "both_ua";
@@ -344,13 +340,69 @@ function save_google_ads_data(google_ads_id, tvc_data, subscription_id, is_skip=
               //console.log("google_ads_id"+google_ads_id+"profile_id"+profile_id);
               //console.log(UalinkData);
               if(google_ads_id != "" && profile_id != undefined){
-                setTimeout(function(){      
-                  link_analytic_to_ads_account(UalinkData);
+                setTimeout(function(){  
+                  //link_analytic_to_ads_account(UalinkData);
+                  jQuery.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: tvc_ajax_url,
+                    data: UalinkData,
+                    success: function (response) {
+                      clearTimeout(tvc_time_out);
+                      if(response.error === false){
+                        add_message("success","Google ananlytics and google ads linked successfully.");
+                      }else{
+                        //const errors = JSON.parse(response?.errors[0]);
+                        //add_message("error",errors?.message);
+                      }
+
+                      /* start GA4 */
+                      if(tracking_option == "GA4" || tracking_option == "BOTH"){
+                        if(tracking_option == "BOTH"){
+                          s_tracking_option = "both_ga4";
+                        }
+                        var web_property = jQuery("#"+s_tracking_option+"_web_measurement_id_option_val").attr('data-name');
+                        var Ga4linkData = {
+                          action: "link_analytic_to_ads_account",
+                          type: "GA4",
+                          ads_customer_id: google_ads_id,
+                          web_property_id: jQuery("#"+s_tracking_option+"_web_measurement_id_option_val").attr("data-val"),
+                          web_property: web_property,
+                          tvc_data:tvc_data,
+                          conversios_onboarding_nonce:conversios_onboarding_nonce
+                        };
+                        //console.log("web_property"+web_property);
+                        if(google_ads_id != "" && web_property != undefined){
+                          //setTimeout(function(){
+                            //console.log("cal GA4 link");
+                            //link_analytic_to_ads_account(Ga4linkData);
+                            jQuery.ajax({
+                              type: "POST",
+                              dataType: "json",
+                              url: tvc_ajax_url,
+                              data: Ga4linkData,
+                              success: function (response) {
+                                console.log(response);
+                                clearTimeout(tvc_time_out);
+                                if(response.error === false){
+                                  add_message("success","Google ananlytics and google ads linked successfully.");
+                                }else{
+                                  //const errors = JSON.parse(response?.errors[0]);
+                                  //add_message("error",errors?.message);
+                                }
+                              }
+                            });
+                          //}, 1000); 
+                        }
+                      }
+                      /* end GA4 */
+
+                    }
+                  });
                 }, 1000); 
               }
               
-            }
-            if(tracking_option == "GA4" || tracking_option == "BOTH"){
+            }else if(tracking_option == "GA4" || tracking_option == "BOTH"){
               if(tracking_option == "BOTH"){
                 s_tracking_option = "both_ga4";
               }
@@ -367,10 +419,34 @@ function save_google_ads_data(google_ads_id, tvc_data, subscription_id, is_skip=
               //console.log("web_property"+web_property);
               if(google_ads_id != "" && web_property != undefined){
                 setTimeout(function(){
-                  link_analytic_to_ads_account(Ga4linkData);
-                }, 1500); 
-              }
+                  //console.log("cal GA4 link");
+                  //link_analytic_to_ads_account(Ga4linkData);
+                  jQuery.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: tvc_ajax_url,
+                    data: Ga4linkData,
+                    success: function (response) {
+                      console.log(response);
+                      clearTimeout(tvc_time_out);
+                      if(response.error === false){
+                        add_message("success","Google ananlytics and google ads linked successfully.");
+                      }else{
+                        //const errors = JSON.parse(response?.errors[0]);
+                        //add_message("error",errors?.message);
+                      }
+                    }
+                  });
+                }, 1000); 
+              }            
+              /* end GA4 */
             }
+            
+            if(plan_id != 1){
+              setTimeout(function(){
+                check_oradd_conversion_list(google_ads_id, tvc_data);
+              }, 3500);
+            }          
             loaderSection(false);
             return true;
           }            
@@ -403,7 +479,7 @@ function save_merchant_data(google_merchant_center_id, merchant_id, tvc_data, su
       tvc_data:tvc_data,
       conversios_onboarding_nonce:conversios_onboarding_nonce
     };
-    $.ajax({
+    jQuery.ajax({
       type: "POST",
       dataType: "json",
       url: tvc_ajax_url,
@@ -455,7 +531,7 @@ function check_oradd_conversion_list(google_ads_id,  tvc_data){
         tvc_data:tvc_data,
         conversios_onboarding_nonce:conversios_onboarding_nonce
       };
-    $.ajax({
+    jQuery.ajax({
       type: "POST",
       dataType: "json",
       url: tvc_ajax_url,
@@ -481,26 +557,27 @@ function check_oradd_conversion_list(google_ads_id,  tvc_data){
   }
 }
 /* link account code */
-function link_analytic_to_ads_account(data) {
+/*function link_analytic_to_ads_account(data) {
   $.ajax({
     type: "POST",
     dataType: "json",
     url: tvc_ajax_url,
     data: data,
     success: function (response) {
+      console.log(response);
       clearTimeout(tvc_time_out);
       if(response.error === false){
         add_message("success","Google ananlytics and google ads linked successfully.");
       }else{
-        const errors = JSON.parse(response?.errors[0]);
-        add_message("error",errors?.message);
+        //const errors = JSON.parse(response?.errors[0]);
+        //add_message("error",errors?.message);
       }
     }
   });
-}
+}*/
 
 function link_google_Ads_to_merchant_center(link_data, tvc_data, subscription_id){
-  $.ajax({
+  jQuery.ajax({
     type: "POST",
     dataType: "json",
     url: tvc_ajax_url,
@@ -526,7 +603,7 @@ function link_google_Ads_to_merchant_center(link_data, tvc_data, subscription_id
 /* get subscription details */
 function get_subscription_details(tvc_data, subscription_id) { 
   var conversios_onboarding_nonce = jQuery("#conversios_onboarding_nonce").val(); 
-  $.ajax({
+  jQuery.ajax({
     type: "POST",
     dataType: "json",
     url: tvc_ajax_url,
@@ -600,7 +677,7 @@ function list_analytics_web_properties(type, tvc_data, page =1) {
   loaderSection(true);
   var conversios_onboarding_nonce = jQuery("#conversios_onboarding_nonce").val();
   //console.log("page"+page);
-  $.ajax({
+  jQuery.ajax({
     type: "POST",
     dataType: "json",
     url: tvc_ajax_url,
@@ -618,7 +695,7 @@ function list_analytics_web_properties(type, tvc_data, page =1) {
           //console.log("call option");
           //console.log(Object.keys(response.data.wep_properties).length +"=="+response.data.wep_properties.length);
           if(response.data != null && response.data.wep_properties.length > 0){
-            $.each(response.data.wep_properties, function (propKey, propValue) {
+            jQuery.each(response.data.wep_properties, function (propKey, propValue) {
                 var selected ="";              
                 if (subscriptionPropertyId == propValue.webPropertyId) {
                   if(ga_view_id != "" && ga_view_id == propValue.id){
@@ -626,9 +703,10 @@ function list_analytics_web_properties(type, tvc_data, page =1) {
                   }else if(ga_view_id =="" ){
                     selected = "selected='selected'";
                   }
-                  if(type == "BOTH"){
+                  /*if(type == "BOTH"){
                     s_tracking_option = "both_ua";
-                  }
+                  }*/
+                  jQuery("#both_ua_web_property_id_option_val").attr("data-profileid",propValue.id); 
                   jQuery("#"+s_tracking_option+"_web_property_id_option_val").attr("data-profileid",propValue.id);                      
                 }else{
                   selected = "";
@@ -637,6 +715,10 @@ function list_analytics_web_properties(type, tvc_data, page =1) {
             });
           }else{
             //console.log("hide option");
+            if(page == 1){
+              list_analytics_web_properties(type, tvc_data, 2);
+              return;
+            }
             jQuery(".tvc-ua-option-more").hide();
           }
           jQuery('#ua_web_property_id_option > .tvc-select-items').append(PropOptions);
@@ -647,13 +729,14 @@ function list_analytics_web_properties(type, tvc_data, page =1) {
           var subscriptionMeasurementId = jQuery("#subscriptionMeasurementId").val();
           var MeasOptions = '';
           if(response.data != null && response.data.wep_measurement.length > 0){
-            $.each(response.data.wep_measurement, function (measKey, measValue) {
+            jQuery.each(response.data.wep_measurement, function (measKey, measValue) {
               var web_property = measValue.name.split("/");
               if (subscriptionMeasurementId == measValue.measurementId) {
                 var selected = "selected='selected'";
-                if(type == "BOTH"){
+                /*if(type == "BOTH"){
                   s_tracking_option = "both_ga4";
-                }
+                };*/
+                jQuery("#both_ga4_web_measurement_id_option_val").attr('data-name',web_property[1]);
                 jQuery("#"+s_tracking_option+"_web_measurement_id_option_val").attr('data-name',web_property[1]);
               } else {
                 var selected = "";
@@ -662,6 +745,10 @@ function list_analytics_web_properties(type, tvc_data, page =1) {
             });
           }else{
             //console.log("hide option");
+            if(page == 1){
+              list_analytics_web_properties(type, tvc_data, 2);
+              return;
+            }
             jQuery(".tvc-ga4-option-more").hide();
           }
           jQuery('#ga4_web_measurement_id_option > .tvc-select-items').append(MeasOptions);
@@ -690,7 +777,7 @@ function list_googl_ads_account(tvc_data) {
   //loaderSection(true);
   var selectedValue = jQuery("#subscriptionGoogleAdsId").val();
   var conversios_onboarding_nonce = jQuery("#conversios_onboarding_nonce").val();
-  $.ajax({
+  jQuery.ajax({
     type: "POST",
     dataType: "json",
     url: tvc_ajax_url,
@@ -706,7 +793,7 @@ function list_googl_ads_account(tvc_data) {
           add_message("warning","There are no Google ads accounts associated with email.");
         } else {
           if(response.data.length > 0){
-            $.each(response.data, function (key, value) {
+            jQuery.each(response.data, function (key, value) {
               if (selectedValue == value) {
                 jQuery('#ads-account').append(jQuery('<option>', { value: value, text: value,selected: "selected"}));
               } else {
@@ -736,7 +823,7 @@ function call_list_google_merchant_account(tvc_data){
 function list_google_merchant_account(tvc_data){
   var selectedValue = jQuery("#subscriptionMerchantCenId").val();
   var conversios_onboarding_nonce = jQuery("#conversios_onboarding_nonce").val();
-  $.ajax({
+  jQuery.ajax({
     type: "POST",
     dataType: "json",
     url: tvc_ajax_url,
@@ -746,7 +833,7 @@ function list_google_merchant_account(tvc_data){
         jQuery('#google_merchant_center_id').empty();
         jQuery('#google_merchant_center_id').append(jQuery('<option>', {value: "", text: "Select Google Merchant Center"}));
         if (response.data.length > 0) {        
-          $.each(response.data, function (key, value) {
+          jQuery.each(response.data, function (key, value) {
             if(selectedValue == value.account_id){
               jQuery('#google_merchant_center_id').append(jQuery('<option>', {value: value.account_id, "data-merchant_id": value.merchant_id, text: value.account_id,selected: "selected"}));
             }else{
@@ -770,7 +857,7 @@ function list_google_merchant_account(tvc_data){
 /* Create function */
 function create_google_ads_account(tvc_data){
   var conversios_onboarding_nonce = jQuery("#conversios_onboarding_nonce").val();
-  $.ajax({
+  jQuery.ajax({
     type: "POST",
     dataType: "json",
     url: tvc_ajax_url,
@@ -782,6 +869,12 @@ function create_google_ads_account(tvc_data){
       if (response.error === false) {
         add_message("success",response.data.message);
         jQuery("#new_google_ads_id").text(response.data.adwords_id);
+        if(response.data.invitationLink != ""){
+          jQuery("#ads_invitationLink").attr("href",response.data.invitationLink);
+        }else{
+          jQuery("#invitationLink").html("");
+        }
+        
         jQuery("#tvc_ads_section").slideUp();
         jQuery("#new_google_ads_section").slideDown();
         //localStorage.setItem("new_google_ads_id", response.data.adwords_id);
@@ -832,7 +925,7 @@ function create_google_merchant_center_account(tvc_data){
       tvc_data:tvc_data,
       conversios_onboarding_nonce:conversios_onboarding_nonce
     };
-    $.ajax({
+    jQuery.ajax({
       type: "POST",
       dataType: "json",
       url: tvc_ajax_url,

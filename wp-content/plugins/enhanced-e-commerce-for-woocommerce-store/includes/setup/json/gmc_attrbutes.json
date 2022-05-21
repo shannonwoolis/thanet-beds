@@ -30,7 +30,7 @@
     },
     {
         "field": "brand",
-        "desc": "Your product’s brand name"
+        "desc": "Your product’s brand name (PRO Version - You can see the list of supported brand plugins on our Wordpress forum)"
     },
     {
         "field": "gtin",

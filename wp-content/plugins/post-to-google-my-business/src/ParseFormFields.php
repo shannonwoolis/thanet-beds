@@ -451,7 +451,7 @@ class ParseFormFields
             'user_variables'        => new UserVariables( $parent_post_id ),
             'site_variables'        => new SiteVariables(),
             'location_variables'    => new LocationVariables( $location ),
-            'woocommerce_variables' => new WooCommerceVariables( $parent_post_id ),
+            'woocommerce_variables' => new WooCommerceVariables( $parent_post_id, $this->get_link_parsing_mode() ),
         ];
         $decorators = apply_filters(
             'mbp_placeholder_decorators',

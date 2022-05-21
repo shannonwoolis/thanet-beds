@@ -9,21 +9,6 @@
 })( jQuery );
 class TVC_Enhanced {
   constructor(options = {}){
-    /*"is_admin"=>is_admin(),
-    "tracking_option"=>$this->tracking_option,
-    "property_id"=>$this->ga_id,
-    "measurement_id"=>$this->gm_id,
-    "google_ads_id"=>$this->google_ads_id,
-    "google_merchant_center_id"=>$this->google_merchant_id,
-    "o_add_gtag_snippet"=>$this->ga_ST,
-    "o_enhanced_e_commerce_tracking"=>$this->ga_eeT,
-    "o_log_step_gest_user"=>$this->ga_gUser,
-    "o_impression_thresold"=>$this->ga_imTh,
-    "o_ip_anonymization"=>$this->ga_IPA,
-    "o_ga_OPTOUT"=>$this->ga_OPTOUT,
-    "ads_tracking_id"=>$this->ads_tracking_id,
-    "remarketing_tags"=>$this->ads_ert,
-    "dynamic_remarketing_tags"=>$this->ads_edrt*/
     this.options = {
       tracking_option: 'UA'
     };
@@ -34,7 +19,6 @@ class TVC_Enhanced {
     //this.addEventBindings();  
   }
   singleProductaddToCartEventBindings(variations_data){
-   // alert("call first");
     //var single_btn = document.getElementsByClassName("single_add_to_cart_button");
     var single_btn = document.querySelectorAll("button[class*='btn-buy-shop'],button[class*='single_add_to_cart_button'], button[class*='add_to_cart']");
     if(single_btn.length > 0){
@@ -144,7 +128,18 @@ class TVC_Enhanced {
       });
     }
 
-    
+    /* facebook pixel*/
+    if(this.options.fb_pixel_id != ""){
+      fbq("track", "ViewContent", {
+          content_type  : "product",
+          content_name  : tvc_po.tvc_n,
+          content_category: tvc_po.tvc_c,
+          content_ids   : [tvc_po.tvc_id],
+          currency      : this.options.currency,
+          value         : tvc_po.tvc_p,
+          contents      :[{id:tvc_po.tvc_id, quantity:1}]
+        })
+    }    
 
   }
   get_variation_data_by_id(variations_data, variation_id){
@@ -171,7 +166,29 @@ class TVC_Enhanced {
       return p_v_title;
     }
   }
+  add_to_cart_click_fb( product , t_qty){
+    //console.log("add_to_cart_click_fb", product);
+    if(t_qty < 0){
+      t_qty = 1;
+    }
+    /* facebook pixel*/
+    if(this.options.fb_pixel_id != ""){
+      fbq("track", "AddToCart", {
+          content_type  : "product",
+          content_name  : product.tvc_n,
+          content_ids   : [product.tvc_id],
+          currency      : this.options.currency,
+          value         : product.tvc_p,
+          contents   :[{id:product.tvc_id, quantity:t_qty}]
+        })
+    }
+  }
+  /*
+   * below code run while add to cart on product page. 
+   * ( Event=>  add_to_cart)
+   */
   add_to_cart_click( variations_data, page_type ="Product Pages" ){
+    var this_var =  event.currentTarget;
     if(this.options.is_admin == true){
       return;
     }
@@ -198,8 +215,7 @@ class TVC_Enhanced {
         varPrice = vari_data.display_regular_price;
       }      
     }
-    //console.log(variation_attribute_name);
-   
+    //console.log(variation_attribute_name);   
     
     if(variation_id != ""){
       event_label="add_to_cart_"+this.options.page_type+" | "+tvc_po.tvc_n+" | "+variation_attribute_name;
@@ -231,7 +247,7 @@ class TVC_Enhanced {
             "name": tvc_po.tvc_n,
             "category" :tvc_po.tvc_c,
             "price": varPrice,
-            "quantity" :jQuery(this).parent().find("input[name=quantity]").val(),
+            "quantity" :jQuery(this_var).parent().find("input[name=quantity]").val(),
             "list_name":this.options.page_type,
             "list_position": 1,
             "variant": variation_attribute_name
@@ -258,7 +274,6 @@ class TVC_Enhanced {
      */
     }else if( this.options.tracking_option == "GA4" && this.options.measurement_id ){
       try {
-        console.log("call GA4");
         gtag("event", "add_to_cart", {
           "event_category":"Enhanced-Ecommerce",
           "event_label":"add_to_cart_click",
@@ -270,7 +285,7 @@ class TVC_Enhanced {
             "item_category" :tvc_po.tvc_c,
             "price":varPrice,
             "currency": this.options.currency,
-            "quantity": jQuery(this).parent().find("input[name=quantity]").val(),
+            "quantity": jQuery(this_var).parent().find("input[name=quantity]").val(),
             "item_variant": variation_attribute_name,
             "discount": tvc_po.tvc_pd,
             "affiliation":this.options.affiliation
@@ -305,8 +320,123 @@ class TVC_Enhanced {
         }]
       });
     }
-  }
 
+    /* facebook pixel*/
+    if(this.options.fb_pixel_id != ""){
+      var quantity = jQuery(this_var).parent().find("input[name=quantity]").val();
+      fbq("track", "AddToCart", {
+          content_type  : "product",
+          content_name  : tvc_po.tvc_n,
+          content_ids   : [tvc_po.tvc_id],
+          currency      : this.options.currency,
+          value         : tvc_po.tvc_p,
+          contents   :[{id:tvc_po.tvc_id, quantity:quantity}]
+        })
+    } 
+  }
+  /*
+  *
+  */
+  checkout_step_1_tracking(tvc_ch, cart_total){
+    var fb_content_ids = [];
+    var fb_contents = [], num_items = 0;
+    for(var t_item in tvc_ch){
+      num_items+=parseInt(tvc_ch[t_item].tvc_q);
+      fb_content_ids.push(tvc_ch[t_item].tvc_id);
+      fb_contents.push({"id":tvc_ch[t_item].tvc_id, "quantity":tvc_ch[t_item].tvc_q});
+    }
+    if((this.options.tracking_option =="UA" || this.options.tracking_option == "BOTH") && this.options.property_id ){
+      try {
+        gtag("set", {"currency": this.options.currency});
+        var items = [];
+        for(var t_item in tvc_ch){
+          items.push({
+            "id": tvc_ch[t_item].tvc_i,
+            "name": tvc_ch[t_item].tvc_n,
+            "category": tvc_ch[t_item].tvc_c,
+            "attributes": tvc_ch[t_item].tvc_attr,
+            "price": tvc_ch[t_item].tvc_p,
+            "quantity": tvc_ch[t_item].tvc_q
+          });
+        }
+        gtag("event", "begin_checkout", {
+          "event_category":"Enhanced-Ecommerce",
+          "event_label":"checkout_step_1",
+          "items":items,
+          "non_interaction": true 
+        });
+      }catch(err){
+        gtag("event", "exception", {
+          "description": err,
+          "fatal": false
+        });
+      }
+    /*
+     * Start GA4
+     */
+    }else if( this.options.tracking_option == "GA4" && this.options.measurement_id ){
+      try {
+        var items = [];
+        for(var t_item in tvc_ch){
+          items.push({
+            "item_id": tvc_ch[t_item].tvc_i,
+            "currency": this.options.currency,
+            "item_name": tvc_ch[t_item].tvc_n,
+            "item_category": tvc_ch[t_item].tvc_c,
+            "item_variant": tvc_ch[t_item].tvc_attr,
+            "price": tvc_ch[t_item].tvc_p,
+            "quantity": tvc_ch[t_item].tvc_q
+          });
+        }
+        gtag("event", "begin_checkout", {
+           "event_category":"Enhanced-Ecommerce",
+          "event_label":"checkout_step_1",
+          "currency": this.options.currency,
+          "value": cart_total,
+          "items":items,
+          "non_interaction": true
+        });
+      }catch(err){
+        gtag("event", "exception", {
+          "description": err,
+          "fatal": false
+        });
+      }
+    }
+    /* facebook pixel*/
+    if(this.options.fb_pixel_id != ""){
+      fbq("track", "InitiateCheckout", {
+          content_type  : "product_group",
+          content_name  : "Checkout Page",
+          content_ids   : fb_content_ids,
+          currency      : this.options.currency,
+          num_items     : num_items,
+          value         : cart_total,
+          contents      : fb_contents
+        })
+    } 
+  }
+  /*
+   * below code run on search page. 
+   * ( Event=> search )
+   */
+  search_page(products, keyword){
+    console.log(products, keyword);
+    /* facebook pixel*/
+    if(this.options.fb_pixel_id != ""){
+      var fb_content_ids = [];
+      var fb_contents = [];
+      for(var t_item in products){
+        fb_content_ids.push(products[t_item].tvc_id);
+        fb_contents.push({"id":products[t_item].tvc_id, "quantity":1});
+      }
+      fbq("track", "Search", {
+          content_ids   : fb_content_ids,
+          currency      : this.options.currency,
+          contents      : fb_contents
+        })
+    }
+  }
   /*
    * below code run on thenk you page. 
    * ( Event=> purchase )
@@ -316,16 +446,22 @@ class TVC_Enhanced {
       return;
     }
     this.options.page_type="Thankyou Page";
+    var fb_content_ids = [];
+    var fb_contents = [], num_items = 0;
+    var ads_items = [];
+    var ads_value=0;
+    for(var t_item in tvc_oc){
+      ads_value=ads_value + parseFloat(tvc_oc[t_item].tvc_p);
+      ads_items.push({
+        item_id: tvc_oc[t_item].tvc_i,
+        google_business_vertical: "retail"
+      });
+      num_items+=parseInt(tvc_oc[t_item].tvc_q);
+      fb_content_ids.push(tvc_oc[t_item].tvc_id);
+      fb_contents.push({"id":tvc_oc[t_item].tvc_id, "quantity":tvc_oc[t_item].tvc_q});
+    }
     if(this.is_add_remarketing_tags()){
-      var ads_items = [];
-      var ads_value=0;
-      for(var t_item in tvc_oc){
-        ads_value=ads_value + parseFloat(tvc_oc[t_item].tvc_p);
-        ads_items.push({
-          item_id: tvc_oc[t_item].tvc_i,
-          google_business_vertical: "retail"
-        });
-      }
+      
       gtag("event","purchase", {
         "send_to":this.options.remarketing_snippet_id,
         "ecomm_pagetype":"purchase",
@@ -336,11 +472,11 @@ class TVC_Enhanced {
 
     if(this.options.google_ads_conversion_tracking == 1 && this.options.conversio_send_to != ""){
       gtag('event', 'conversion', {
-      'send_to': this.options.conversio_send_to,
-      'value': tvc_td.revenue,
-      'currency': this.options.currency,
-      'transaction_id': tvc_td.id,
-     });
+        'send_to': this.options.conversio_send_to,
+        'value': tvc_td.revenue,
+        'currency': this.options.currency,
+        'transaction_id': tvc_td.id,
+       });
     }
     var last_purchase_time = this.getCookie("time_to_purchase");
     var time_to_purchase = purchase_time - last_purchase_time;
@@ -494,6 +630,19 @@ class TVC_Enhanced {
         });
       }    
     }
+
+    /* facebook pixel*/
+    if(this.options.fb_pixel_id != ""){
+      fbq("track", "Purchase", {
+          content_type  : "product_group",
+          content_name  : "Thankyou Page",
+          content_ids   : fb_content_ids,
+          currency      : this.options.currency,
+          num_items     : num_items,
+          value         : tvc_td.revenue,
+          contents      : fb_contents
+      })
+    }
   }
   getCurrentTime(){
     if (!Date.now) {
@@ -534,8 +683,5 @@ class TVC_Enhanced {
   }
   eraseCookie(name) {   
     document.cookie = name +"=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-  }
-  static test(){
-    
   }
 }

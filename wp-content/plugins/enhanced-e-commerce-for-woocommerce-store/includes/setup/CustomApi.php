@@ -22,16 +22,16 @@ class CustomApi{
     }
 
     public function get_tvc_refresh_token(){
-        if(!empty($this->refresh_token)){
-            return $this->refresh_token;
-        }else{
-            $TVC_Admin_Helper = new TVC_Admin_Helper();
-            $google_detail = $TVC_Admin_Helper->get_ee_options_data();  
-            if(isset($google_detail['setting']->refresh_token)){
-                $this->refresh_token = sanitize_text_field(base64_decode($google_detail['setting']->refresh_token));
-            }
-            return $this->refresh_token;
+      if(!empty($this->refresh_token)){
+        return $this->refresh_token;
+      }else{
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $google_detail = $TVC_Admin_Helper->get_ee_options_data();  
+        if(isset($google_detail['setting']->refresh_token)){
+            $this->refresh_token = sanitize_text_field(base64_decode($google_detail['setting']->refresh_token));
         }
+        return $this->refresh_token;
+      }
     }
 
     public function tc_wp_remot_call_post($url, $args){
@@ -65,6 +65,44 @@ class CustomApi{
         } else {
             return false;
         }
+    }
+
+    public function update_app_status($status=1){
+      try {                
+        $url = $this->apiDomain . '/customer-subscriptions/update-app-status';
+        $header = array(
+          "Authorization: Bearer ".$this->token,
+          "Content-Type" => "application/json"
+        );
+
+        $options = unserialize(get_option('ee_options'));
+        $fb_pixel_enable = "0";
+        if(isset($options['fb_pixel_id']) && $options['fb_pixel_id'] != ""){
+          $fb_pixel_enable = "1";
+        }
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $postData = array(
+          "subscription_id" => sanitize_text_field($TVC_Admin_Helper->get_subscriptionId()),
+          "domain" => esc_url_raw(get_site_url()),
+          "app_status_data" => array(
+            "app_settings" => array(
+              "app_status" => sanitize_text_field($status),
+              "fb_pixel_enable" => $fb_pixel_enable,
+              "app_verstion" => PLUGIN_TVC_VERSION,
+              "domain" => esc_url_raw(get_site_url()),
+              "update_date" => date("Y-m-d")
+            )
+          )
+        );
+        $args = array(
+          'headers' =>$header,
+          'method' => 'POST',
+          'body' => wp_json_encode($postData)
+        );
+        $this->tc_wp_remot_call_post(esc_url_raw($url), $args);        
+      } catch (Exception $e) {
+        return $e->getMessage();
+      }
     }
 
     public function getGoogleAnalyticDetail($subscription_id = null) {
@@ -742,7 +780,7 @@ class CustomApi{
       if (isset($result->error) && $result->error) {
           $credentials = json_decode(file_get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
           $url = 'https://www.googleapis.com/oauth2/v4/token';
-          $header = array("content-type: application/json");
+          $header = array("Content-Type" => "application/json");
           $clientId = $credentials['web']['client_id'];
           $clientSecret = $credentials['web']['client_secret'];
           
@@ -756,7 +794,7 @@ class CustomApi{
             'timeout' => 10000,
             'headers' =>$header,
             'method' => 'POST',
-            'body' => $data
+            'body' => wp_json_encode($data)
           );
           $request = wp_remote_post(esc_url_raw($url), $args);
           // Retrieve information
@@ -776,11 +814,6 @@ class CustomApi{
     public function siteVerificationToken($postData) {
       try {
           $url = $this->apiDomain . '/gmc/site-verification-token';
-          $header = array("Authorization: Bearer MTIzNA==",
-              "Content-Type" => "application/json",
-              "AccessToken:" . $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
-          );
-
           $data = [
               'merchant_id' => sanitize_text_field($postData['merchant_id']),
               'website' => sanitize_text_field($postData['website_url']),
@@ -789,12 +822,16 @@ class CustomApi{
           ];
 
           $args = array(
-            'headers' =>$header,
+            'timeout' => 10000,
+            'headers' => array(
+              'Authorization' => "Bearer MTIzNA==",
+              'Content-Type' => 'application/json',
+              'AccessToken' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+            ),
             'method' => 'POST',
             'body' => wp_json_encode($data)
           );
           $result = $this->tc_wp_remot_call_post(esc_url_raw($url), $args);
-
           $return = new \stdClass();
           if($result->status == 200){
             $return->status = $result->status;
@@ -824,11 +861,6 @@ class CustomApi{
     public function siteVerification($postData) {
         try {
             $url = $this->apiDomain . '/gmc/site-verification';
-            $header = array("Authorization: Bearer MTIzNA==",
-              "Content-Type" => "application/json",
-              "AccessToken:" . $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
-            );
-
             $data = [
                 'merchant_id' => sanitize_text_field($postData['merchant_id']),
                 'website' => esc_url_raw($postData['website_url']),
@@ -839,7 +871,11 @@ class CustomApi{
 
             $args = array(
               'timeout' => 10000,
-              'headers' =>$header,
+              'headers' => array(
+                'Authorization' => "Bearer MTIzNA==",
+                'Content-Type' => 'application/json',
+                'AccessToken' => $this->generateAccessToken($this->get_tvc_access_token(), $this->get_tvc_refresh_token())
+              ),
               'method' => 'POST',
               'body' => wp_json_encode($data)
             );
@@ -848,8 +884,6 @@ class CustomApi{
             $response_code = wp_remote_retrieve_response_code($request);
             $response_message = wp_remote_retrieve_response_message($request);
             $result = json_decode(wp_remote_retrieve_body($request));
-            
-
             $return = new \stdClass();
             if ((isset($result->error) && $result->error == '')) {
               

@@ -24,7 +24,7 @@ Class TVC_Admin_Helper{
     $this->customApiObj = new CustomApi();
     $this->TVC_Admin_DB_Helper = new TVC_Admin_DB_Helper();
     add_action('init',array($this, 'init'));
-    
+    add_action( 'init', array( $this, 'tvc_upgrade_function' ), 9999 );
   }
   
   public function includes() {
@@ -99,6 +99,19 @@ Class TVC_Admin_Helper{
       }
     }
   	return $value;
+  }
+  public function tvc_upgrade_function( ) {
+    $ee_additional_data = $this->get_ee_additional_data();
+    $ee_p_version = isset($ee_additional_data['ee_p_version'])?$ee_additional_data['ee_p_version']:"";
+    if($ee_p_version == ""){
+      $ee_p_version ="1.0.0";
+    }
+    if( version_compare($ee_p_version , PLUGIN_TVC_VERSION, ">=")){
+      return;
+    }
+    $ee_additional_data['ee_p_version'] = PLUGIN_TVC_VERSION;
+    $this->set_ee_additional_data($ee_additional_data);
+    $this->update_app_status();  
   }
   /*
    * verstion auto updated
@@ -590,6 +603,12 @@ Class TVC_Admin_Helper{
   }
   /* start display form input*/
   public function tvc_language_select($name, $class_id="", string $label="Please Select", string $sel_val = "en", bool $require = false){
+    if($sel_val == "en"){
+      $sel_val = get_locale();
+      if ( strlen( $sel_val ) > 0 ) {
+       $sel_val = explode( '_', $sel_val )[0];
+      }
+    }
   	if($name){
   		$countries_list = $this->get_gmc_language_list();
 	  	?>
@@ -633,26 +652,39 @@ Class TVC_Admin_Helper{
   }
 
   public function add_additional_option_in_tvc_select($tvc_select_option, $field){
-  	if($field == "brand"){
-  		$is_plugin='yith-woocommerce-brands-add-on/init.php';
-	  	$is_plugin_premium='yith-woocommerce-brands-add-on-premium/init.php';
-		  if(is_plugin_active($is_plugin) || is_plugin_active($is_plugin_premium)){
-	      $tvc_select_option[]["field"]="yith_product_brand";
-	    }
-  	}  	
-  	return $tvc_select_option;
+    $plan_id = $this->get_plan_id();
+    if($field == "brand" && $plan_id != 1){
+      $is_plugin='yith-woocommerce-brands-add-on/init.php';
+      $is_plugin_premium='yith-woocommerce-brands-add-on-premium/init.php';
+      $woocommerce_brand_is_active = 'woocommerce-brands/woocommerce-brands.php';
+      $perfect_woocommerce_brand_is_active = 'perfect-woocommerce-brands/perfect-woocommerce-brands.php';
+      if(is_plugin_active($is_plugin) || is_plugin_active($is_plugin_premium)){
+        $tvc_select_option[]["field"]="yith_product_brand";
+      }else if ( in_array( $woocommerce_brand_is_active, apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+        $tvc_select_option[]["field"]="woocommerce_product_brand";  
+      }else if ( in_array( $perfect_woocommerce_brand_is_active, apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+        $tvc_select_option[]["field"]="perfect_woocommerce_product_brand";  
+      }
+    }   
+    return $tvc_select_option;
   }
 
   public function add_additional_option_val_in_map_product_attribute($key, $product_id){
-  	if($key != "" && $product_id != ""){
-  		if($key == "brand"){
-	  		$is_plugin='yith-woocommerce-brands-add-on/init.php';
-	  		$is_plugin_premium='yith-woocommerce-brands-add-on-premium/init.php';
-		    if(is_plugin_active($is_plugin) || is_plugin_active($is_plugin_premium)){
-		    	return $yith_product_brand = $this->get_custom_taxonomy_name($product_id,"yith_product_brand");  
-		    }
-	  	} 
-  	}  	
+    if($key != "" && $product_id != ""){
+      if($key == "brand"){
+        $is_plugin='yith-woocommerce-brands-add-on/init.php';
+        $is_plugin_premium='yith-woocommerce-brands-add-on-premium/init.php';
+        $woocommerce_brand_is_active = 'woocommerce-brands/woocommerce-brands.php';
+        $perfect_woocommerce_brand_is_active = 'perfect-woocommerce-brands/perfect-woocommerce-brands.php';
+        if(is_plugin_active($is_plugin) || is_plugin_active($is_plugin_premium)){
+          return $yith_product_brand = $this->get_custom_taxonomy_name($product_id,"yith_product_brand");  
+        }else if ( in_array( $woocommerce_brand_is_active, apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+          return $product_brand = $this->get_custom_taxonomy_name($product_id,"product_brand");
+        }else if ( in_array( $perfect_woocommerce_brand_is_active, apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+          return $product_brand = $this->get_custom_taxonomy_name($product_id,"pwb-brand");
+        }
+      } 
+    }   
   }
 
   public function get_custom_taxonomy_name($product_id, $taxonomy ="product_cat", $separator = ", "){
@@ -897,6 +929,9 @@ Class TVC_Admin_Helper{
     }		
 	}
 
+  public function update_app_status($status = "1"){  
+    $this->customApiObj->update_app_status($status);
+  }
 	public function get_tvc_popup_message(){
 		return '<div id="tvc_popup_box">
 		<span class="close" id="tvc_close_msg" onclick="tvc_helper.tvc_close_msg()"> × </span>

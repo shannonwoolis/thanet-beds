@@ -98,7 +98,7 @@ class TVC_Pricings {
                   </div>                
                </div>
             </div>
-            <div class="row-subheading clearfix"><?php esc_html_e("Google Analytics","conversios"); ?></div>
+            <div class="row-subheading clearfix"><?php esc_html_e("Analytics","conversios"); ?></div>
             <div class="row-feature clearfix">
                <div class="column"><?php esc_html_e("Universal Analytics Tracking","conversios"); ?></div>
                <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
@@ -168,24 +168,6 @@ class TVC_Pricings {
                <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
                <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
                <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
-            </div><div class="row-feature clearfix">
-               <div class="column"><?php esc_html_e("User id tracking","conversios"); ?></div>
-               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
-            </div><div class="row-feature clearfix">
-               <div class="column"><?php esc_html_e("Client id tracking","conversios"); ?></div>
-               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
-            </div><div class="row-feature clearfix">
-               <div class="column"><?php esc_html_e("Scroll tracking","conversios"); ?></div>
-               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
-               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
-               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
-               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div>
             <div class="row-feature clearfix">
                <div class="column"><?php esc_html_e("Affiliate performance tracking","conversios"); ?></div>
@@ -202,25 +184,18 @@ class TVC_Pricings {
                <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column"><?php esc_html_e("Actionable Dashboard","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("Actionable Dashboard (GA3/ GA4)","conversios"); ?></div>
                <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Limited)","conversios"); ?></div>
                <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
                <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
                <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column"><?php esc_html_e("Menu tracking","conversios"); ?></div>
-               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
-               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
-               <div class="column popular"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
-               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
-            </div>
-            <div class="row-feature clearfix">
-               <div class="column"><?php esc_html_e("Search Query Tracking","conversios"); ?></div>
-               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
-               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
-               <div class="column popular"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
-               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("Facebook pixel tracking","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Limited)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column popular"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"><br><?php esc_html_e("(Complete)","conversios"); ?></div>
             </div>
             <div class="row-subheading clearfix"><?php esc_html_e("Google Shopping","conversios"); ?></div>
             <div class="row-feature clearfix">
@@ -296,20 +271,20 @@ class TVC_Pricings {
                <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
                <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column"><?php esc_html_e("Product filters for selected products sync","conversios"); ?></div>
-               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
-               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
-               <div class="column popular"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
-               <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("Compatibility with Brands Plugin","conversios"); ?></div>
+               <div class="column"><img src="<?php echo esc_url_raw($close_icon); ?>" alt="no"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column popular "><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
+               <div class="column"><img src="<?php echo esc_url_raw($check_icon); ?>" alt="yes"></div>
             </div><div class="row-feature clearfix">
-               <div class="column"><?php esc_html_e("Product filter for Smart Shopping Campaign","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("Product filters for selected products sync","conversios"); ?></div>
                <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
                <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
                <div class="column popular"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
                <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
             </div>
             <div class="row-feature clearfix">
-               <div class="column"><?php esc_html_e("Rule Based Shopping Campaigns","conversios"); ?></div>
+               <div class="column"><?php esc_html_e("Performance max campaigns","conversios"); ?></div>
                <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
                <div class="column"><?php esc_html_e("(Upcoming)","conversios"); ?></div>
                <div class="column popular"><?php esc_html_e("(Upcoming)","conversios"); ?></div>

@@ -78,6 +78,9 @@ if ( ! class_exists( 'TVCProductSyncHelper' ) ) {
      */
     public function tvc_get_map_product_attribute($products, $tvc_currency, $merchantId, $product_batch_size = 100){
       if(!empty($products)){
+        global $wpdb;
+        $tve_table_prefix = $wpdb->prefix;
+        $plan_id = $this->TVC_Admin_Helper->get_plan_id();
         $items = [];
         $skipProducts = [];
         $product_ids = [];
@@ -224,13 +227,25 @@ if ( ! class_exists( 'TVCProductSyncHelper' ) ) {
                       $stock_status = str_replace($tvc_find,$tvc_replace,$stock_status);
                       $product[$key] = sanitize_text_field($stock_status);
                     }
+                  }else if(in_array($key, array("brand")) && $plan_id != 1){ //list of cutom option added (Pro user only)                    
+                    $product_brand = ""; $is_custom_attr_brand = false;
+                    $woo_attr_list = json_decode(json_encode($this->TVC_Admin_Helper->getTableData($tve_table_prefix.'woocommerce_attribute_taxonomies', ['attribute_name'])), true);
+                    if(!empty($woo_attr_list)){
+                      foreach ($woo_attr_list as $key_attr => $value_attr) {
+                        if(isset($value_attr['field']) && $value_attr['field'] == $value){
+                          $is_custom_attr_brand = true;
+                          $product_brand = $this->TVC_Admin_Helper->get_custom_taxonomy_name($postvalue->w_product_id, "pa_".$value);
+                        }
+                      } 
+                    }
+                    if($is_custom_attr_brand == false && $product_brand == ""){
+                      $product_brand = $this->TVC_Admin_Helper->add_additional_option_val_in_map_product_attribute($key, $postvalue->w_product_id);
+                    }
+                    if($product_brand != ""){
+                      $product[$key] = sanitize_text_field($product_brand);
+                    }
                   }else if(isset($postmeta_var->$value) && $postmeta_var->$value != ""){
                     $product[$key] = sanitize_text_field($postmeta_var->$value);             
-                  }else if(in_array($key, array("brand")) ){ //list of cutom option added
-                    $yith_product_brand = $this->TVC_Admin_Helper->add_additional_option_val_in_map_product_attribute($key, $postvalue->w_product_id);
-                    if($yith_product_brand != ""){
-                      $product[$key] = sanitize_text_field($yith_product_brand);
-                    }
                   }
                 }
                 $item = [
@@ -289,14 +304,28 @@ if ( ! class_exists( 'TVCProductSyncHelper' ) ) {
                   $stock_status = str_replace($tvc_find,$tvc_replace,$stock_status);
                   $product[$key] = sanitize_text_field($stock_status);
                 }
+              }else if(in_array($key, array("brand")) && $plan_id != 1){ 
+                //list of cutom option added
+                $product_brand = ""; $is_custom_attr_brand = false;
+                    $woo_attr_list = json_decode(json_encode($this->TVC_Admin_Helper->getTableData($tve_table_prefix.'woocommerce_attribute_taxonomies', ['attribute_name'])), true);
+                    if(!empty($woo_attr_list)){
+                      foreach ($woo_attr_list as $key_attr => $value_attr) {
+                        if(isset($value_attr['field']) && $value_attr['field'] == $value){
+                          $is_custom_attr_brand = true;
+                          $product_brand = $this->TVC_Admin_Helper->get_custom_taxonomy_name($postvalue->w_product_id, "pa_".$value);
+                        }
+                      }
+                    }
+                    if($is_custom_attr_brand == false && $product_brand == ""){
+                      $product_brand = $this->TVC_Admin_Helper->add_additional_option_val_in_map_product_attribute($key, $postvalue->w_product_id);
+                    }
+                    if($product_brand != ""){
+                      $product[$key] = sanitize_text_field($product_brand);
+                    }
               }else if(isset($postObj->$value) && $postObj->$value != ""){
                 $product[$key] = $postObj->$value;
-              }else if(in_array($key, array("brand")) ){ //list of cutom option added
-                $yith_product_brand = $this->TVC_Admin_Helper->add_additional_option_val_in_map_product_attribute($key, $postvalue->w_product_id);
-                if($yith_product_brand != ""){
-                  $product[$key] = sanitize_text_field($yith_product_brand);
-                }
               }
+
             }
             $item = [
               'merchant_id' => sanitize_text_field($merchantId),
@@ -376,7 +405,9 @@ if ( ! class_exists( 'TVCProductSyncHelper' ) ) {
 		  $tve_table_prefix = $wpdb->prefix;
 		  $column1 = json_decode(json_encode($this->TVC_Admin_Helper->getTableColumns($tve_table_prefix.'posts')), true);
 		  $column2 = json_decode(json_encode($this->TVC_Admin_Helper->getTableData($tve_table_prefix.'postmeta', ['meta_key'])), true);
-		  return array_merge($column1, $column2);
+      $column3 = json_decode(json_encode($this->TVC_Admin_Helper->getTableData($tve_table_prefix.'woocommerce_attribute_taxonomies', ['attribute_name'])), true);
+
+		  return array_merge($column1, $column2,$column3);
 		}
 
 		public function tvc_product_sync_popup_html(){			
@@ -428,7 +459,7 @@ if ( ! class_exists( 'TVCProductSyncHelper' ) ) {
 			                  echo '<div class="row">
 			                    <div class="col-6 align-self-center">
 			                      <div class="form-group">
-			                        <span class="td-head">' . esc_attr($attribute["field"]) . " " . (isset($attribute["required"]) && esc_attr($attribute["required"]) == 1 ? '<span style="color: red;"> *</span>' : "") . '
+			                        <span class="td-head">' . esc_attr($attribute["field"]).(($attribute["field"] == "brand")?" <span class='tvc-pro'>(PRO)</span>":"") . " " . (isset($attribute["required"]) && esc_attr($attribute["required"]) == 1 ? '<span style="color: red;"> *</span>' : "") . '
 			                        <div class="tvc-tooltip">
 			                          <span class="tvc-tooltiptext tvc-tooltip-right">'.(isset($attribute["desc"])? esc_attr($attribute["desc"]):"") .'</span>
 			                          <img src="'. esc_url_raw(ENHANCAD_PLUGIN_URL."/admin/images/icon/informationI.svg").'" alt=""/>

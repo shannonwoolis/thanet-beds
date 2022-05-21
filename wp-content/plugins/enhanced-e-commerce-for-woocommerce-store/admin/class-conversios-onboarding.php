@@ -401,7 +401,9 @@ if ( ! class_exists( 'Conversios_Onboarding' ) ) {
                               <p><?php esc_html_e("Your Google Ads Account has been created","conversios"); ?> <strong>(<b><span id="new_google_ads_id"></span></b>).</strong></p>
                              	<h5><?php esc_html_e("Steps to claim your Google Ads Account:","conversios"); ?></h5>
                               <ol>
-						                    <li><?php esc_html_e("Accept invitation mail from Google Ads sent to your email address","conversios"); ?> <em><?php echo (isset($this->tvc_data['g_mail']))?esc_attr($this->tvc_data['g_mail']):""; ?></em></li>
+						                    <li><?php esc_html_e("Accept invitation mail from Google Ads sent to your email address","conversios"); ?> <em><?php echo (isset($this->tvc_data['g_mail']))?esc_attr($this->tvc_data['g_mail']):""; ?></em><span id="invitationLink"><br><em>OR</em> Open
+						                    	<a href="" target="_blank" id="ads_invitationLink">Invitation Link</a></span>
+						                    </li>
 						                    <li><?php esc_html_e("Log into your Google Ads account and set up your billing preferences","conversios"); ?></li>
 							                </ol>                          
 	                          </div>

@@ -5,7 +5,7 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Content analysis, Readability, Schema
 Tested up to: 5.9
-Stable tag: 18.3
+Stable tag: 18.9
 Requires PHP: 5.6.20
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
@@ -236,47 +236,37 @@ Your question has most likely been answered on our help center: [yoast.com/help/
 
 == Changelog ==
 
-= 18.3 =
-Release Date: March 8th, 2022
+= 18.9 =
+Release Date: May 17th, 2022
 
-Meet Yoast SEO 18.3! For this release, we did another round of fixes and improvements. Read more about what's new in Yoast SEO 18.3 in [our release post in English](https://yoa.st/release-8-3-22) or [our release post in Spanish](https://yoa.st/release-8-3-22-spanish)!
-
-Enhancements:
-
-* Improves the importer so you can now import `post_meta`, `robot_txt` and search appearance options when moving from All-In-One SEO to Yoast SEO.
-* Improves feedback strings for the Keyphrase Length assessment by making it explicit that we only count content words for languages with function word support.
-
-Bugfixes:
-
-* Fixes a bug where the Force rewrite titles option would be shown when a user was using a block-based theme.
-* Fixes a bug where the title of a page would not get included in our `get_head` REST route.
-* Fixes a bug where URLs in the XML sitemaps in certain edge cases would potentially be mangled, most notably when schema-relative URLs were being used.
-* Fixes an issue where HowTo images would not be optimized if they did not start with the site URL.
-* Fixes a bug where HowTo images with custom width would lose their custom width in the Twenty Twenty-One theme.
-
-Other:
-
-* Fixes an incompatibility with Elementor 3.6.0 where the React contents of the Yoast tab in Elementor were not rendered.
-
-= 18.2 =
-Release Date: February 22nd, 2022
-
-Yoast SEO 18.2 is out today! This release includes more fixes and enhancements to enjoy. We improved the workings of the FAQ and How-to blocks. Happy optimizing! Read more about what's new in Yoast SEO 18.2 in [our release post in English](https://yoa.st/release-22-2-22) or [our release post in Spanish](https://yoa.st/release-22-2-22-spanish)!
+Yoast SEO 18.9 is out now! In this release, we have improved the first experience users have with the plugin. The first-time configuration takes users by the hand and guides them in properly setting everything up so that search engines understand their site. Make sure to run that first-time configuration to see if you’ve filled everything in correctly! Read more about what's new in Yoast SEO 18.9 in [our release post in English](https://yoa.st/release-17-5-22) or [our release post in Spanish](https://yoa.st/release-17-5-22-spanish)!
 
 Enhancements:
 
-* Optimizes the images in FAQ and HowTo blocks to be more responsive and load faster.
+* Adds an `installation successful` page to welcome first-time users.
+* Introduces the First-time configuration, replacing and improving the Configuration Workout.
+* Renames the main admin menu item to `Yoast SEO` instead of `SEO`.
 
 Bugfixes:
 
-* Fixes a bug where the "Save changes" button would overlap with the admin sidebar on WordPress.com. Props to @DustyReagan.
-* Fixes a bug where a (debug) deprecation message would show in the widget editor on WordPress 5.8 and above.
-* Fixes a bug where a console warning would be thrown when adding a structured data block in the block editor, FSE editor or widget editor.
+* Fixes a bug that would lead to race conditions when using persistent object caching.
+* Fixes a bug where a 403 error page would be thrown when a user tried to access the old configuration wizard.
+* Fixes a bug where our How To and FAQ blocks would not handle focus correctly when using WordPress 6.0.
+* Fixes a bug where the global var $post is sometimes modified unexpectedly. Props to [grantalltodavid](https://github.com/grantalltodavid).
 
 Other:
 
-* Adds a filter to enable/disable creating indexables: `Yoast\WP\SEO\should_index_indexables`
-* Adds an `__isset` magic method to ease working with helper surfaces. Props to @nlemoine.
+* Adds a `Premium` badge to the Workouts menu item.
+* Updates the look of the Accounts tab in the Social page.
+
+= 18.8 =
+Release Date: May 6th, 2022
+
+Did you catch the latest update from Google? Today they made some small changes to how they read XML sitemaps. But you don’t have to worry about that - today's Yoast SEO 18.8 update already applies the latest standards. Read more about what's new in Yoast SEO 18.8 in [our release post in English](https://yoa.st/release-6-5-22) or [our release post in Spanish](https://yoa.st/release-6-5-22-spanish)!
+
+Enhancements:
+
+* Removes XML sitemap image properties `title` and `caption` following deprecation by Google.
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to [the changelog on yoast.com](https://yoa.st/yoast-seo-changelog).

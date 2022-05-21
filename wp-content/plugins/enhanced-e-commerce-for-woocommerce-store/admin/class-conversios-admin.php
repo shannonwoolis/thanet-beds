@@ -109,55 +109,57 @@ if ( ! class_exists( 'Conversios_Admin' ) ) {
       add_menu_page(
           esc_html__('Tatvic EE Plugin','conversios'), esc_html__('Tatvic EE Plugin','conversios'), 'manage_options', "conversios", array($this, 'showPage'), esc_url_raw(plugin_dir_url(__FILE__) . 'images/tatvic_logo.png'), 26
       );
-      add_submenu_page(
-        'conversios', 
-        esc_html__('Dashboard','conversios'), 
-        esc_html__('Dashboard','conversios'), 
-        'manage_options', 
-        'conversios' );
-      add_submenu_page(
-        'conversios',
-        esc_html__('Google Analytics', 'conversios'),
-        esc_html__('Google Analytics', 'conversios'),
-        'manage_options',
-        'conversios-google-analytics',
-        array($this, 'showPage')
-      );
-      add_submenu_page(
-          'conversios',
-          esc_html__('Google Ads', 'conversios'),
-          esc_html__('Google Ads', 'conversios'),
-          'manage_options',
-          'conversios-google-ads',
-          array($this, 'showPage')
-      );
-      add_submenu_page(
-          'conversios',
-          esc_html__('Google Shopping', 'conversios'),
-          esc_html__('Google Shopping', 'conversios'),
-          'manage_options',
-          'conversios-google-shopping-feed',
-          array($this, 'showPage')
-      );
-      add_submenu_page(
-        'conversios',
-        esc_html__('Account Summary', 'conversios'),
-        esc_html__('Account Summary', 'conversios'),
-        'manage_options',
-        'conversios-account',
-        array($this, 'showPage')
-      );
-      if($plan_id == 1){
+      if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+        add_submenu_page(
+          'conversios', 
+          esc_html__('Dashboard','conversios'), 
+          esc_html__('Dashboard','conversios'), 
+          'manage_options', 
+          'conversios' );
+        add_submenu_page(
+            'conversios',
+            esc_html__('Google Shopping', 'conversios'),
+            esc_html__('Google Shopping', 'conversios'),
+            'manage_options',
+            'conversios-google-shopping-feed',
+            array($this, 'showPage')
+        );
+        add_submenu_page(
+            'conversios',
+            esc_html__('Google Ads', 'conversios'),
+            esc_html__('Google Ads', 'conversios'),
+            'manage_options',
+            'conversios-google-ads',
+            array($this, 'showPage')
+        );
         add_submenu_page(
           'conversios',
-          esc_html__('Free Vs Pro', 'conversios'),
-          esc_html__('Free Vs Pro', 'conversios'),
+          esc_html__('Account Settings', 'conversios'),
+          esc_html__('Account Settings', 'conversios'),
           'manage_options',
-          'conversios-pricings',
+          'conversios-google-analytics',
           array($this, 'showPage')
         );
-      } 
-
+        
+        add_submenu_page(
+          'conversios',
+          esc_html__('Account Summary', 'conversios'),
+          esc_html__('Account Summary', 'conversios'),
+          'manage_options',
+          'conversios-account',
+          array($this, 'showPage')
+        );
+        if($plan_id == 1){
+          add_submenu_page(
+            'conversios',
+            esc_html__('Free Vs Pro', 'conversios'),
+            esc_html__('Free Vs Pro', 'conversios'),
+            'manage_options',
+            'conversios-pricings',
+            array($this, 'showPage')
+          );
+        } 
+      }
     }
     
     /**

@@ -4,8 +4,8 @@ Tags: woocommerce, mail, email, email template, email templates, email design, p
 Donate link: https://www.kadencewp.com/about-us/
 Requires PHP: 5.2.4
 Requires at least: 5.0
-Tested up to: 5.8
-Stable tag: 1.4.10
+Tested up to: 5.9
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,13 @@ After you create your translations make sure to clear your server cache from any
 
 
 == Changelog ==
+
+= 1.5.1 =
+* Update: Prevent an error if using old woocommerce.
+
+= 1.5.0 =
+* Update: Add in Shipping Phone.
+* Update: Pot file.
 
 = 1.4.10 =
 * Update: Support WC 6.0 email template changes

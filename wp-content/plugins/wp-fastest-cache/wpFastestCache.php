@@ -3,7 +3,7 @@
 Plugin Name: WP Fastest Cache
 Plugin URI: http://wordpress.org/plugins/wp-fastest-cache/
 Description: The simplest and fastest WP Cache system
-Version: 0.9.9
+Version: 1.0.1
 Author: Emre Vona
 Author URI: http://tr.linkedin.com/in/emrevona
 Text Domain: wp-fastest-cache
@@ -1105,12 +1105,19 @@ GNU General Public License for more details.
 					}
 				}
 
-				if($new_status == "publish" && $old_status == "publish"){
+				if(isset($this->options->wpFastestCacheStatus) && $new_status == "publish" && $old_status == "publish"){
 
+					// if(isset($this->options->wpFastestCacheUpdatePost) && isset($this->options->wpFastestCacheStatus)){
 
+					// 	if($this->options->wpFastestCacheUpdatePost_type == "post"){
+					// 		$this->singleDeleteCache(false, $post->ID);
+					// 	}else if($this->options->wpFastestCacheUpdatePost_type == "all"){
+					// 		$this->deleteCache();
+					// 	}
+						
+					// }
 
-
-					if(isset($this->options->wpFastestCacheUpdatePost) && isset($this->options->wpFastestCacheStatus)){
+					if(isset($this->options->wpFastestCacheUpdatePost)){
 
 						if($this->options->wpFastestCacheUpdatePost_type == "post"){
 							$this->singleDeleteCache(false, $post->ID);
@@ -1118,6 +1125,9 @@ GNU General Public License for more details.
 							$this->deleteCache();
 						}
 						
+					}else{
+						// to clear only cache of content even though the "update post" option is disabled
+						$this->singleDeleteCache(false, $post->ID, false);
 					}
 				}
 
@@ -1153,12 +1163,11 @@ GNU General Public License for more details.
 			}
 		}
 
-		public function singleDeleteCache($comment_id = false, $post_id = false){
+		public function singleDeleteCache($comment_id = false, $post_id = false, $to_clear_parents = true){
 			include_once('inc/cdn.php');
 
 			CdnWPFC::cloudflare_clear_cache();
 
-			$to_clear_parents = true;
 			$to_clear_feed = true;
 
 			// not to clear cache of homepage/cats/tags after ajax request by other plugins

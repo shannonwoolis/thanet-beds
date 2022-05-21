@@ -109,7 +109,7 @@ let BusinessSelector = function(container, ajax_prefix){
     /**
      * Hook function to toggle the selection of groups
      */
-    $(".pgmb-toggle-group", container).click(function(event){
+    $(".pgmb-toggle-account", container).click(function(event){
         event.preventDefault();
 
         let checkboxes = $(this).closest('tbody').find('.mbp-checkbox-container input:checkbox:visible');

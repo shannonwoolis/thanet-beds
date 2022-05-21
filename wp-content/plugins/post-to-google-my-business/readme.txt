@@ -4,7 +4,7 @@ Donate link: https://tycoonmedia.net/?utm_source=repository&utm_medium=link&utm_
 Tags: google my business, google, business, auto publish, posts, post, local search, google my business posts, google places, google plus, google+
 Requires at least: 4.9.0
 Tested up to: 5.9.2
-Stable tag: 3.0.13
+Stable tag: 3.0.14
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -90,6 +90,17 @@ Post to Google My Business relies on the WP Cron system to send out scheduled po
 6. Auto-post template settings
 
 == Changelog ==
+
+= 3.0.14 =
+* Fix incorrect location selection within groups
+* Fix support for Google accounts with more than 20 location groups
+* Remove shortcodes from WooCommerce product description
+
+> **Premium**
+>
+> * Fix undefined index errors on product form when WP_DEBUG was enabled
+> * Fix intermittent issue with location(s) not being selected in the "Advanced post settings"
+> * Restore disappeared "Toggle Selection" function on Google Accounts
 
 = 3.0.13 =
 * Fix auto-post toggle not being turned on by default in block editor
@@ -555,5 +566,5 @@ Post to Google My Business relies on the WP Cron system to send out scheduled po
 
 == Upgrade Notice ==
 
-= 3.0.0 =
-* Important! You might need to re-authenticate your Google account in the plugin settings after this update!
+= 3.0.14 =
+* If your GMB listings are within a "location group" in your Google My Business account, make sure the appropriate location(s) is/are still selected in your auto-post templates & Google settings after updating

@@ -51,6 +51,7 @@ class Enhanced_Ecommerce_Google_Analytics_Admin extends TVC_Admin_Helper {
     public function tvc_admin_notice(){
         // add fixed message notification
         //$this->add_tvc_fixed_nofification();
+        $ee_settings = unserialize(get_option('ee_options'));
         $ee_additional_data = $this->get_ee_additional_data();
         if(isset($ee_additional_data['dismissed_ee_adimin_notic_a']) && $ee_additional_data['dismissed_ee_adimin_notic_a'] == 1){
         }else{
@@ -79,6 +80,27 @@ class Enhanced_Ecommerce_Google_Analytics_Admin extends TVC_Admin_Helper {
                 <p>'. esc_html__("Now access important eCommerce KPIs and Google Ads campaign performance data directly in your wordpress backend to improve your marketing ROI.","conversios").' <a href="'.esc_url_raw('admin.php?page=conversios').'"><b><u>'. esc_html__("View it from here.","conversios").'</u></b></a></p>
                </div>';
           
+        }
+        $fb_pixel_id = isset($ee_settings['fb_pixel_id'])?$ee_settings['fb_pixel_id']:"";
+        if(isset($ee_additional_data['dismissed_ee_adimin_notic_d']) && $ee_additional_data['dismissed_ee_adimin_notic_d'] == 1){
+
+        }else{
+          
+          if($fb_pixel_id == ""){          
+            echo '<div class="notice notice-info is-dismissible" data-id="ee_adimin_notic_d">
+            <img style="float: left; height: 45px;" src="'.esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/fb-pixel.jpg").'" ><p style="line-height: 28px; margin-left: 5px; display: inline-block;">'. esc_html__("Introducing the all-new Facebook Pixel Tracking in Conversios today!","conversios").' <a href="'.esc_url_raw('admin.php?page=conversios-google-analytics#fb_pixel_id').'"><b><u>'. esc_html__(" Check it out for yourself.","conversios").'</u></b></a></p>
+                 </div>'; 
+          }
+        }
+
+        if(isset($ee_additional_data['dismissed_ee_adimin_notic_e']) && $ee_additional_data['dismissed_ee_adimin_notic_e'] == 1){
+        }else if(( isset($ee_additional_data['dismissed_ee_adimin_notic_d']) && $ee_additional_data['dismissed_ee_adimin_notic_d'] == 1) || $fb_pixel_id != ""){
+          $gm_id = isset($ee_settings['gm_id'])?$ee_settings['gm_id']:"";
+          if($gm_id != ""){          
+            echo '<div class="notice notice-info is-dismissible" data-id="ee_adimin_notic_e">
+            <img style="float: left; height: 45px;" src="'.esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/icon-dashboard.jpg").'" ><p style="line-height: 28px; margin-left: 5px; display: inline-block;">'. esc_html__("Your GA4 Dashboard is just a click away !","conversios").' <a href="'.esc_url_raw('admin.php?page=conversios&ga_type=ga4').'"><b><u>'. esc_html__(" Go to GA4 Dashboard.","conversios").'</u></b></a></p>
+                 </div>'; 
+          }
         }
         ?>
         <script>

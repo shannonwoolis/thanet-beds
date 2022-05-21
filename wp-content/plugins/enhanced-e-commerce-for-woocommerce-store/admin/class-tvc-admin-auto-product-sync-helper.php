@@ -160,6 +160,9 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
     
     public function tvc_get_map_product_attribute($products, $tvc_currency, $merchantId){
       if(!empty($products)){
+        global $wpdb;
+        $tve_table_prefix = $wpdb->prefix;
+        $plan_id = $this->TVC_Admin_Helper->get_plan_id();
         $items = [];
         $skipProducts = [];
         $product_ids = [];
@@ -278,13 +281,26 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
                       $stock_status = str_replace($tvc_find,$tvc_replace,$stock_status);
                       $product[$key] = sanitize_text_field($stock_status);
                     }
-                  }else if(isset($postmeta_var->$value) && $postmeta_var->$value != ""){
-                    $product[$key] = sanitize_text_field($postmeta_var->$value);                        
-                  }else if(in_array($key, array("brand")) ){ //list of cutom option added
-                    $yith_product_brand = $this->TVC_Admin_Helper->add_additional_option_val_in_map_product_attribute($key, $postvalue->w_product_id);
-                    if($yith_product_brand != ""){
-                      $product[$key] = sanitize_text_field($yith_product_brand);
+                  }else if(in_array($key, array("brand")) && $plan_id != 1){ 
+                    //list of cutom option added
+                   $product_brand = ""; $is_custom_attr_brand = false;
+                    $woo_attr_list = json_decode(json_encode($this->TVC_Admin_Helper->getTableData($tve_table_prefix.'woocommerce_attribute_taxonomies', ['attribute_name'])), true);
+                    if(!empty($woo_attr_list)){
+                      foreach ($woo_attr_list as $key_attr => $value_attr) {
+                        if(isset($value_attr['field']) && $value_attr['field'] == $value){
+                          $is_custom_attr_brand = true;
+                          $product_brand = $this->TVC_Admin_Helper->get_custom_taxonomy_name($postvalue->w_product_id, "pa_".$value);
+                        }
+                      }
                     }
+                    if($is_custom_attr_brand == false && $product_brand == ""){
+                      $product_brand = $this->TVC_Admin_Helper->add_additional_option_val_in_map_product_attribute($key, $postvalue->w_product_id);
+                    }
+                    if($product_brand != ""){
+                      $product[$key] = sanitize_text_field($product_brand);
+                    }
+                  }else if(isset($postmeta_var->$value) && $postmeta_var->$value != ""){
+                    $product[$key] = sanitize_text_field($postmeta_var->$value);                 
                   }
                 }
                 $item = [
@@ -341,13 +357,26 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
                   $stock_status = str_replace($tvc_find,$tvc_replace,$stock_status);
                   $product[$key] = sanitize_text_field($stock_status);
                 }
+              }else if(in_array($key, array("brand")) && $plan_id != 1){
+               //list of cutom option added
+                $product_brand = ""; $is_custom_attr_brand = false;
+                    $woo_attr_list = json_decode(json_encode($this->TVC_Admin_Helper->getTableData($tve_table_prefix.'woocommerce_attribute_taxonomies', ['attribute_name'])), true);
+                    if(!empty($woo_attr_list)){
+                      foreach ($woo_attr_list as $key_attr => $value_attr) {
+                        if(isset($value_attr['field']) && $value_attr['field'] == $value){
+                          $is_custom_attr_brand = true;
+                          $product_brand = $this->TVC_Admin_Helper->get_custom_taxonomy_name($postvalue->w_product_id, "pa_".$value);
+                        }
+                      }
+                    }
+                    if($is_custom_attr_brand == false && $product_brand == ""){
+                      $product_brand = $this->TVC_Admin_Helper->add_additional_option_val_in_map_product_attribute($key, $postvalue->w_product_id);
+                    }
+                    if($product_brand != ""){
+                      $product[$key] = sanitize_text_field($product_brand);
+                    }
               }else if(isset($postObj->$value) && $postObj->$value != ""){
                 $product[$key] = $postObj->$value;
-              }else if(in_array($key, array("brand")) ){ //list of cutom option added
-                $yith_product_brand = $this->TVC_Admin_Helper->add_additional_option_val_in_map_product_attribute($key, $postvalue->w_product_id);
-                if($yith_product_brand != ""){
-                  $product[$key] = sanitize_text_field($yith_product_brand);
-                }
               }
             }
             $item = [
@@ -482,7 +511,7 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
       if (isset($result->error) && $result->error) {
           $credentials = json_decode(file_get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
           $url = 'https://www.googleapis.com/oauth2/v4/token';
-          $header = array("content-type: application/json");
+          $header = array("Content-Type" => "application/json");
           $clientId = $credentials['web']['client_id'];
           $clientSecret = $credentials['web']['client_secret'];
           
@@ -495,7 +524,7 @@ if ( ! class_exists( 'TVC_Admin_Auto_Product_sync_Helper' ) ) {
           $args = array(
             'headers' =>$header,
             'method' => 'POST',
-            'body' => $data
+            'body' => wp_json_encode($data)
           );
           $request = wp_remote_post(esc_url_raw($url), $args);
           // Retrieve information

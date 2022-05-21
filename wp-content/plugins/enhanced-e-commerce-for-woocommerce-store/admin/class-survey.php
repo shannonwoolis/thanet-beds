@@ -97,7 +97,8 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 				// Survey Skip & Deactivate.
 				$form.on('click', '.ee-survey-deactivate', function(event) {
 					event.preventDefault();
-					var data = {
+					$overlay.css('display', 'none');
+					/*var data = {
 						action:'tvc_call_add_survey',
 						customer_id:'<?php echo esc_attr($this->apiCustomerId); ?>',
 						subscription_id:'<?php echo esc_attr($this->subscriptionId); ?>',
@@ -106,7 +107,7 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 						site_url: '<?php echo esc_url_raw( home_url() ); ?>',
 						plugin_name: 'ee-woocommerce'
 					}
-					add_survey(data);
+					add_survey(data);*/
 				});
 				// Survey submit.
 				$form.submit(function(event) {
@@ -295,7 +296,7 @@ if ( ! class_exists( 'TVC_Survey' ) ) {
 								<?php echo sprintf( esc_html__('Submit %s Deactivate', 'conversios' ), '&amp;' );	?>
 							</button>
 							<a href="#" class="ee-survey-deactivate">
-								<?php	echo sprintf( esc_html__('Skip %s Deactivate', 'conversios' ), '&amp;' ); ?>
+								<?php	echo esc_html__('Close', 'conversios' ); ?>
 							</a>
 						</div>
 					</form>

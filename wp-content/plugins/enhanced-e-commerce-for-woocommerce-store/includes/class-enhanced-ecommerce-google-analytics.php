@@ -139,13 +139,14 @@ class Enhanced_Ecommerce_Google_Analytics {
        * The class responsible for defining all actions that occur in the public-facing
        * side of the site.
        */
-
-      $TVC_Admin_Helper = new TVC_Admin_Helper();
-      $plan_id = $TVC_Admin_Helper->get_plan_id();
-      if($plan_id == 1){
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-enhanced-ecommerce-google-analytics-public.php';
-      }else{
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-enhanced-ecommerce-google-analytics-public-pro.php';
+      if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+        $TVC_Admin_Helper = new TVC_Admin_Helper();
+        $plan_id = $TVC_Admin_Helper->get_plan_id();
+        if($plan_id == 1){
+          require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-enhanced-ecommerce-google-analytics-public.php';
+        }else{
+          require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-enhanced-ecommerce-google-analytics-public-pro.php';
+        }
       }
       $this->loader = new Enhanced_Ecommerce_Google_Analytics_Loader();
     }
@@ -190,7 +191,9 @@ class Enhanced_Ecommerce_Google_Analytics {
      * @access   private
      */
     public function define_public_hooks() {
-      new Enhanced_Ecommerce_Google_Analytics_Public( $this->get_plugin_name(), $this->get_version() );
+      if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+        new Enhanced_Ecommerce_Google_Analytics_Public( $this->get_plugin_name(), $this->get_version() );
+      }
     }
 
     /**

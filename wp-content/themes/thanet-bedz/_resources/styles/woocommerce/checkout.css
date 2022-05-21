@@ -145,7 +145,7 @@
     }
 }
 
-.woocommerce_checkout_place_order {
+#place_order {
     @apply mt-4;
 }
 

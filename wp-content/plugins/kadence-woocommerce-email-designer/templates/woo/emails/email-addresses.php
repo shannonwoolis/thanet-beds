@@ -13,7 +13,7 @@
  * @see 	    https://docs.woocommerce.com/document/template-structure/
  * @author 		WooThemes
  * @package 	WooCommerce/Templates/Emails
- * @version 3.9.0
+ * @version     5.6.0
  */
 
 /** 
@@ -72,6 +72,9 @@ if ( true == $responsive_check ) {
 							<tr>
 								<td class="address-td" valign="top">
 									<?php echo wp_kses_post( $shipping ); ?>
+									<?php if ( method_exists( $order, 'get_shipping_phone' ) && $order->get_shipping_phone() ) : ?>
+										<br /><?php echo wc_make_phone_clickable( $order->get_shipping_phone() ); ?>
+									<?php endif; ?>
 								</td>
 							</tr>
 						</table>
@@ -119,6 +122,9 @@ if ( true == $responsive_check ) {
 							<tr>
 								<td class="address-td" valign="top">
 									<?php echo wp_kses_post( $shipping ); ?>
+									<?php if ( method_exists( $order, 'get_shipping_phone' ) && $order->get_shipping_phone() ) : ?>
+										<br /><?php echo wc_make_phone_clickable( $order->get_shipping_phone() ); ?>
+									<?php endif; ?>
 								</td>
 							</tr>
 						</table>

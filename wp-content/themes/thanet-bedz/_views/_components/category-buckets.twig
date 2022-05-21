@@ -9,7 +9,26 @@
                 {% set link = fn('get_term_link',item.term_id) %}
                 <div class="w-1/2 p-2 lg:p-4 md:w-1/4">
                     <a href="{{ link }}" class="relative block overflow-hidden transition-all duration-500 group">
-                        <span class="block transition-all duration-500 transform group-hover:scale-110"><img class="lazyload" data-src="{{ thumb|resize(600,600) }}"></span>
+                        <span class="block transition-all duration-500 transform group-hover:scale-110">
+                            <img class="lazyload" data-src="{{ thumb|resize(600,600) }}" src="" alt="{{ item.name }}">
+                            {# {% include "_components/picture.twig" with {
+                                source: thumb,
+                                lazyload: true,
+                                breakpoints: {
+                                    "1px" : {
+                                        w: 600,
+                                        h: 600,
+                                        crop: 'center'
+                                    },
+                                },
+                                img: {
+                                    classes: 'lazyload',
+                                    w: 600,
+                                    h: 600,
+                                    crop: 'center',
+                                }
+                            } %} #}
+                        </span>
                         <div class="absolute bottom-0 right-0 bucket-btn btn btn-primary group-hover:bg-left">
                             {{ item.name }}{{ fn('icon','caret-right') }}
                         </div>

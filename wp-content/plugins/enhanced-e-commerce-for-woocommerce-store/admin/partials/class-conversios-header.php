@@ -39,29 +39,45 @@ if ( ! class_exists( 'Conversios_Header' ) ) {
      * @since    4.1.4
      */
 		public function header_notices(){
-			if($this->plan_id == 1){
+			if( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 				?>
-				<!--- Promotion box start -->
-			  <div class="promobandtop">
-			    <div class="container-fluid">
-			      <div class="row">
-			          <div class="promoleft">
-		              <div class="promobandmsg">
-		                <?php esc_html_e("Level up your game by getting detail insights on every products. Make the informed decision for your next campaign.","conversios"); ?>
-		              </div>
-			          </div>
-			          <div class="promoright">
-	                <div class="prmoupgrdbtn">
-	                    <a target="_blank" href="<?php echo esc_url_raw($this->get_pro_plan_site().'?utm_source=EE+Plugin+User+Interface&utm_medium=Top+Bar+upgrading+to+pro&utm_campaign=Upsell+at+Conversios'); ?>" class="upgradebtn"><?php esc_html_e("Upgrade","conversios"); ?></a>
-	                </div>
-			          </div>
-			      </div>
-			    </div>
-			  </div>
-			  <!--- Promotion box end -->
+				<div class="errormsgtopbx claimalert">
+	      	<div class="errmscntbx">
+	          <div class="errmsglft">
+	             <span class="errmsgicon"><img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/images/error-white-icon.png'); ?>" alt="error" /></span>
+	          </div>
+	          <div class="erralertrigt">
+	          	<h6><?php echo esc_html_e("Hey,.","conversios"); ?></h6>
+	            <p><?php echo esc_html_e("It seems WooCommerce plugin is not active on your wp-admin. Conversios.io - Google Analytics and Google Shopping plugin required.","conversios"); ?> </p>
+	          </div>
+	       </div>
+	  		</div>
 				<?php
-			}
-			echo esc_attr($this->call_tvc_site_verified_and_domain_claim());	
+			}else{
+				if($this->plan_id == 1){
+					?>
+					<!--- Promotion box start -->
+				  <div class="promobandtop">
+				    <div class="container-fluid">
+				      <div class="row">
+				          <div class="promoleft">
+			              <div class="promobandmsg">
+			                <?php esc_html_e("Level up your game by getting detail insights on every products. Make the informed decision for your next campaign.","conversios"); ?>
+			              </div>
+				          </div>
+				          <div class="promoright">
+		                <div class="prmoupgrdbtn">
+		                    <a target="_blank" href="<?php echo esc_url_raw($this->get_pro_plan_site().'?utm_source=EE+Plugin+User+Interface&utm_medium=Top+Bar+upgrading+to+pro&utm_campaign=Upsell+at+Conversios'); ?>" class="upgradebtn"><?php esc_html_e("Upgrade","conversios"); ?></a>
+		                </div>
+				          </div>
+				      </div>
+				    </div>
+				  </div>
+				  <!--- Promotion box end -->
+					<?php
+				}
+				echo esc_attr($this->call_tvc_site_verified_and_domain_claim());
+			}	
 		}
 		/**
      * header section
@@ -69,6 +85,7 @@ if ( ! class_exists( 'Conversios_Header' ) ) {
      * @since    4.1.4
      */
 		public function conversios_header(){
+
 			$plan_name = esc_html__("Free Plan","conversios");
 			if(isset($this->subscription_data->plan_name) && !in_array($this->subscription_data->plan_id, array("1"))){
         $plan_name = $this->subscription_data->plan_name;
@@ -83,7 +100,7 @@ if ( ! class_exists( 'Conversios_Header' ) ) {
                   <a target="_blank" href="<?php echo esc_url_raw($this->conversios_site_url); ?>"><img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/images/logo.png'); ?>" alt="" /></a>
               </div>
               <div class="hdrcntcbx">
-                  <?php printf("%s <span><a href=\"tel:+1 (415) 968-6313\">+1 (415) 968-6313</a></span>",esc_html_e("For any query, contact us at","conversios")); ?>
+                  <?php printf("%s <span><a href=\"mailto:info@conversios.io\">info@conversios.io</a></span>",esc_html_e("For any query, contact us on","conversios")); ?>
               </div>
             </div>
             <div class="hdrtpright">
@@ -110,16 +127,19 @@ if ( ! class_exists( 'Conversios_Header' ) ) {
 	  }
 	  public function conversios_menu_list(){
 	  	//slug => arra();
-	  	$conversios_menu_list = array(
-	  		'conversios' => array(
-	  			'title'=>'Dashboard',
-	  			'icon'=>esc_url_raw(ENHANCAD_PLUGIN_URL."/admin/images/conversios-menu.png"),
-	  			'acitve_icon'=>esc_url_raw(ENHANCAD_PLUGIN_URL."/admin/images/active-conversios-menu.png")
-	  			),
-	  		'conversios-google-analytics'=>array('title'=>esc_html__('Google Analytics','conversios')),
-	  		'conversios-google-ads'=>array('title'=>esc_html__('Google Ads','conversios')),
-	  		'conversios-google-shopping-feed'=>array('title'=>esc_html__('Google Shopping','conversios'))
-	  		 );
+	  	$conversios_menu_list = array();
+	  	if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+		  	$conversios_menu_list = array(
+		  		'conversios' => array(
+		  			'title'=>'Dashboard',
+		  			'icon'=>esc_url_raw(ENHANCAD_PLUGIN_URL."/admin/images/conversios-menu.png"),
+		  			'acitve_icon'=>esc_url_raw(ENHANCAD_PLUGIN_URL."/admin/images/active-conversios-menu.png")
+		  			),
+		  		'conversios-google-shopping-feed'=>array('title'=>esc_html__('Google Shopping','conversios')),
+		  		'conversios-google-ads'=>array('title'=>esc_html__('Google Ads','conversios')),
+		  		'conversios-google-analytics'=>array('title'=>esc_html__('Account Settings','conversios')),
+		  		 );
+		  }
 	  	if($this->plan_id == 1){
 	  		$conversios_menu_list['conversios-pricings'] = array('title'=>esc_html__('Free Vs Pro','conversios'),'icon'=>'');
 	  	}
@@ -166,6 +186,9 @@ if ( ! class_exists( 'Conversios_Header' ) ) {
 							}
 						}?>
 						</ul>
+						<div class="rate_us">
+							<a href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store/reviews/?rate=5#rate-response" target="_blank"><span>Rate Us!</span><img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/images/rate-us.png'); ?>" /></a>
+						</div>
 					</div>
 				</div>	
 				<?php

@@ -63,7 +63,7 @@ do_action('woocommerce_before_customer_login_form'); ?>
   </div>
 
   <?php if ('yes' === get_option('woocommerce_enable_myaccount_registration')) : ?>
-    <div class="w-full column md:w-6/12">
+    <div class="w-full mt-8 column md:w-6/12 md:mt-0">
       <h2 class="mb-3"><?php esc_html_e('Register', 'woocommerce'); ?></h2>
 
       <form method="post" class="woocommerce-form woocommerce-form-register register" <?php do_action('woocommerce_register_form_tag'); ?>>

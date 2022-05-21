@@ -34,6 +34,9 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			$this->oauthScribe = $oauthScribe;
 			$this->adminController = $adminController;
 			$this->logger = new PostmanLogger( get_class( $this ) );
+			$hostname = PostmanOptions::getInstance()->getHostname();
+			$auth_type = PostmanOptions::getInstance()->getAuthenticationType();
+
 			PostmanUtils::registerAdminMenu( $this, 'generateDefaultContent' );
 			PostmanUtils::registerAdminMenu( $this, 'addPurgeDataSubmenu' );
 
@@ -42,6 +45,10 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			add_action( 'wp_ajax_delete_lock_file', array( $this, 'delete_lock_file' ) );
 			add_action( 'wp_ajax_dismiss_version_notify', array( $this, 'dismiss_version_notify' ) );
 			add_action( 'wp_ajax_dismiss_donation_notify', array( $this, 'dismiss_donation_notify' ) );
+			
+			if( $hostname == 'smtp.gmail.com' && $auth_type == 'plain' ) {
+				add_action( 'admin_notices', array( $this, 'google_less_secure_notice' ) );
+			}
 
 			//add_action( 'admin_init', array( $this, 'do_activation_redirect' ) );
 
@@ -238,10 +245,10 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		 */
 		public static function outputChildPageHeader( $title, $slug = '' ) {
 			printf( '<h2>%s</h2>', sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) ) );
-			printf( '<div id="postman-main-menu" class="welcome-panel %s">', $slug );
-			print '<div class="welcome-panel-content">';
+			printf( '<div id="postman-main-menu" class="post-smtp-welcome-panel %s">', $slug );
+			print '<div class="post-smtp-welcome-panel-content">';
 			print '<div class="welcome-panel-column-container">';
-			print '<div class="welcome-panel-column welcome-panel-last">';
+			print '<div class="welcome-panel-last">';
 			printf( '<h4>%s</h4>', $title );
 			print '</div>';
 			printf( '<p id="back_to_main_menu">%s <a id="back_to_menu_link" href="%s">%s</a></p>', self::BACK_ARROW_SYMBOL, PostmanUtils::getSettingsPageUrl(), _x( 'Back To Main Menu', 'Return to main menu link', 'post-smtp' ) );
@@ -328,8 +335,8 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
             //include_once POST_SMTP_PATH . '/Postman/extra/donation.php';
 
             echo '<div class="twitter-wrap">';
-			    print '<div id="postman-main-menu" class="welcome-panel">';
-                print '<div class="welcome-panel-content">';
+			    print '<div id="postman-main-menu" class="post-smtp-welcome-panel">';
+                print '<div class="post-smtp-welcome-panel-content">';
                 print '<div class="welcome-panel-column-container" style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start;">';
                 print '<div class="ps-welcome-panel-column">';
                 printf( '<h4>%s</h4>', __( 'Configuration', 'post-smtp' ) );
@@ -395,6 +402,23 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
             </div>
             <?php
 		}
+
+		public function google_less_secure_notice() {
+
+			?>
+			<div class="notice notice-error is-dismissible">
+			<?php 
+				printf(
+					'<p>%1$s <br />%2$s <a href="%3$s" target="_blank">%4$s</a></p>',
+					esc_html__( '"To help keep your account secure, starting May 30, 2022, ​​Google will no longer support the use of third-party apps or devices which ask you to sign in to your Google Account using only your username and password."', 'post-smtp' ),
+					esc_html__( 'You can switch to Auth 2.0 option to continue without any downtime.', 'post-smtp' ),
+					esc_url( 'https://postmansmtp.com/gmail-is-disabling-less-secure-apps' ),
+					esc_html__( 'Click here for more info', 'post-smtp' )
+				);
+			?>
+			</div>
+			<?php
+
+		}
 	}
 }
-

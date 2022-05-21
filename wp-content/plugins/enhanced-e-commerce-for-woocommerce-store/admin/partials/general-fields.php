@@ -27,12 +27,16 @@ if (isset($_POST['ee_submit_plugin'])) {
     //$_POST['ga_gCkout'] = 'on';
     $settings['ga_Impr'] = isset($_POST["ga_Impr"])?sanitize_text_field($_POST["ga_Impr"]):"1";
     $settings['ga_IPA'] = isset($_POST["ga_IPA"])?sanitize_text_field($_POST["ga_IPA"]):"";
-    $settings['ga_OPTOUT'] = isset($_POST["ga_OPTOUT"])?sanitize_text_field($_POST["ga_OPTOUT"]):"";
+    //$settings['ga_OPTOUT'] = isset($_POST["ga_OPTOUT"])?sanitize_text_field($_POST["ga_OPTOUT"]):"";
     $settings['ga_PrivacyPolicy'] = isset($_POST["ga_PrivacyPolicy"])?sanitize_text_field($_POST["ga_PrivacyPolicy"]):"";
     $settings['google-analytic'] = '';
     $settings['tvc_conversion_tracking_type'] = isset($_POST["tvc_conversion_tracking_type"])?sanitize_text_field($_POST["tvc_conversion_tracking_type"]):"";
+    $settings['tvc_product_detail_conversion_tracking_type'] = isset($_POST["tvc_product_detail_conversion_tracking_type"])?sanitize_text_field($_POST["tvc_product_detail_conversion_tracking_type"]):"";
+    $settings['tvc_checkout_conversion_tracking_type'] = isset($_POST["tvc_checkout_conversion_tracking_type"])?sanitize_text_field($_POST["tvc_checkout_conversion_tracking_type"]):"";
+    $settings['fb_pixel_id'] = isset($_POST["fb_pixel_id"])?sanitize_text_field($_POST["fb_pixel_id"]):"";
     
     $TVC_Admin_Helper->save_ee_options_settings($settings);
+    $TVC_Admin_Helper->update_app_status();
 
     $class = 'alert-message tvc-alert-success';
     $message_p = esc_html__( 'Your settings have been saved.', 'conversios' );
@@ -209,18 +213,53 @@ if(isset($google_detail['setting'])){
                   </td>
                 </tr>
                 <tr>
-                  <th>
-                    <label class = "align-middle" for="ga_PrivacyPolicy"><?php esc_html_e("Order Conversion Trigger","conversios"); ?></label>
-                  </th>
-                  <td>
-                    <?php $tvc_con_tracking_type = isset($data['tvc_conversion_tracking_type'])?$data['tvc_conversion_tracking_type']:""; ?>
-                      <select name="tvc_conversion_tracking_type" id="tvc_conversion_tracking_type">
-                        <option value="woo-thankyou-hook" <?php echo ($tvc_con_tracking_type != "on-thankyou-page")?"selected":""; ?>><?php esc_html_e("Woo Thankyou Hook","conversios"); ?></option>
-                        <option value="on-thankyou-page" <?php echo ($tvc_con_tracking_type == "on-thankyou-page")?"selected":""; ?>><?php esc_html_e("On Thankyou Page","conversios"); ?></option>
-                      </select>
-                      <i style="cursor: help;" class="fas fa-question-circle" title="<?php esc_html_e("If your thank you page conversion tracking does not work with the current tracking method then switch to another method.","conversios"); ?>"></i>
+                  <td colspan="2" style="padding: 0.5rem 0;">
+                    <strong>Tracking Trigger Point Settings</strong>
+                    <table class="tracking-trigger">
+                      <tr>
+                        <th style="padding: 0 1rem;">
+                          <label class = "align-middle" for="tvc_product_detail_conversion_tracking_type"><?php esc_html_e("AddtoCart PDP","conversios"); ?></label>
+                        </th>
+                        <td>
+                          <?php $tvc_prod_dtl_con_tracking_type = isset($data['tvc_product_detail_conversion_tracking_type'])?$data['tvc_product_detail_conversion_tracking_type']:""; ?>
+                            <select name="tvc_product_detail_conversion_tracking_type" id="tvc_conversion_tracking_type">
+                              <option value="woo-product-detail-hook" <?php echo ($tvc_prod_dtl_con_tracking_type != "on-productdetail-page")?"selected":""; ?>><?php esc_html_e("hook - woocommerce_after_single_product","conversios"); ?></option>
+                              <option value="on-productdetail-page" <?php echo ($tvc_prod_dtl_con_tracking_type == "on-productdetail-page")?"selected":""; ?>><?php esc_html_e("On Page Condition","conversios"); ?></option>
+                            </select>
+                            <i style="cursor: help;" class="fas fa-question-circle" title="<?php esc_html_e("If your AddtoCart event (product detail page) tracking does not work with the current tracking method then switch to another method.","conversios"); ?>"></i>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th style="padding: 0 1rem;">
+                          <label class = "align-middle" for="tvc_checkout_conversion_tracking_type"><?php esc_html_e("Checkout Steps","conversios"); ?></label>
+                        </th>
+                        <td>
+                          <?php $tvc_checkout_con_tracking_type = isset($data['tvc_checkout_conversion_tracking_type'])?$data['tvc_checkout_conversion_tracking_type']:""; ?>
+                            <select name="tvc_checkout_conversion_tracking_type" id="tvc_conversion_tracking_type">
+                              <option value="woo-checkout-hook" <?php echo ($tvc_checkout_con_tracking_type != "on-checkout-page")?"selected":""; ?>><?php esc_html_e("hook - woocommerce_before_checkout_form","conversios"); ?></option>
+                              <option value="on-checkout-page" <?php echo ($tvc_checkout_con_tracking_type == "on-checkout-page")?"selected":""; ?>><?php esc_html_e("On Page Condition","conversios"); ?></option>
+                            </select>
+                            <i style="cursor: help;" class="fas fa-question-circle" title="<?php esc_html_e("If your checkout page tracking does not work with the current tracking method then switch to another method.","conversios"); ?>"></i>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th style="padding: 0 1rem;">
+                          <label class = "align-middle" for="tvc_conversion_tracking_type"><?php esc_html_e("Order Conversion","conversios"); ?></label>
+                        </th>
+                        <td>
+                          <?php $tvc_con_tracking_type = isset($data['tvc_conversion_tracking_type'])?$data['tvc_conversion_tracking_type']:""; ?>
+                            <select name="tvc_conversion_tracking_type" id="tvc_conversion_tracking_type">
+                              <option value="woo-thankyou-hook" <?php echo ($tvc_con_tracking_type != "on-thankyou-page")?"selected":""; ?>><?php esc_html_e("hook - woocommerce_thankyou","conversios"); ?></option>
+                              <option value="on-thankyou-page" <?php echo ($tvc_con_tracking_type == "on-thankyou-page")?"selected":""; ?>><?php esc_html_e("On Page Condition","conversios"); ?></option>
+                            </select>
+                            <i style="cursor: help;" class="fas fa-question-circle" title="<?php esc_html_e("If your thank you page conversion tracking does not work with the current tracking method then switch to another method.","conversios"); ?>"></i>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
+                <?php /*
                 <tr>
                   <th>
                       <label class = "align-middle" for="ga_OPTOUT"><?php esc_html_e("Google Analytics Opt Out","conversios"); ?></label>
@@ -234,6 +273,16 @@ if(isset($google_detail['setting'])){
                       <i style="cursor: help;" class="fas fa-question-circle" title="<?php esc_html_e("Use this feature to provide website visitors the ability to prevent their data from being used by Google Analytics As per the GDPR compliance.Go through the documentation to check the setup","conversios"); ?>"></i>
                     </label>
                   </td>
+                </tr> */ ?>
+                <tr>
+                    <th>
+                      <img style="height: 20px;" src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . "/admin/images/fb-icon.png"); ?>" > Facebook pixel ID 
+                    </th>
+                    <td>
+                      <?php $fb_pixel_id = isset($data['fb_pixel_id'])?$data['fb_pixel_id']:""; ?>
+                      <input type="text"  class="fromfiled" name="fb_pixel_id" id="fb_pixel_id" value="<?php echo esc_attr($fb_pixel_id); ?>">
+                      <small>The Facebook pixel ID looks like. 518896233175751</small>
+                    </td>
                 </tr>
                 <tr>
                   <th>
@@ -263,6 +312,12 @@ if(isset($google_detail['setting'])){
         </div>
         <div class="col-md-6 col-lg-4">
           <?php echo get_tvc_google_ga_sidebar(); ?>
+          <div class="tvc-youtube-video">
+            <span>Video tutorial:</span>
+            <a href="https://www.youtube.com/watch?v=FAV4mybKogg" target="_blank">Walkthrough about Onboarding</a>
+            <a href="https://www.youtube.com/watch?v=4pb-oPWHb-8" target="_blank">Walkthrough about Product Sync</a>
+            <a href="https://www.youtube.com/watch?v=_C9cemX6jCM" target="_blank">Walkthrough about Smart Shopping Campaign</a>
+          </div>
         </div>
       </div>
     </div>
@@ -273,6 +328,21 @@ if(isset($google_detail['setting'])){
 ?>
 <script>
 jQuery(document).ready(function () {
+  /*facebook*/
+  jQuery("#fb_pixel_id").keypress(function (evt){
+    var theEvent = evt || window.event;
+    var key = theEvent.keyCode || theEvent.which;
+    key = String.fromCharCode( key );
+    var regex = /[-\d\.]/; // dowolna liczba (+- ,.) :)
+    var objRegex = /^-?\d*[\.]?\d*$/;
+    var val = $(evt.target).val();
+    if(!regex.test(key) || !objRegex.test(val+key) || 
+            !theEvent.keyCode == 46 || !theEvent.keyCode == 8) {
+        theEvent.returnValue = false;
+        if(theEvent.preventDefault) theEvent.preventDefault();
+    };
+  });
+
   jQuery(document).on('click','#tvc_google_connect_active_licence_close',function(event){
     jQuery('#tvc_google_connect_active_licence').modal('hide');
   });

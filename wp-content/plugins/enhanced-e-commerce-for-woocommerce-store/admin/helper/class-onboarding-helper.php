@@ -81,16 +81,7 @@ if(!class_exists('Conversios_Onboarding_Helper')):
       if($this->admin_safe_ajax_call($nonce, 'conversios_onboarding_nonce')){ 
         $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
-        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
-        /*sendingblue*/
-        $data = array();
-        $data["email"] = $tvc_data->g_mail;
-        $data["attributes"]["PRODUCT"] = "Woocommerce Free Plugin";
-        $data["attributes"]["SET_GA"] = true;
-        $data["listIds"]=[40,41];
-        $data["updateEnabled"]=true;
-        $this->add_sendinblue_contant($data, $api_obj);
-        /*end sendingblue*/        
+        $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));        
         echo json_encode($api_obj->saveAnalyticsData($_POST));
         wp_die();
       }else{
@@ -141,15 +132,6 @@ if(!class_exists('Conversios_Onboarding_Helper')):
         $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
-        /*sendingblue*/
-        $data = array();
-        $data["email"] = sanitize_email($tvc_data->g_mail);
-        $data["attributes"]["PRODUCT"] = sanitize_text_field("Woocommerce Free Plugin");
-        $data["attributes"]["SET_ADS"] = true;
-        $data["listIds"]=[40,41];
-        $data["updateEnabled"]=true;
-        $this->add_sendinblue_contant($data, $api_obj);
-        /*end sendingblue*/
         echo json_encode($api_obj->saveGoogleAdsData($_POST));
         wp_die();
       }else{
@@ -217,15 +199,6 @@ if(!class_exists('Conversios_Onboarding_Helper')):
         $data = isset($_POST['tvc_data'])?sanitize_text_field($_POST['tvc_data']):"";
         $tvc_data = json_decode(str_replace("&quot;", "\"", $data));
         $api_obj = new Conversios_Onboarding_ApiCall(sanitize_text_field($tvc_data->access_token), sanitize_text_field($tvc_data->refresh_token));
-        /*sendingblue*/
-        $data = array();
-        $data["email"] = sanitize_email($tvc_data->g_mail);
-        $data["attributes"]["PRODUCT"] = sanitize_text_field("Woocommerce Free Plugin");
-        $data["attributes"]["SET_GMC"] = true;
-        $data["listIds"]=[40,41];
-        $data["updateEnabled"]=true;
-        $this->add_sendinblue_contant($data, $api_obj);
-        /*end sendingblue*/
         echo json_encode($api_obj->saveMechantData($_POST));
         wp_die();
       }else{
@@ -309,7 +282,7 @@ if(!class_exists('Conversios_Onboarding_Helper')):
      * @since    4.0.2
      */
     public function save_wp_setting_from_subscription_api($api_obj, $tvc_data, $subscription_id){ 
-        
+      $old_setting = unserialize(get_option('ee_options')); 
       $TVC_Admin_Helper = new TVC_Admin_Helper(); 
       $google_detail = $api_obj->getSubscriptionDetails($tvc_data, $subscription_id);
       /**
@@ -323,13 +296,7 @@ if(!class_exists('Conversios_Onboarding_Helper')):
         $TVC_Admin_Helper->set_ee_additional_data($ee_additional_data);
       }
       if(property_exists($google_detail,"error") && $google_detail->error == false){
-        /**
-         * for save conversion send to in WP DB
-         */      
         $googleDetail = $google_detail->data;
-        if($googleDetail->plan_id != 1 && sanitize_text_field($googleDetail->google_ads_conversion_tracking) == 1){
-          $TVC_Admin_Helper->update_conversion_send_to();
-        }
         /**
          * for site verifecation
          */
@@ -349,9 +316,10 @@ if(!class_exists('Conversios_Onboarding_Helper')):
         $settings['ga_gUser'] = 'on';
         $settings['ga_Impr'] = 6;
         $settings['ga_IPA'] = 'on';
-        $settings['ga_OPTOUT'] = 'on';
+        //$settings['ga_OPTOUT'] = 'on';
         $settings['ga_PrivacyPolicy'] = 'on';
         $settings['google-analytic'] = '';
+        $settings['fb_pixel_id'] = isset($old_setting['fb_pixel_id'])?$old_setting['fb_pixel_id']:"";
         //update option in wordpress local database
         update_option('google_ads_conversion_tracking', $googleDetail->google_ads_conversion_tracking);
         update_option('ads_tracking_id', $googleDetail->google_ads_id);
@@ -359,6 +327,10 @@ if(!class_exists('Conversios_Onboarding_Helper')):
         update_option('ads_edrt', $googleDetail->dynamic_remarketing_tags);
         
         $TVC_Admin_Helper->save_ee_options_settings($settings);
+        $TVC_Admin_Helper->update_app_status();
+        /**
+         * for save conversion send to in WP DB
+         */      
         /*
          * function call for save API data in WP DB
          */
@@ -368,6 +340,10 @@ if(!class_exists('Conversios_Onboarding_Helper')):
          * function call for save remarketing snippets in WP DB
          */
         $TVC_Admin_Helper->update_remarketing_snippets();
+        
+        if($googleDetail->plan_id != 1 && sanitize_text_field($googleDetail->google_ads_conversion_tracking) == 1){
+          $TVC_Admin_Helper->update_conversion_send_to();
+        }
         /**
          * save gmail and view ID in WP DB
          */
@@ -450,15 +426,7 @@ if(!class_exists('Conversios_Onboarding_Helper')):
        * function call for save API data in WP DB
        */
       $TVC_Admin_Helper->set_update_api_to_db($googleDetail);
-    }
-    /**
-     * update contact details on sendinblue.
-     * @since    4.0.2
-     */
-    function add_sendinblue_contant($data, $api_obj){
-      $api_obj->TVC_CALL_API_sendinblue("POST", "https://api.sendinblue.com/v3/contacts", $data);    
-    }
-		
+    }		
 	}
 endif; // class_exists
 new Conversios_Onboarding_Helper();
@@ -501,36 +469,7 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
           return $e->getMessage();
       }
     }
-    public function TVC_CALL_API_sendinblue($method, $url, $data, $headers = false){
-      try {
-        $args = array(
-          'headers' => array(
-              'api-key' => sanitize_text_field("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"),
-              'Content-Type' => 'application/json'
-          ),
-          'method' => $method,
-          'body' => $data
-        );
-        // Send remote request
-        $request = wp_remote_post($url, $args);
-        // Retrieve information
-        $response_code = wp_remote_retrieve_response_code($request);
-        $response_message = wp_remote_retrieve_response_message($request);
-        $response_body = json_decode(wp_remote_retrieve_body($request));
-
-        if ((isset($response_body->error) && $response_body->error == '')) {
-          return new WP_REST_Response(
-            array('status' => $response_code, 'message' => $response_message, 'data' => $response_body->data)
-          );
-        } else {
-          return new WP_Error($response_code, $response_message, $response_body);
-        }
-      } catch (Exception $e) {
-          return $e->getMessage();
-      }
-     
-    }
-
+    
     public function getSubscriptionDetails($tvc_data, $subscription_id){
       try{
         $tvc_data = (object)$tvc_data;
@@ -1127,7 +1066,7 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
       if (isset($result->error) && $result->error) {
           $credentials = json_decode(file_get_contents(ENHANCAD_PLUGIN_DIR . 'includes/setup/json/client-secrets.json'), true);
           $url = 'https://www.googleapis.com/oauth2/v4/token';
-          $header = array("content-type: application/json");
+          $header = array("Content-Type" => "application/json");
           $clientId = $credentials['web']['client_id'];
           $clientSecret = $credentials['web']['client_secret'];
           
@@ -1141,7 +1080,7 @@ if(!class_exists('Conversios_Onboarding_ApiCall') ){
             'timeout' => 10000,
             'headers' =>$header,
             'method' => 'POST',
-            'body' => $data
+            'body' => wp_json_encode($data)
           );
           $request = wp_remote_post(esc_url_raw($url), $args);
           // Retrieve information

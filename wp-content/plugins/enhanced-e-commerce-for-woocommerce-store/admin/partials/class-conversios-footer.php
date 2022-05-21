@@ -9,7 +9,9 @@ if ( ! class_exists( 'Conversios_Footer' ) ) {
 			add_action('add_conversios_footer',array($this, 'before_end_footer'));
 		}	
 		public function before_end_footer(){ 
-			?>
+			?>  <div class="tvc_footer_links">
+						
+					</div>
 				</div>
 			<?php
 		}

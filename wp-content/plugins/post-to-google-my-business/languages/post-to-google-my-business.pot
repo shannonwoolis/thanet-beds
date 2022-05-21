@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the Post to Google My Business package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Post to Google My Business 3.0.11\n"
+"Project-Id-Version: Post to Google My Business 3.0.14\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/post-to-google-my-business\n"
-"POT-Creation-Date: 2022-03-08 17:30:18+00:00\n"
+"POT-Creation-Date: 2022-04-11 06:38:05+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,12 +29,12 @@ msgstr ""
 msgid "Could not parse JSON response from Google API."
 msgstr ""
 
-#: src/API/ProxyAuthenticationAPI.php:50
+#: src/API/ProxyAuthenticationAPI.php:51
 msgid "Could not parse JSON response from authentication server."
 msgstr ""
 
-#: src/Admin/AdminPage.php:87 src/Components/BusinessSelector.php:263
-#: src/Premium/Components/MultiAccountBusinessSelector.php:116
+#: src/Admin/AdminPage.php:87 src/Components/BusinessSelector.php:277
+#: src/Premium/Components/MultiAccountBusinessSelector.php:126
 msgid "Refresh locations"
 msgstr ""
 
@@ -327,10 +327,6 @@ msgstr ""
 msgid "No Google account connected at time of publishing"
 msgstr ""
 
-#: src/BackgroundProcessing/PostPublishProcess.php:128
-msgid "This location is unverified, not public, or not eligible to publish posts."
-msgstr ""
-
 #: src/BackgroundProcessing/PostPublishProcess.php:151
 msgid "Failed to create/update post: %s"
 msgstr ""
@@ -351,84 +347,84 @@ msgstr ""
 msgid "Post to Google My Business:"
 msgstr ""
 
-#: src/Components/BusinessSelector.php:55
-#: src/Premium/Components/MultiAccountBusinessSelector.php:78
+#: src/Components/BusinessSelector.php:56
+#: src/Premium/Components/MultiAccountBusinessSelector.php:82
 msgid "No Google account connected"
 msgstr ""
 
-#: src/Components/BusinessSelector.php:103
+#: src/Components/BusinessSelector.php:110
 msgid "Could not retrieve account or location groups from Google My Business: %s"
 msgstr ""
 
-#: src/Components/BusinessSelector.php:107
+#: src/Components/BusinessSelector.php:114
 msgid ""
 "No user account or location groups found. Did you log in to the correct "
 "Google account?"
 msgstr ""
 
-#: src/Components/BusinessSelector.php:138
+#: src/Components/BusinessSelector.php:146
 msgid "Could not retrieve locations from Google My Business: %s"
 msgstr ""
 
-#: src/Components/BusinessSelector.php:142
+#: src/Components/BusinessSelector.php:150
 msgid "No businesses found."
 msgstr ""
 
-#: src/Components/BusinessSelector.php:209
+#: src/Components/BusinessSelector.php:223
 msgid "Service Area Business"
 msgstr ""
 
-#: src/Components/BusinessSelector.php:254
+#: src/Components/BusinessSelector.php:268
 msgid "Location grayed out?"
 msgstr ""
 
-#: src/Components/BusinessSelector.php:255
+#: src/Components/BusinessSelector.php:269
 msgid ""
 "It means the location is blocked from using the LocalPostAPI, and can't be "
 "posted to using the plugin."
 msgstr ""
 
-#: src/Components/BusinessSelector.php:256
+#: src/Components/BusinessSelector.php:270
 msgid "Learn more..."
 msgstr ""
 
-#: src/Components/BusinessSelector.php:262
-#: src/Premium/Components/MultiAccountBusinessSelector.php:108
+#: src/Components/BusinessSelector.php:276
+#: src/Premium/Components/MultiAccountBusinessSelector.php:118
 msgid "Search/Filter locations..."
 msgstr ""
 
-#: src/Components/GooglePostEntityListTable.php:30
+#: src/Components/GooglePostEntityListTable.php:31
 msgid "Published GMB Post"
 msgstr ""
 
-#: src/Components/GooglePostEntityListTable.php:31
+#: src/Components/GooglePostEntityListTable.php:32
 msgid "Published GMB Posts"
 msgstr ""
 
-#: src/Components/GooglePostEntityListTable.php:42
+#: src/Components/GooglePostEntityListTable.php:43
 msgid "Location"
 msgstr ""
 
-#: src/Components/GooglePostEntityListTable.php:43
+#: src/Components/GooglePostEntityListTable.php:44
 msgid "Status"
 msgstr ""
 
-#: src/Components/GooglePostEntityListTable.php:56
+#: src/Components/GooglePostEntityListTable.php:57
 #: src/Components/SubPostListTable.php:123
 #: src/Components/SubPostListTable.php:246
 #: src/Subscriber/CalendarFeedAjaxSubscriber.php:112
 msgid "Delete"
 msgstr ""
 
-#: src/Components/GooglePostEntityListTable.php:119
+#: src/Components/GooglePostEntityListTable.php:120
 msgid "Could not get location name: %s"
 msgstr ""
 
-#: src/Components/GooglePostEntityListTable.php:124
+#: src/Components/GooglePostEntityListTable.php:125
 msgid "Unknown"
 msgstr ""
 
-#: src/Components/GooglePostEntityListTable.php:126
+#: src/Components/GooglePostEntityListTable.php:127
 msgid "View on Google"
 msgstr ""
 
@@ -671,35 +667,35 @@ msgstr ""
 msgid "Invalid post ID"
 msgstr ""
 
-#: src/ParseFormFields.php:263
+#: src/ParseFormFields.php:264
 msgid ""
 "Products are not supported in the free version of the plugin. Please choose "
 "a different post type in your template."
 msgstr ""
 
-#: src/ParseFormFields.php:458 src/ParseFormFields.php:548
+#: src/ParseFormFields.php:459 src/ParseFormFields.php:549
 msgid ""
 "Could not detect post image file size. Make sure the image file/url is "
 "accessible remotely."
 msgstr ""
 
-#: src/ParseFormFields.php:558
+#: src/ParseFormFields.php:559
 msgid "Post image must be at least 250x250px. Selected image is %dx%dpx"
 msgstr ""
 
-#: src/ParseFormFields.php:562
+#: src/ParseFormFields.php:563
 msgid "Post image file too small, must be at least 10 KB. Selected image is %s"
 msgstr ""
 
-#: src/ParseFormFields.php:564
+#: src/ParseFormFields.php:565
 msgid "Post image file too big, must be 5 MB at most. Selected image is %s"
 msgstr ""
 
-#: src/ParseFormFields.php:572
+#: src/ParseFormFields.php:573
 msgid "Tried to convert WebP image but imagecreatefromwebp is not available"
 msgstr ""
 
-#: src/ParseFormFields.php:614
+#: src/ParseFormFields.php:615
 msgid "Could not parse post locations"
 msgstr ""
 
@@ -707,75 +703,81 @@ msgstr ""
 msgid "GMB Agency Client"
 msgstr ""
 
-#: src/Premium/API/GMBCookieAPI.php:108
+#: src/Premium/API/GMBCookieAPI.php:107
 msgid "Could not match backend ID to frontend ID. Try updating the cookie settings"
 msgstr ""
 
-#: src/Premium/API/GMBCookieAPI.php:252
+#: src/Premium/API/GMBCookieAPI.php:249
+msgid ""
+"Could not find account data. Cookie settings may be outdated. Try updating "
+"the cookie settings"
+msgstr ""
+
+#: src/Premium/API/GMBCookieAPI.php:253
 msgid ""
 "Could not detect \"at\" code. Cookie settings may be outdated. Try updating "
 "the cookie settings"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:40
+#: src/Premium/Admin/PremiumAdminPage.php:37
 msgid "Enable evergreen content"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:41
+#: src/Premium/Admin/PremiumAdminPage.php:38
 msgid "Auto-publish random content -marked as evergreen- to GMB"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:46
+#: src/Premium/Admin/PremiumAdminPage.php:43
 msgid "Evergreen by default"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:47
+#: src/Premium/Admin/PremiumAdminPage.php:44
 msgid ""
 "Automatically mark new content as evergreen (checks evergreen checkbox by "
 "default when enabled)"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:52
+#: src/Premium/Admin/PremiumAdminPage.php:49
 msgid "Posting schedule"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:53
+#: src/Premium/Admin/PremiumAdminPage.php:50
 msgid "Choose the interval at which the plugin will auto-post evergreen content"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:63
+#: src/Premium/Admin/PremiumAdminPage.php:60
 msgid "Post type default template"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:64
+#: src/Premium/Admin/PremiumAdminPage.php:61
 msgid "Choose which auto-post template the post type should use by default"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:117
+#: src/Premium/Admin/PremiumAdminPage.php:110
 msgid "The chosen schedule is invalid"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:135
+#: src/Premium/Admin/PremiumAdminPage.php:128
 msgid ""
 "The chosen schedule is impossible, make sure it doesn't resolve to an "
 "impossible date such as the 30th of February."
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:149
+#: src/Premium/Admin/PremiumAdminPage.php:142
 #: src/Premium/Subscribers/PremiumSubmitboxMetaSubscriber.php:92
 msgid "Default auto-post template"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:151
+#: src/Premium/Admin/PremiumAdminPage.php:144
 #: src/Premium/Subscribers/PremiumSubmitboxMetaSubscriber.php:94
 msgid "Untitled"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:182
+#: src/Premium/Admin/PremiumAdminPage.php:175
 msgid "Manage Google account(s)"
 msgstr ""
 
-#: src/Premium/Admin/PremiumAdminPage.php:183
+#: src/Premium/Admin/PremiumAdminPage.php:176
 msgid "See Google accounts added by other users"
 msgstr ""
 
@@ -809,42 +811,46 @@ msgstr ""
 msgid "Failed to delete product from GMB: %s"
 msgstr ""
 
-#: src/Premium/Components/MultiAccountBusinessSelector.php:49
+#: src/Premium/Components/MultiAccountBusinessSelector.php:44
+msgid "Toggle selection"
+msgstr ""
+
+#: src/Premium/Components/MultiAccountBusinessSelector.php:53
 msgid "Update cookies"
 msgstr ""
 
-#: src/Premium/Components/MultiAccountBusinessSelector.php:49
+#: src/Premium/Components/MultiAccountBusinessSelector.php:53
 msgid "Set cookies"
 msgstr ""
 
-#: src/Premium/Components/MultiAccountBusinessSelector.php:57
+#: src/Premium/Components/MultiAccountBusinessSelector.php:61
 msgid "Download debug data"
 msgstr ""
 
-#: src/Premium/Components/MultiAccountBusinessSelector.php:62
+#: src/Premium/Components/MultiAccountBusinessSelector.php:66
 msgid "Disconnect account from this website"
 msgstr ""
 
-#: src/Premium/Components/MultiAccountBusinessSelector.php:111
+#: src/Premium/Components/MultiAccountBusinessSelector.php:121
 msgid "Select all"
 msgstr ""
 
-#: src/Premium/Components/MultiAccountBusinessSelector.php:112
+#: src/Premium/Components/MultiAccountBusinessSelector.php:122
 msgid "Select none"
 msgstr ""
 
-#: src/Premium/Components/MultiAccountBusinessSelector.php:141
+#: src/Premium/Components/MultiAccountBusinessSelector.php:151
 msgid ""
 "To be able to create products on your Google Business Profile, you will "
 "need to enter additional cookie values."
 msgstr ""
 
-#: src/Premium/Components/MultiAccountBusinessSelector.php:142
+#: src/Premium/Components/MultiAccountBusinessSelector.php:152
 #: templates/admin/posteditor.php:284
 msgid "Learn more"
 msgstr ""
 
-#: src/Premium/Components/MultiAccountBusinessSelector.php:159
+#: src/Premium/Components/MultiAccountBusinessSelector.php:169
 msgid "Save"
 msgstr ""
 

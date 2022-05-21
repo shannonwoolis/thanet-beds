@@ -153,7 +153,7 @@ class GoogleAds {
                   <div class="form-group">
                     <div class="tvc-custom-control tvc-custom-checkbox">
                       <input type="checkbox" class="tvc-custom-control-input" id="google_ads_conversion_tracking" name="google_ads_conversion_tracking" value="1" <?php echo (esc_attr($googleDetail->google_ads_conversion_tracking) == 1) ? 'checked="checked"' : ''; ?>>
-                      <label class="custom-control-label" for="google_ads_conversion_tracking"><?php esc_html_e("Enable Google Ads conversion tracking","conversios"); ?></label>
+                      <label class="custom-control-label" for="google_ads_conversion_tracking"><?php esc_html_e("Enable Google Ads conversion tracking","conversios"); ?><span class="tvc-pro"> (PRO)</span></label>
                     </div>
                   </div>
                 </div>
@@ -174,6 +174,7 @@ class GoogleAds {
               <ul>
                 <li><img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/images/config-success.svg'); ?>" alt="configuration  success" class="config-success"><?php esc_html_e("Enable remarketing tags","conversios"); ?></li>
                 <li><img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/images/config-success.svg'); ?>" alt="configuration  success" class="config-success"><?php esc_html_e("Enable dynamic remarketing tags","conversios"); ?></li>
+                <li><img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/images/config-success.svg'); ?>" alt="configuration  success" class="config-success"><?php esc_html_e("Enable Google Ads conversion tracking","conversios"); ?><span class="tvc-pro"> (PRO)</span></li>
                 <li><img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL.'/admin/images/config-success.svg'); ?>" alt="configuration  success" class="config-success"><?php esc_html_e("Link Google analytics with google ads","conversios"); ?></li>        
               </ul>
               <?php
@@ -188,7 +189,13 @@ class GoogleAds {
           </form>
         </div>
         <div class="col-md-6 col-lg-4">          
-          <?php echo get_tvc_google_ads_help_html(); ?>          
+          <?php echo get_tvc_google_ads_help_html(); ?>  
+          <div class="tvc-youtube-video">
+            <span>Video tutorial:</span>
+            <a href="https://www.youtube.com/watch?v=FAV4mybKogg" target="_blank">Walkthrough about Onboarding</a>
+            <a href="https://www.youtube.com/watch?v=4pb-oPWHb-8" target="_blank">Walkthrough about Product Sync</a>
+            <a href="https://www.youtube.com/watch?v=_C9cemX6jCM" target="_blank">Walkthrough about Smart Shopping Campaign</a>
+          </div>        
         </div>
       </div>
     </div>
