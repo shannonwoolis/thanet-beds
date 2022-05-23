@@ -14,7 +14,8 @@
             content: post.content|default(false),
             buttons: post.meta('copy_buttons')|default(false),
             utility_links: true,
-            thumb: false
+            thumb: false,
+            reviews: post.meta('show_reviews_bucket'),
         } %}
     {% endif %}
 
