@@ -1,6 +1,25 @@
 <div class="relative cursor-pointer group video-popup-trigger" tabindex="0">
     <span class="sr-only">Open video</span>
-    <img class="w-full lazyload" src="" data-src="{{ video_placeholder|resize(600,600) }}" alt="Video placeholder">
+    {# <img class="w-full lazyload" src="" data-src="{{ video_placeholder|resize(600,600) }}" alt="Video placeholder"> #}
+    {% include "_components/picture.twig" with {
+        source: Image(video_placeholder),
+        lazyload: true,
+        pictureClasses: 'w-full',
+        breakpoints: {
+            "1px" : {
+                w: 600,
+                h: 600,
+                crop: 'center'
+            },
+        },
+        img: {
+            classes: 'w-full lazyload',
+            w: 600,
+            h: 600,
+            crop: 'center',
+            alt: "Video placeholder"
+        }
+    } %}
     <span class="absolute flex items-center justify-center w-24 h-16 text-white transition transform -translate-x-1/2 -translate-y-1/2 bg-black pointer-events-none group-hover:scale-110 bg-opacity-80 top-1/2 left-1/2">{{ fn('icon','play','w-8 h-8') }}</span>
 </div>
 

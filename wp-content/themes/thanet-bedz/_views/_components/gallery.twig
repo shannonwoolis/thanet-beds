@@ -7,7 +7,28 @@
                 {% for item in gallery %}
                     <div class="w-1/2 p-2 lg:p-4 md:w-1/4">
                         <div class="relative block overflow-hidden transition-all duration-500 group">
-                            <span class="block transition-all duration-500 transform"><img class="lazyload" data-src="{{ item.url|resize(600,600) }}" src="" alt="{{ item.alt }}"></span>
+                            <span class="block transition-all duration-500 transform">
+                                {# <img class="lazyload" data-src="{{ item.url|resize(600,600) }}" src="" alt="{{ item.alt }}"> #}
+                                {% include "_components/picture.twig" with {
+                                    source: Image(item.url),
+                                    lazyload: true,
+                                    pictureClasses: 'w-full',
+                                    breakpoints: {
+                                        "1px" : {
+                                            w: 600,
+                                            h: 600,
+                                            crop: 'center'
+                                        },
+                                    },
+                                    img: {
+                                        classes: 'lazyload',
+                                        w: 600,
+                                        h: 600,
+                                        crop: 'center',
+                                        alt: item.alt
+                                    }
+                                } %}
+                            </span>
                             <a href="{{ item.url }}" data-fslightbox="gallery" class="absolute top-0 left-0 flex items-center justify-center w-full h-full text-2xl text-white transition-all duration-500 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
                                 <span>{{ fn('icon','magnify','mx-2') }}<span class="sr-only">Magnify</span></span>
                                 {# <a class="hover:opacity-60" href="">{{ fn('icon','open','mx-2') }}<span class="sr-only">Open post</span></a> #}

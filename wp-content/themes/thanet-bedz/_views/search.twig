@@ -64,7 +64,26 @@
                         {% if post.post_type == 'post' %}
                             <div class="w-full p-4 md:w-1/2 lg:w-1/4">
                                 <a href="{{ post.link }}" class="block w-full h-full bg-white border-t-8 group border-primary-dark">
-                                    <img class="w-full lazyload" data-src="{{ post.thumbnail.src|resize(600,400) }}" src="" alt="{{ post.thumbnail.alt }}">
+                                    {# <img class="w-full lazyload" data-src="{{ post.thumbnail.src|resize(600,400) }}" src="" alt="{{ post.thumbnail.alt }}"> #}
+                                        {% include "_components/picture.twig" with {
+                                        source: Image(post.thumbnail.src),
+                                        lazyload: true,
+                                        pictureClasses: 'w-full',
+                                        breakpoints: {
+                                            "1px" : {
+                                                w: 600,
+                                                h: 400,
+                                                crop: 'center'
+                                            },
+                                        },
+                                        img: {
+                                            classes: 'w-full lazyload',
+                                            w: 600,
+                                            h: 400,
+                                            crop: 'center',
+                                            alt: post.thumbnail.alt
+                                        }
+                                    } %}
                                     <div class="flex flex-col items-start p-4 bg-white md:p-6">
                                         <span class="mb-1 text-2xl font-medium">{{ post.name }}</span>
                                         <span class="text-sm">{{ post.content|truncate(15) }}</span>
