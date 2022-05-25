@@ -35,7 +35,7 @@
         <div class="flex flex-wrap items-center justify-between">
 
             <a aria-label="Go to homepage" class="block lg:inline-block" href="{{site.site_url}}">
-                <img class="mx-auto max-w-28 2xs:max-w-40" src="{{options.site_logo.url}}" alt="{{site.title}} Logo"/>
+                <img class="mx-auto max-w-28 2xs:max-w-40" src="{{ options.site_logo.url|resize(250)|towebp }}" alt="{{site.title}} Logo"/>
             </a>
 
             <nav id="menu-primary" class="hidden ml-4 xl:ml-8 lg:block menu" aria-labelledby="primary-navigation">
