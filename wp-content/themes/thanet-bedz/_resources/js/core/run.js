@@ -38,6 +38,7 @@
         });
 
         $(".mob-search-btn").on('click',function() {
+            // $("html, body").animate({ scrollTop: 0 });
             $(".mob-search").removeClass('-left-full');
             $(".mob-search").addClass('left-0');
             // $(".mob-search").fadeIn();
@@ -50,9 +51,11 @@
         $(window).scroll(function() {
             if ($(document).scrollTop() > 50) {
                 $('.mob-top-bar').addClass('scrolled');
+                $(".mob-search").addClass('scrolled');
             }
             else {
                 $('.mob-top-bar').removeClass('scrolled');
+                $(".mob-search").removeClass('scrolled');
             }
         });
 

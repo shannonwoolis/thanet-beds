@@ -132,6 +132,14 @@ Deals **************************************************/
     }
 }
 
+.mob-search {
+    @apply top-[36px] py-4;
+
+    &.scrolled {
+        @apply top-0 py-5;
+    }
+}
+
 .text-vertical-left {
     @apply py-2 text-sm sm:py-0;
     @screen sm {
