@@ -24,6 +24,10 @@
     }
 }
 
+.reset_variations {
+    @apply ml-2;
+}
+
 /* Ratings */
 .woocommerce-product-rating {
   @apply flex items-center;

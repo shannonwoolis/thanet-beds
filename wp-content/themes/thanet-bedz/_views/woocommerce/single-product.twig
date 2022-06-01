@@ -23,6 +23,8 @@
                 <div class="w-full mt-8 md:mt-0 md:w-6/12 lg:w-2/5 md:pr-8 copy">  
                     <span class="text-sm">{% do action('woocommerce_before_main_content') %}</span>{# breadcrumbs #}
                     {% do action('woocommerce_single_product_summary') %}
+
+                    {% do action('woocommerce_output_product_data_tabs') %}
                 </div>
 
             </div>

@@ -61,3 +61,7 @@
 .add_to_wishlist svg {
     @apply -mt-1;
 }
+
+.add_to_wishlist img {
+    @apply w-4 h-4 mr-2 -mt-1 max-w-4 max-h-4;
+}

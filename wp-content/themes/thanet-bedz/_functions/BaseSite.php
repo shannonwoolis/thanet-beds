@@ -202,3 +202,16 @@ function woo_cart_but() {
     return ob_get_clean();
  
 }
+
+
+// Add to wishlist
+add_action('yith_add_to_wishlist', 'yith_add_to_wishlist' );
+
+function yith_add_to_wishlist() {
+ 
+        // echo do_shortcode( '[yith_wcwl_add_to_wishlist]' );
+        // echo "hello";
+	        
+    return "hello";
+ 
+}
