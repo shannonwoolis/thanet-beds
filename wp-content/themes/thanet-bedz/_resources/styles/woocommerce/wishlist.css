@@ -63,5 +63,5 @@
 }
 
 .add_to_wishlist img, .yith-wcwl-wishlistaddedbrowse img, .yith-wcwl-wishlistexistsbrowse img {
-    @apply w-4 h-4 mr-2 -mt-1 max-w-4 max-h-4;
+    @apply inline-block w-4 h-4 mr-1 -mt-1 max-w-4 max-h-4;
 }
