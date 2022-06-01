@@ -122,6 +122,6 @@ footer {
 .cart-contents {
     @apply text-lg relative text-black hover:text-primary mt-[-2px];
     .cart-contents-count {
-        @apply absolute top-0 flex items-center justify-center w-4 h-4 p-1 text-xs font-bold text-white rounded-full left-[85%] bg-primary;
+        @apply absolute top-1.5 xs:right-4 right-2 lg:right-auto lg:top-0 flex items-center justify-center w-4 h-4 p-1 text-xs font-bold text-white rounded-full lg:left-[85%] bg-primary;
     }
 }

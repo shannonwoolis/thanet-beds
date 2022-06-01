@@ -19,11 +19,11 @@
 defined('ABSPATH') || exit; ?>
 
 <section class="flex flex-wrap">
-  <div class="w-full md:w-3/12 xl:w-2/12 column">
+  <div class="w-full md:w-3/12 xl:w-2/12">
     <?php do_action('woocommerce_account_navigation'); ?>
   </div>
 
-  <div class="w-full woocommerce-MyAccount-content column md:w-9/12 xl:w-10/12">
+  <div class="w-full mt-4 woocommerce-MyAccount-content md:w-9/12 md:pl-8 md:mt-0 xl:w-10/12">
     <?php do_action('woocommerce_account_content'); ?>
   </div>
 </section>

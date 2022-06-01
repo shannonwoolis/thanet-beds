@@ -180,14 +180,17 @@ add_shortcode ('woo_cart_but', 'woo_cart_but' );
 /**
  * Create Shortcode for WooCommerce Cart Menu Item
  */
-function woo_cart_but() {
+function woo_cart_but($atts) {
+    shortcode_atts(array(
+        'classes' => false,
+    ), $atts);
 	ob_start();
  
         $cart_count = WC()->cart->cart_contents_count; // Set variable for cart item count
         $cart_url = wc_get_cart_url();  // Set Cart URL
   
         ?>
-        <a class="cart-contents" href="<?php echo $cart_url; ?>" title="My Basket">
+        <a class="cart-contents <?php echo $atts['classes']; ?>" href="<?php echo $cart_url; ?>" title="My Basket">
         <svg class="icon icon-basket"><use href="/wp-content/themes/thanet-bedz/_resources/images/icons-sprite.svg#icon-basket"></use></svg>
 	    <?php
         if ( $cart_count > 0 ) {
@@ -196,6 +199,7 @@ function woo_cart_but() {
         <?php
         }
         ?>
+        <span class="sr-only">Basket</span>
         </a>
         <?php
 	        

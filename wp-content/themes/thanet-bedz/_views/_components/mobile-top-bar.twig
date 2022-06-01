@@ -10,10 +10,11 @@
         <span class="sr-only">Search</span>
     </div>
 
-    <a href="/basket/" class="flex items-center justify-center px-4 py-3 text-center 2xs:px-5 xs:px-7 hover:text-grey-dark basket-btn">
-        {{ function('icon', 'basket', '2xs:text-xl') }}
-        <span class="sr-only">Basket</span>
-    </a>
+    {# <a href="/basket/" class="flex items-center justify-center px-4 py-3 text-center 2xs:px-5 xs:px-7 hover:text-grey-dark basket-btn"> #}
+        {# {{ function('icon', 'basket', '2xs:text-xl') }} #}
+        {% filter shortcodes %}[woo_cart_but classes="flex items-center justify-center px-4 py-3 text-center 2xs:px-5 xs:px-7 hover:text-grey-dark basket-btn"]{% endfilter %}
+        {# <span class="sr-only">Basket</span> #}
+    {# </a> #}
 
     {#<div class="w-1/2 p-2 text-center bg-gray-500">
         {% do action('ld_default', false) %}
