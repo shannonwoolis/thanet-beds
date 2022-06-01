@@ -133,7 +133,7 @@ Deals **************************************************/
 }
 
 .mob-search {
-    @apply top-[36px] py-4;
+    @apply top-[36px] lg:top-0 py-4;
 
     &.scrolled {
         @apply top-0 py-5;
