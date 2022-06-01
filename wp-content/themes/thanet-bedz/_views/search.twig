@@ -34,12 +34,15 @@
 
                     <div class="w-full">
                         <div class="flex flex-wrap -mx-4 -mb-2 products">
+                            {% set productPosts = false %}
                             {% for post in posts %}
                                 {% if post.post_type == 'product' %}
+                                    {% set productPosts = true %}
                                     {% include ["_shop/tease-product.twig"] %}
                                 {% endif %}
                             {% endfor %}
                         </div>
+                        {% if productPosts == false %}<p>Sorry, no products match your search.</p>{% endif %}
                     </div>
 
                 </section>
@@ -60,8 +63,10 @@
                     <span class="h2">Blog results for <span class="font-bold text-primary-light">{{ query }}</span></span>
                 </div>
                 <div class="flex flex-wrap mt-4 -mx-2 w-full-2 sm:w-auto lg:-mx-4">
+                    {% set blogPosts = false %}
                     {% for post in posts %}
                         {% if post.post_type == 'post' %}
+                            {% set blogPosts = true %}
                             <div class="w-full p-4 md:w-1/2 lg:w-1/4">
                                 <a href="{{ post.link }}" class="block w-full h-full bg-white border-t-8 group border-primary-dark">
                                     {# <img class="w-full lazyload" data-src="{{ post.thumbnail.src|resize(600,400) }}" src="" alt="{{ post.thumbnail.alt }}"> #}
@@ -94,6 +99,7 @@
                         {% endif %}
                     {% endfor %}
                 </div>
+                {% if blogPosts == false %}<p>Sorry, no blog posts match your search.</p>{% endif %}
             </div>
         </div>
     </section>
