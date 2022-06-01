@@ -74,13 +74,13 @@
 
 .woocommerce-checkout.woocommerce-page {
     .woocom-form .woocommerce {
-        @apply flex flex-wrap -mx-4;
+        @apply flex flex-wrap -mx-2 sm:-mx-4;
 
         .woocommerce-form-login-toggle, .woocommerce-form-coupon-toggle {
-            @apply w-1/2 px-4;
+            @apply w-1/2 px-2 sm:px-4;
 
             .woocommerce-info {
-                @apply p-8 bg-white;
+                @apply p-6 text-sm bg-white md:p-8 md:text-base;
 
                 a {
                     @apply text-primary hover:underline;
@@ -112,6 +112,14 @@
             }
             button {
                 @apply w-1/4;
+            }
+        }
+    }
+
+    &.logged-in {
+        .woocom-form .woocommerce {
+            .woocommerce-form-login-toggle, .woocommerce-form-coupon-toggle {
+                @apply !w-full;
             }
         }
     }

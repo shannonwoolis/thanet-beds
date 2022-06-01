@@ -34,7 +34,7 @@ if (!$checkout->is_registration_enabled() && $checkout->is_registration_required
 
   <?php if ($checkout->get_checkout_fields()) : ?>
     <?php do_action('woocommerce_checkout_before_customer_details'); ?>
-    <div class="w-full py-4 column lg:w-1/2 lg:px-4 billing-shipping">
+    <div class="w-full px-2 py-4 lg:w-1/2 sm:px-4 billing-shipping">
         <div class="p-8 bg-white woocom-form">
             <div>
                 <?php do_action('woocommerce_checkout_billing'); ?>
