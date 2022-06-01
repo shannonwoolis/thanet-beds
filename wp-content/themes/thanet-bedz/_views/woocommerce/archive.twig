@@ -2,9 +2,10 @@
 
 {% block hero %}
     {% if fn('is_shop') %}
-        {% set hero_title = 'Shop All' %}
-        {% set hero_copy = 'Our wide selection of different models means we can offer exactly what you’re looking for to create your perfect home.' %}
-        {% set thumb = 'https://thanet-bedz.vm/wp-content/uploads/2022/04/about-hero-2.jpeg' %}
+        {% set shopID = 11643 %}
+        {% set hero_title = fn('get_field','hero_title', shopID) %}
+        {% set hero_copy = fn('get_field','hero_copy', shopID) %}
+        {% set thumb = fn('get_the_post_thumbnail_url', shopID) %}
     {% else %}
         {% set hero_title = post.meta('hero_title')|default(post.title) %}
         {% set hero_copy = post.meta('hero_copy')|default(false) %}
