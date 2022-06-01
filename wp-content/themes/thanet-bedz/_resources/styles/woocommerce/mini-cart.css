@@ -10,7 +10,7 @@
   transition: .3s;
   max-width: 340px;
 
-  @apply fixed top-0 bottom-0 flex flex-wrap items-start w-full bg-white left-full;
+  @apply fixed top-0 bottom-0 flex flex-col flex-wrap items-start w-full bg-white left-full;
 
   &.active {
     transform: translateX(-100%);
