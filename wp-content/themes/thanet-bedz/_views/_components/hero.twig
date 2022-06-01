@@ -4,16 +4,16 @@
     {% set hero_large = image|resize('2000') %}
     <style>
       .hero {
-        background-image: url('{{ hero_small|towebp }}');
+        background-image: url('{{ hero_small|towebp }}'), url('{{ hero_small }}');
       }
       @media (min-width: 800px) {
         .hero {
-          background-image: url('{{ hero_medium|towebp }}');
+          background-image: url('{{ hero_medium|towebp }}'), url('{{ hero_medium }}');
         }
       }
       @media (min-width: 1200px) {
         .hero {
-          background-image: url('{{ hero_large|towebp }}');
+          background-image: url('{{ hero_large|towebp }}'), url('{{ hero_large }}');
         }
       }
     </style>
