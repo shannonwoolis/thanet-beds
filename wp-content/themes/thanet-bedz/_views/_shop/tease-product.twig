@@ -2,6 +2,7 @@
 
 	<div class="h-full text-black bg-white">
 		{{ fn('timber_set_product', post) }}
+        {# <pre>{{dump(fn('is_variable', post.id))}}<pre> #}
 
         {# <div class="w-full p-2 lg:w-1/4 xs:w-1/2"> #}
             <div class="relative flex flex-col flex-wrap w-full h-full text-black bg-white border-t-8 border-primary-light">
@@ -38,6 +39,8 @@
                     {# {% do action( 'woocommerce_after_shop_loop_item' ) %} #}
                     {% if post._stock_status == "outofstock" %}
                         <a href="{{ link }}" class="w-full button btn btn-primary-light product_type_simple" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">View <span class="inline-block">details {{ fn('icon','plus') }}</span></a>
+                    {% elseif fn('is_variable', post.id) %}
+                        <a href="{{ link }}" class="w-full button btn btn-primary-light product_type_variable" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">Select <span class="inline-block">options {{ fn('icon','plus') }}</span></a>
                     {% else %}
                         <a href="{{ site.link }}/?add-to-cart={{ post.id }}&quantity=1" data-quantity="1" class="w-full button btn btn-primary-light product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">Add to <span class="inline-block">basket {{ fn('icon','plus') }}</span></a>
                     {% endif %}

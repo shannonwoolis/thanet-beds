@@ -204,14 +204,14 @@ function woo_cart_but() {
 }
 
 
-// Add to wishlist
-add_action('yith_add_to_wishlist', 'yith_add_to_wishlist' );
-
-function yith_add_to_wishlist() {
- 
-        // echo do_shortcode( '[yith_wcwl_add_to_wishlist]' );
-        // echo "hello";
-	        
-    return "hello";
- 
+// Is variable product?
+function is_variable($id) {
+    $product = wc_get_product($id);
+    if( $product ) :
+        if ( $product->is_type( 'variable' ) ) :
+            return true;
+        else:
+            return false;
+        endif;
+    endif;
 }
