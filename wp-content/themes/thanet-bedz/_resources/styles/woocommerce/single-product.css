@@ -129,7 +129,7 @@
 
 /* Product quantity and add to cart */
 .single-cart, .woocommerce-variation-add-to-cart {
-  @apply flex;
+  @apply flex w-full mt-3;
 
   /* label {
     @apply my-2;
@@ -152,7 +152,12 @@
   }
 
   .quantity {
-    @apply max-w-20;
+    .screen-reader-text {
+        @apply sr-only;
+    }
+    input {
+        @apply max-w-20;
+    }
   }
 }
 
