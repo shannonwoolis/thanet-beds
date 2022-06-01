@@ -87,7 +87,7 @@
 
 @media screen and (min-device-width: 481px) and (max-device-width: 768px) {
     .wishlist_table {
-        @apply list-none;
+        @apply !mt-3 !mb-2 list-none;
 
         li {
             @apply !list-none border-b border-grey pt-6;
@@ -133,7 +133,7 @@
 
 @media screen and (max-width: 480px) {
     .wishlist_table {
-        @apply !px-0 list-none;
+        @apply !mt-3 !mb-2 !px-0 list-none;
 
         li {
             @apply !list-none border-b border-grey pt-6;
