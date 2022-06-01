@@ -62,6 +62,6 @@
     @apply -mt-1;
 }
 
-.add_to_wishlist img {
+.add_to_wishlist img, .yith-wcwl-wishlistaddedbrowse img {
     @apply w-4 h-4 mr-2 -mt-1 max-w-4 max-h-4;
 }
