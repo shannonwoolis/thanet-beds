@@ -1,9 +1,10 @@
 {% if options.logos %}
-    <div class="flex flex-wrap items-center -mx-4">
+    {% set classes = "w-1/3 p-2 sm:my-2 xs:w-1/3 sm:p-4 2xl:w-32"%}
+    <div class="flex flex-wrap items-center -mx-2 sm:-mx-4 max-w-[450px] w-full">
         {% for logo in options.logos %}
-            {% if logo.link %}<a href="{{ logo.link }}" target="_blank" class="group">{% endif %}
-                <img class="w-1/2 p-4 sm:mx-4 sm:my-2 xs:w-1/3 sm:w-28 sm:p-0 2xl:w-32 lazyload" src="" data-src="{{logo.image.url|resize(300)}}" alt="{{logo.name}} Logo">
-            {% if logo.link %}</a>{% endif %}
+            {% if logo.link %}<a href="{{ logo.link }}" target="_blank" class="group {{ classes }}">{% else %}<div class="{{ classes }}">{% endif %}
+                <img class="lazyload" src="" data-src="{{logo.image.url|resize(300)}}" alt="{{logo.name}} Logo">
+            {% if logo.link %}</a>{% else %}</div>{% endif %}
         {% endfor %}
     </div>
 {% endif %}
