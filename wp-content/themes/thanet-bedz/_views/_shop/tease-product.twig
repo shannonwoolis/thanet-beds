@@ -36,9 +36,9 @@
                     </span>
                     {# {% do action( 'woocommerce_after_shop_loop_item' ) %} #}
                     {% if post._stock_status == "outofstock" %}
-                        <a href="{{ post.link }}" class="button btn btn-primary-light product_type_simple" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">View details {{ fn('icon','plus') }}</a>
+                        <a href="{{ post.link }}" class="w-full button btn btn-primary-light product_type_simple" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">View <span class="inline-block">details {{ fn('icon','plus') }}</span></a>
                     {% else %}
-                        <a href="{{ site.link }}/?add-to-cart={{ post.id }}&quantity=1" data-quantity="1" class="button btn btn-primary-light product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">Add to basket {{ fn('icon','plus') }}</a>
+                        <a href="{{ site.link }}/?add-to-cart={{ post.id }}&quantity=1" data-quantity="1" class="w-full button btn btn-primary-light product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">Add to <span class="inline-block">basket {{ fn('icon','plus') }}</span></a>
                     {% endif %}
                     {# <a href="{{ site.link }}/?add-to-cart={{ item.id }}&quantity=1" class="btn btn-primary-light">Add to basket {{ fn('icon','plus') }}</a> #}
                 </div>
