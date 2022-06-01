@@ -136,7 +136,7 @@
         @apply !px-0 list-none;
 
         li {
-            @apply !list-none border-b border-grey;
+            @apply !list-none border-b border-grey pt-6;
         }
 
         h3 {
