@@ -4,59 +4,49 @@ Cookie Notice
 
 #wp-notification {
     @apply fixed bottom-0 z-50 hidden w-full text-sm text-gray-500 bg-gray-100;
-  }
-  
-  #wp-notification.open {
+}
+
+#wp-notification.open {
     @apply block;
-  }
-  
-  .wp-notification-container {
+}
+
+.wp-notification-container {
     @apply p-4 mx-auto text-center;
-  }
-  
-  .wp-notification-container p {
+}
+
+.wp-notification-container p {
     @apply m-0;
-  }
-  
-  .wp-notification-container a,
-  #wp-notification-toggle {
-    @apply block px-4 py-2 mt-4 font-bold text-gray-900 no-underline transition bg-white border-2 border-gray-400;
-  
-    &:hover {
-      @apply bg-white;
-    }
-  }
-  
-  #wp-notification-toggle {
-    @apply text-white bg-gray-400 cursor-pointer;
-  
-    &:hover {
-      @apply bg-gray-900 border-gray-900;
-    }
-  }
-  
-  
-  .wp-notification-container a:hover {
+}
+
+.wp-notification-container a,
+#wp-notification-toggle {
+    @apply block px-4 py-2 mt-4 font-bold text-gray-900 no-underline transition bg-white border-2 border-gray-400 hover:bg-white;
+}
+
+#wp-notification-toggle {
+    @apply text-white bg-gray-400 cursor-pointer hover:bg-gray-900 hover:border-gray-900;
+}
+
+
+.wp-notification-container a:hover {
     @apply no-underline;
-  }
-  
-  #wp-notification-toggle:hover {
+}
+
+#wp-notification-toggle:hover {
     @apply opacity-75;
-  }
-  
-  @screen md {
-  
+}
+
+@screen md {
     .wp-notification-container {
-      @apply flex items-center justify-between w-full text-left;
+        @apply flex items-center justify-between w-full text-left;
     }
-  
+
     .wp-notification-container div {
-        min-width: 325px;
+        min-width: 361px;
     }
-  
+
     #wp-notification-toggle,
     .wp-notification-container a {
-      @apply inline-block mt-0 ml-4;
+        @apply inline-block mt-0 ml-4;
     }
-  }
-  
+}
