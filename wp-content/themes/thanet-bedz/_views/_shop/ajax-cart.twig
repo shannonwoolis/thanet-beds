@@ -1,7 +1,8 @@
 <div class="z-40 cart-slideout">
-  <a href="javascript:void(0)" title="Close Ajax Cart" data-ajax-cart-close>X</a>
-
-  <span class="mb-4 h4">Cart</span>
+    <div class="flex w-full">
+        <a class="min-w-[40px]" href="javascript:void(0)" title="Close Ajax Cart" data-ajax-cart-close>✕</a>
+        <span class="flex items-center w-full px-4 font-medium text-white uppercase bg-primary">Basket</span>
+    </div>
   
-  {% include '_shop/ajax-cart-content.twig' %}
+    {% include '_shop/ajax-cart-content.twig' %}
 </div>
