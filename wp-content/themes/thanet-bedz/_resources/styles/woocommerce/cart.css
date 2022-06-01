@@ -2,7 +2,7 @@
   @apply text-xs md:text-sm; 
 
   .product-thumbnail img {
-    max-width: 50px;
+    max-width: 120px;
     height: auto;
     @apply pt-0;
   }
