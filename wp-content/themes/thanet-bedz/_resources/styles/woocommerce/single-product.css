@@ -18,7 +18,7 @@
     }
 }
 
-.single-product.single {
+.single-product.single article {
     .onsale {
         @apply md:mt-20 md:ml-1 lg:text-lg;
     }
