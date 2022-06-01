@@ -7,9 +7,10 @@
             <div class="relative flex flex-col flex-wrap w-full h-full text-black bg-white border-t-8 border-primary-light">
                 {% set thumbID = fn('get_post_thumbnail_id',post.id) %}
                 {% set thumb = fn('wp_get_attachment_url',thumbID) %}
+                {% set link = fn('get_permalink', post.id) %}
 
                 <div class="block w-full px-4 pt-4">
-                    <a href="{{ post.link }}" class="block w-auto h-auto max-w-full max-h-full overflow-hidden bg-grey product-loop-image group">
+                    <a href="{{ link }}" class="block w-auto h-auto max-w-full max-h-full overflow-hidden bg-grey product-loop-image group">
                         {% do action('woocommerce_before_shop_loop_item_title') %}
                     </a>
                 </div>
@@ -17,7 +18,7 @@
                 {% set title = fn('get_the_title', post.id) %}
                 {% set excerpt = post.excerpt|default(post.content|default(post.post_content)) %}
                 <div class="p-4 md:p-6">
-                    <a href="{{ post.link }}" class="block font-medium leading-tight hover:text-primary">{{ title }}</a>
+                    <a href="{{ link }}" class="block font-medium leading-tight hover:text-primary">{{ title }}</a>
                     <div class="block mt-2 text-sm font-light leading-5 text-grey-dark">{{ excerpt|truncate(12)|striptags }}</div>
                 </div>
                 <div class="flex items-center justify-between mt-auto bg-grey-light">
@@ -36,7 +37,7 @@
                     </span>
                     {# {% do action( 'woocommerce_after_shop_loop_item' ) %} #}
                     {% if post._stock_status == "outofstock" %}
-                        <a href="{{ post.link }}" class="w-full button btn btn-primary-light product_type_simple" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">View <span class="inline-block">details {{ fn('icon','plus') }}</span></a>
+                        <a href="{{ link }}" class="w-full button btn btn-primary-light product_type_simple" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">View <span class="inline-block">details {{ fn('icon','plus') }}</span></a>
                     {% else %}
                         <a href="{{ site.link }}/?add-to-cart={{ post.id }}&quantity=1" data-quantity="1" class="w-full button btn btn-primary-light product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="{{ post.id }}" data-product_sku="" rel="nofollow">Add to <span class="inline-block">basket {{ fn('icon','plus') }}</span></a>
                     {% endif %}
