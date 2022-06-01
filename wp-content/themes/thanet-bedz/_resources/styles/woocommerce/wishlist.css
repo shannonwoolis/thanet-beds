@@ -19,7 +19,7 @@
     }
 
     .product-add-to-cart a {
-        @apply px-4 py-3 ml-3 text-sm text-white no-underline uppercase hover:no-underline;
+        @apply py-3 pl-5 pr-8 ml-3 text-sm text-white no-underline uppercase hover:no-underline;
         @apply transition-all duration-500;
         display: inline-block !important;
         background-size: 200%;
@@ -27,6 +27,11 @@
 
         &:hover {
             background-position: 0%;
+        }
+
+        &:after {
+            content: '+';
+            @apply ml-2 text-lg leading-3 text-primary-bright;
         }
 
         &.active {
