@@ -128,7 +128,7 @@ Deals **************************************************/
 .mob-top-bar {
     @apply right-6;
     &.scrolled {
-        @apply text-sm right-4 top-4;
+        @apply text-sm shadow-lg right-4 top-4;
     }
 }
 

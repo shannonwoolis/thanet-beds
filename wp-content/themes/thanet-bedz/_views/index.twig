@@ -20,7 +20,7 @@
             <div class="w-full text-black bg-grey-light bar-black sm:w-auto text-vertical-right bar-right"><span class="text-black bg-grey-light">Blog</span></div>
             <div class="w-full">
                 {% if fn('is_home') %}
-                    <h1>{{ post.meta('h1')|default(post.title) }}</h1>
+                    <h1 class="text-primary">{{ post.meta('h1')|default(post.title) }}</h1>
                     <div class="max-w-screen-lg mb-6">
                         {{ post.content }}
                     </div>
@@ -32,20 +32,20 @@
                         text: 'Show All',
                         link: '/blog/',
                         colour: 'primary-light',
-                        classes: 'mr-2 ' ~ (fn('is_home') ? 'active' : 'order-2')
+                        classes: 'mr-2 mb-2 ' ~ (fn('is_home') ? 'active' : 'order-2')
                     } %}
                     {% for item in categories %}
                         {% include "_components/button.twig" with {
                             text: item.name,
                             link: '/news-category/' ~ item.slug,
                             colour: 'primary-light',
-                            classes: 'mr-2 ' ~ (fn('is_category',item.slug) ? 'active order-1' : 'order-2')
+                            classes: 'mr-2 mb-2 ' ~ (fn('is_category',item.slug) ? 'active order-1' : 'order-2')
                         } %}
                     {% endfor %}
                 </div>
-                <div class="flex flex-wrap mt-4 -mx-2 w-full-2 sm:w-auto lg:-mx-4">
+                <div class="flex flex-wrap mt-4 -mx-2 w-full-2 sm:w-auto md:-mx-4">
                     {% for post in posts %}
-                        <div class="w-full p-4 md:w-1/2 lg:w-1/4">
+                        <div class="w-full p-2 md:p-4 md:w-1/2 lg:w-1/4">
                             <a href="{{ post.link }}" class="block w-full h-full bg-white border-t-8 group border-primary-dark">
                                 {# <img class="w-full lazyload" src="" data-src="{{ post.thumbnail.src|resize(600,400) }}" alt="{{ post.thumbnail.alt }}"> #}
                                 {% include "_components/picture.twig" with {
