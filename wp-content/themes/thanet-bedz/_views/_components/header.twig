@@ -76,7 +76,7 @@
             <a href="/my-account/" class="text-black hover:text-primary"><span class="sr-only">My Account</span>{{ fn('icon', 'user') }}</a>
             <a href="/wishlist/" class="ml-1 text-black mr-1.5 hover:text-primary"><span class="sr-only">Wishlist</span>{{ fn('icon', 'heart') }}</a>
             {# <a href="/basket/" class="text-lg text-black hover:text-primary mt-[-2px]"><span class="sr-only">Basket</span>{{ fn('icon', 'basket') }}</a> #}
-            {% filter shortcodes %}[woo_cart_but]{% endfilter %}
+            {% filter shortcodes %}[woo_cart_but classes=""]{% endfilter %}
         </div>
 
 	</div>

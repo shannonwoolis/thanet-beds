@@ -204,7 +204,7 @@ function woo_cart_but($atts) {
         <?php
 	        
     return ob_get_clean();
- 
+
 }
 
 
