@@ -1,4 +1,4 @@
-<a href="{{ link }}" class="relative flex flex-col p-8 border-l-8 lg:flex-none group hover:border-primary lg:flex-row info-card border-primary-dark">
+<a href="{{ link }}" class="relative flex flex-col p-8 border-l-8 lg:flex-none group hover:border-primary lg:flex-row info-card border-primary-dark" {{ tracking ? 'onClick="' ~ tracking ~ '"' }}>
     {{ fn('icon',icon,'min-w-8 mb-4 lg:mb-0 lg:mr-4 text-4xl text-primary-light') }}
     <div class="flex flex-col">
         <span class="h3">{{ title }}</span>

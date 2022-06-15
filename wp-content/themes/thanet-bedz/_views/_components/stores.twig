@@ -8,7 +8,8 @@
                     {% include "_components/button.twig" with {
                         text: "Contact us",
                         link: "/contact/",
-                        colour: 'primary-light'
+                        colour: 'primary-light',
+                        tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ post.title ~ " body', 'event_label' : '" ~ post.title ~ " body button click Contact Us' });"
                     } %}
                 </div>
             </div>
@@ -26,7 +27,8 @@
                                         text: "Find out more",
                                         link: item.link,
                                         colour: 'primary-light',
-                                        classes: 'mt-4'
+                                        classes: 'mt-4',
+                                        tracking: "gtag('event' , 'Click' , { 'event_category' : 'Global body', 'event_label' : 'Global footer store button click Find Out More' });"
                                     } %}
                                 {% endif %}
                             </div>

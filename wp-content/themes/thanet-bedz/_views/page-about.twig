@@ -30,7 +30,8 @@
                             {% include "_components/button.twig" with {
                                 text: "Contact us",
                                 link: "/contact/",
-                                colour: 'primary-light'
+                                colour: 'primary-light',
+                                tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ post.title ~ " body', 'event_label' : '" ~ post.title ~ " body button click Contact Us' });"
                             } %}
                         </div>
                     </div>

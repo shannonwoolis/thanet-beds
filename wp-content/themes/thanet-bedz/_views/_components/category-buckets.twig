@@ -1,14 +1,13 @@
 <div class="py-8 bg-grey-light md:py-12 lg:py-12">
     <div class="container relative flex flex-wrap sm:flex-nowrap">
         <div class="w-full sm:w-auto text-vertical-left bar-right bar-black bg-grey-light"><span class="bg-grey-light">{{ title }}</span></div>
-        
         <div class="flex flex-wrap -mx-2 w-full-2 lg:-mx-4">
             {% for item in buckets %}
                 {% set thumbID = fn('get_term_meta',item.term_id,'thumbnail_id',true) %}
                 {% set thumb = fn('wp_get_attachment_url',thumbID) %}
                 {% set link = fn('get_term_link',item.term_id) %}
                 <div class="w-1/2 p-2 lg:p-4 md:w-1/4">
-                    <a href="{{ link }}" class="relative block overflow-hidden transition-all duration-500 group">
+                    <a href="{{ link }}" class="relative block overflow-hidden transition-all duration-500 group" {{ tracking ? 'onClick="' ~ tracking ~ '"' }}>
                         <span class="block transition-all duration-500 transform group-hover:scale-110">
                             {# <img class="lazyload" data-src="{{ thumb|resize(600,600) }}" src="" alt="{{ item.name }}"> #}
                             {% include "_components/picture.twig" with {
@@ -51,7 +50,8 @@
                             text: "Contact<span class='hidden 2xs:inline'> us</span>",
                             link: "/contact/",
                             colour: "primary-light",
-                            classes: "mt-auto -mr-4 -mb-4 -ml-1 2xs:mb-0 2xs:ml-0 2xs:-mr-2 !px-3 !text-xs xs:!text-sm xs:!px-5 md:!px-3 md:!text-xs 2xl:!text-sm 2xl:!px-5"
+                            classes: "mt-auto -mr-4 -mb-4 -ml-1 2xs:mb-0 2xs:ml-0 2xs:-mr-2 !px-3 !text-xs xs:!text-sm xs:!px-5 md:!px-3 md:!text-xs 2xl:!text-sm 2xl:!px-5",
+                            tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ post.title ~ " body', 'event_label' : '" ~ post.title ~ " body button click Contact Us' });"
                         } %}
                     </div>
                 </div>

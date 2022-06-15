@@ -42,7 +42,7 @@
                         link: btn.button.url,
                         text: btn.button.title,
                         target: btn.button.target,
-                        tracking: false,
+                        tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ post.title ~ " hero', 'event_label' : '" ~ post.title ~ " hero button click " ~ btn.button.title ~ "' });",
                         colour: (loop.index is odd ? 'primary-light' : 'primary'),
                         classes: 'mt-5 mr-2'
                     } only %}

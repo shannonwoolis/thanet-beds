@@ -1,3 +1,9 @@
+{% if fn('is_archive','product-category') %}
+    {% set trackingPage = 'Product category pages' %}
+{% else %}
+    {% set trackingPage = trackingPage %}
+{% endif %}
+
 <div class="container flex-wrap items-start py-8 md:py-12 lg:py-16 lg:flex">
 
     <main class="lg:w-2/3 lg:pr-16">
@@ -16,7 +22,7 @@
                     link: btn.button.url,
                     text: btn.button.title,
                     target: btn.button.target,
-                    tracking: false,
+                    tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ trackingPage ~ " body', 'event_label' : '" ~ trackingPage ~ " body button click " ~ btn.button.title ~ "' });",
                     colour: (loop.index is odd ? 'primary-dark' : 'primary-light'),
                     classes: 'mt-8 mr-2'
                 } only %}
@@ -26,14 +32,14 @@
                 {% include "_components/button.twig" with {
                     link: '/about/',
                     text: 'About us',
-                    tracking: false,
+                    tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ trackingPage ~ " body', 'event_label' : '" ~ trackingPage ~ " body copy green button click About Us' });",
                     colour: 'primary-dark',
                     classes: 'mr-2'
                 } only %}
                 {% include "_components/button.twig" with {
                     link: '/our-stores/',
                     text: 'Our stores',
-                    tracking: false,
+                    tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ trackingPage ~ " body', 'event_label' : '" ~ trackingPage ~ " body copy green button click Our Stores' });",
                     colour: 'primary-light',
                     classes: 'mt-2 mr-2'
                 } only %}
@@ -52,6 +58,7 @@
                     copy: 'We supply our products to customers at affordable prices and seek to deliver your orders in a fast and convenient manner.',
                     link: '/delivery/',
                     icon: 'box',
+                    tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ trackingPage ~ " body', 'event_label' : '" ~ trackingPage ~ " body copy sidebar click' });"
                 } %}
             </div>
             
@@ -61,6 +68,7 @@
                     copy: "We hope that you love your product, but in the case you need to return it please see our returns policy.",
                     link: '/returns/',
                     icon: 'return',
+                    tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ trackingPage ~ " body', 'event_label' : '" ~ trackingPage ~ " body copy sidebar click' });"
                 } %}
             </div>
 

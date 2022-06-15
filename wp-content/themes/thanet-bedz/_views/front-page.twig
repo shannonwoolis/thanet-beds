@@ -20,6 +20,7 @@
     {% include "_components/category-buckets.twig" with {
         title: "Shop by category",
         buckets: topProductCats,
+        tracking: "gtag('event' , 'Click' , { 'event_category' : 'Homepage buckets', 'event_label' : 'Homepage buckets furniture category click' });"
     } %}
 
     {% include "_components/reviews-section.twig" %}
@@ -29,12 +30,13 @@
         sideTitle: "Featured products",
         products: featured,
         btnText: "Shop all",
-        btnLink: "/product-category/featured/"
+        btnLink: "/product-category/featured/",
     } %}
 
     {% include "_components/category-buckets.twig" with {
         title: "Shop by room",
         buckets: roomProductCats,
+        tracking: "gtag('event' , 'Click' , { 'event_category' : 'Homepage buckets', 'event_label' : 'Homepage buckets room category click' });"
     } %}
 
     {% include "_components/stores.twig" with {

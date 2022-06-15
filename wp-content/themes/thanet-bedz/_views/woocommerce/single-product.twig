@@ -43,6 +43,7 @@
 {% include "_components/category-buckets.twig" with {
     title: "Shop by room",
     buckets: roomProductCats,
+    tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ post.title ~ " buckets', 'event_label' : '" ~ post.title ~ " buckets room category click' });"
 } %}
 
 {% include "_components/stores.twig" with {

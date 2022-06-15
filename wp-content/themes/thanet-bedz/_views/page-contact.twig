@@ -60,6 +60,7 @@
     {% include "_components/category-buckets.twig" with {
         title: "Shop by category",
         buckets: topProductCats,
+        tracking: "gtag('event' , 'Click' , { 'event_category' : 'Contact page buckets', 'event_label' : 'Contact page buckets furniture category click' });"
     } %}
 
     {% include "_components/reviews-section.twig" %}

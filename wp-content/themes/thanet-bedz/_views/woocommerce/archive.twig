@@ -31,6 +31,7 @@
         {% include "_components/category-buckets.twig" with {
             title: "Shop by category",
             buckets: topProductCats,
+            tracking: "gtag('event' , 'Click' , { 'event_category' : 'Shop buckets', 'event_label' : 'Shop buckets furniture category click' });"
         } %}
     {% endif %}
 
@@ -78,6 +79,7 @@
         {% include "_components/category-buckets.twig" with {
             title: "Shop by room",
             buckets: roomProductCats,
+            tracking: "gtag('event' , 'Click' , { 'event_category' : 'Shop buckets', 'event_label' : 'Shop buckets room category click' });"
         } %}
     {% endif  %}
 
@@ -85,6 +87,7 @@
         {% include "_components/category-buckets.twig" with {
             title: "Shop by category",
             buckets: childCategories,
+            tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ post.title ~ " parent page buckets', 'event_label' : '" ~ post.title ~ " parent page buckets click' });"
         } %}
     {% endif %}
 
