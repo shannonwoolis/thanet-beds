@@ -44,6 +44,10 @@
                         </div>
                         {% if productPosts == false %}<p>Sorry, no products match your search.</p>{% endif %}
                     </div>
+                    
+                    {% include '_components/pagination.twig' with {
+                        posts : posts
+                    } %}
 
                 </section>
 

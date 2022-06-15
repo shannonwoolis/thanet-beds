@@ -37,7 +37,7 @@
 			}
 
 			.current {
-				@apply text-black;
+				@apply text-current;
                 padding: .6rem 1rem;
 			}
 		}

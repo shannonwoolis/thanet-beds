@@ -2,6 +2,7 @@
 
 	<div class="h-full text-black bg-white">
 		{{ fn('timber_set_product', post) }}
+        {% set post = Post(post) %}
         {# <pre>{{dump(fn('is_variable', post.id))}}<pre> #}
 
         {# <div class="w-full p-2 lg:w-1/4 xs:w-1/2"> #}

@@ -19,9 +19,9 @@
     </style>
     
     <div class="container">
-        <div class="py-4 pr-8 md:px-0 md:pt-16 lg:pt-24 {{ deals ? 'pt-12 pb-8 py-12 md:pb-0 lg:-mb-4' : '2xs:pb-8 2xs:pt-12 md:pb-10 lg:pb-16' }}">
-            <div class="relative w-full px-6 bg-white border-l-8 md:px-8 border-primary-dark lg:px-12 py-6 lg:py-16 md:w-3/5 lg:w-1/2 xl:w-2/5 2xs:py-10 {{ deals ? 'pb-20 pt-14' : 'sm:w-3/4' }}">
-                <span class="text-sm xl:text-base">
+        <div class="py-12 pr-8 md:px-0 md:pt-16 lg:pt-24 {{ deals ? 'pt-12 pb-8 py-12 md:pb-0 lg:-mb-4' : '2xs:pb-8 2xs:pt-12 md:pb-10 lg:pb-16' }}">
+            <div class="relative w-full px-6 bg-white border-l-8 md:px-8 border-primary-dark lg:px-12 py-10 lg:py-16 md:w-3/5 lg:w-1/2 xl:w-2/5 2xs:py-10 {{ deals ? 'pb-20 pt-14' : 'sm:w-3/4' }}">
+                <span class="block text-xs xs:text-sm xl:text-base">
                     {% if subtitle %}
                         {{ subtitle }}
                     {% else %}
@@ -29,7 +29,7 @@
                     {% endif %}
                 </span>
                 <span class="text-primary-light"></span>
-                <span class="block mt-1 text-xl sm:text-2xl lg:text-3xl font-medium 2xl:text-4xl {{ fn('is_front_page') ? 'text-black' : 'text-primary-dark' }}">{{ title }}</span>
+                <span class="block xs:mt-1 text-xl sm:text-2xl leading-tight xs:leading-normal lg:text-3xl font-medium 2xl:text-4xl {{ fn('is_front_page') ? 'text-black' : 'text-primary-dark' }}">{{ title }}</span>
                 <div class="block mt-3 text-xs font-light leading-4 md:mt-5 md:leading-6 md:text-sm">
                     {{ copy }}
                     {% if address %}
@@ -52,7 +52,9 @@
                     {% if fn('is_front_page') %}
                         {% include "_components/hero-delivery-badge.twig" %}
                     {% else %}
-                        <div class="hidden 2xs:block">{% include "_components/hero-delivery-badge.twig" %}</div>
+                        {# <div class="origin-top-right transform scale-75 2xs:scale-100"> #}
+                            {% include "_components/hero-delivery-badge.twig" %}
+                        {# </div> #}
                     {% endif %}
                 {% endif %}
 
