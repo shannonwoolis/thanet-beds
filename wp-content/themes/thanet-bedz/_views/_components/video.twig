@@ -21,6 +21,8 @@
         }
     } %}
     <span class="absolute flex items-center justify-center w-24 h-16 text-white transition transform -translate-x-1/2 -translate-y-1/2 bg-black pointer-events-none group-hover:scale-110 bg-opacity-80 top-1/2 left-1/2">{{ fn('icon','play','w-8 h-8') }}</span>
+    {% if video_title %}<span class="absolute bottom-0 left-0 w-full p-2 text-center text-white bg-black pointer-events-none bg-opacity-80">{{ video_title }}</span>{% endif %}
+
 </div>
 
 <div class="video-popup">

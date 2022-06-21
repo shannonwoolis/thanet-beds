@@ -2,12 +2,26 @@
 
     {% for item in options.why_choose_us %}
 
-        <div class="flex items-center w-full my-2 lg:my-0 lg:mx-2 lg:w-auto sm:w-1/2">
+        {% if item.link %}
 
-            {{ function('icon', item.icon, 'text-primary-lightest mr-3 text-4xl') }}
-            {{item.reason}}
+            <a href="{{ item.link }}" class="flex items-center w-full my-2 group lg:my-0 lg:mx-2 lg:w-auto sm:w-1/2">
 
-        </div>
+                {{ function('icon', item.icon, 'text-primary-lightest group-hover:text-primary-bright mr-3 transition text-4xl') }}
+                {{item.reason}}
+                {{ function('icon','caret-right','opacity-0 group-hover:opacity-100 text-grey transition-all duration-500 -ml-2 mr-3 group-hover:mr-0 group-hover:ml-1')}}
+
+            </a>
+
+        {% else %}
+
+            <div class="flex items-center w-full my-2 lg:my-0 lg:mx-2 lg:w-auto sm:w-1/2">
+
+                {{ function('icon', item.icon, 'text-primary-lightest mr-3 text-4xl') }}
+                {{item.reason}}
+
+            </div>
+
+        {% endif %}
     
     {% endfor %}
 

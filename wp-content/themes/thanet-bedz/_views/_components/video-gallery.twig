@@ -7,6 +7,7 @@
                 {% for video in videos %}
                     <div class="w-1/2 p-2 lg:p-4 md:w-1/4">
                         {% include "_components/video.twig" with {
+                            video_title: video.video_title,
                             video_src: video.video_src,
                             video_placeholder: video.video_placeholder.url,
                         } %}

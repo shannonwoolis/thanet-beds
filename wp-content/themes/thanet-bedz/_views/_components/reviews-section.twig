@@ -6,7 +6,7 @@
             <div class="hidden lg:inline-block">
                 {% include "_components/button.twig" with {
                     text: "See more reviews",
-                    link: "/reviews/",
+                    link: "/customer-reviews/",
                     classes: "mt-4"
                 } %}
             </div>
@@ -25,7 +25,7 @@
         </div>
         {% include "_components/button.twig" with {
             text: "See more reviews",
-            link: "/reviews/",
+            link: "/customer-reviews/",
             classes: "mt-4 lg:hidden",
             tracking: "gtag('event' , 'Click' , { 'event_category' : '" ~ post.title ~ " body', 'event_label' : '" ~ post.title ~ " body button click See More Reviews' });"
         } %}
