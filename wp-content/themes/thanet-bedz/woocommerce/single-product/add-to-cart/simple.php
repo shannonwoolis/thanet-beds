@@ -30,26 +30,37 @@ if ($product->is_in_stock()) : ?>
 
   <?php do_action('woocommerce_before_add_to_cart_form'); ?>
 
-  <form class="single-cart cart" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data'>
-    <?php do_action('woocommerce_before_add_to_cart_button'); ?>
+    <form class="mb-6" id="postcode-checker">
+        <p class="mb-2">Please enter the start of your postcode to begin your order:</p>
+        <input type="text" id="postcode">
+        <input class="btn btn-primary" type="submit" value="Check" id="postcodeSubmit">
+    </form>
 
-    <?php
-    do_action('woocommerce_before_add_to_cart_quantity');
+    <span id="success" class="hidden mb-6 font-medium text-primary">Great news, we deliver to your area! Add the product to your basket to checkout.</span>
+    <span id="error" class="hidden px-4 py-3 mb-6 font-medium text-white bg-primary-dark">To order this product please call us on <?php echo do_shortcode('[ld_default calltag="false"]'); ?></span>
 
-    // This loads the global/quanttity-input php file.
-    woocommerce_quantity_input([
-      'min_value'   => apply_filters('woocommerce_quantity_input_min', $product->get_min_purchase_quantity(), $product),
-      'max_value'   => apply_filters('woocommerce_quantity_input_max', $product->get_max_purchase_quantity(), $product),
-      'input_value' => isset($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : $product->get_min_purchase_quantity(), // WPCS: CSRF ok, input var ok.
-    ]);
+    <div class="hidden" id="cartWrapper">
+        <form class="mb-6 single-cart cart" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data'>
+            <?php do_action('woocommerce_before_add_to_cart_button'); ?>
 
-    do_action('woocommerce_after_add_to_cart_quantity');
-    ?>
+            <?php
+            do_action('woocommerce_before_add_to_cart_quantity');
 
-    <button type="submit" name="add-to-cart" value="<?php echo esc_attr($product->get_id()); ?>" class="single_add_to_cart_button button alt"><?php echo esc_html($product->single_add_to_cart_text()); ?></button>
+            // This loads the global/quanttity-input php file.
+            woocommerce_quantity_input([
+            'min_value'   => apply_filters('woocommerce_quantity_input_min', $product->get_min_purchase_quantity(), $product),
+            'max_value'   => apply_filters('woocommerce_quantity_input_max', $product->get_max_purchase_quantity(), $product),
+            'input_value' => isset($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : $product->get_min_purchase_quantity(), // WPCS: CSRF ok, input var ok.
+            ]);
 
-    <?php do_action('woocommerce_after_add_to_cart_button'); ?>
-  </form>
+            do_action('woocommerce_after_add_to_cart_quantity');
+            ?>
+
+            <button type="submit" name="add-to-cart" value="<?php echo esc_attr($product->get_id()); ?>" class="single_add_to_cart_button button alt"><?php echo esc_html($product->single_add_to_cart_text()); ?></button>
+
+            <?php do_action('woocommerce_after_add_to_cart_button'); ?>
+        </form>
+    </div>
 
   <?php do_action('woocommerce_after_add_to_cart_form'); ?>
 

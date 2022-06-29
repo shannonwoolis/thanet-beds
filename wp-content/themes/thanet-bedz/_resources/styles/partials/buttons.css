@@ -52,3 +52,8 @@ input[type="button"],
 .info-card {
     background-image: linear-gradient(90deg,#ebebeb 50%,theme('colors.grey.light') 50%);
 }
+
+button[disabled] {
+    background-image: none !important;
+    @apply !bg-grey-dark;
+}

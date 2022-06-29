@@ -68,7 +68,7 @@
 }
 
 .add_to_wishlist svg {
-    @apply -mt-1;
+    @apply hidden;
 }
 
 .add_to_wishlist img, .yith-wcwl-wishlistaddedbrowse img, .yith-wcwl-wishlistexistsbrowse img {

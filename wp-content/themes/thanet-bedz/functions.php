@@ -86,6 +86,7 @@ function icon($iconName, $classes = null) {
  */
 require_once(__DIR__ . '/_functions/commerce/MiniCart.php');
 require_once(__DIR__ . '/_functions/commerce/CommerceOverrides.php');
+require_once(__DIR__ . '/_functions/commerce/WooCommerceShipping.php');
 
 new CommerceMiniCart();
 new CommerceOverrides();
