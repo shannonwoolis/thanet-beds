@@ -4,7 +4,7 @@
 
         {% if item.link %}
 
-            <a href="{{ item.link }}" class="flex items-center w-full my-2 group lg:my-0 lg:mx-2 lg:w-auto sm:w-1/2">
+            <a href="{{ item.link.url }}" class="flex items-center w-full my-2 group lg:my-0 lg:mx-2 lg:w-auto sm:w-1/2">
 
                 {{ function('icon', item.icon, 'text-primary-lightest group-hover:text-primary-bright mr-3 transition text-4xl') }}
                 {{item.reason}}
