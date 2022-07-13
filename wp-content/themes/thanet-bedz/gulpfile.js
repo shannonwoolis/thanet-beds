@@ -158,7 +158,7 @@ jsFiles.forEach(function(script){
  * Task Watch
  **************************/
 gulp.task("watch", () => {
-  gulp.watch(['_resources/styles/**/*.css', '_views/**/*.twig'], gulp.series("styles"));
+  gulp.watch(['_resources/styles/**/*.css', '_views/**/*.twig', 'woocommerce/**/*.php'], gulp.series("styles"));
   gulp.watch(`_resources/js/core/*.js`, gulp.series("core-scripts"));
   
   jsFiles.forEach(function(script){
@@ -173,7 +173,7 @@ gulp.task("watch", () => {
 gulp.task("serve", () => {
   browserSync.init({
     proxy: `adtrak-boilerplate.vm`,
-    files: ["**/*.php", "**/*.js", "**/*.twig", "**/*.css"],
+    files: ["**/*.php", "**/*.js", "**/*.twig", "**/*.css", "woocommerce/**/*.php"],
     ghostMode: false,
     open: false,
     notify: false
