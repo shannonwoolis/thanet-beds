@@ -31,7 +31,7 @@ if ($product->is_in_stock()) : ?>
   <?php do_action('woocommerce_before_add_to_cart_form'); ?>
 
     <form class="mb-6" id="postcode-checker">
-        <p class="mb-2">Please enter the start of your postcode to begin your order:</p>
+        <p class="mb-2">Please enter your postcode to begin your order:</p>
         <input type="text" id="postcode">
         <input class="btn btn-primary" type="submit" value="Check" id="postcodeSubmit">
     </form>

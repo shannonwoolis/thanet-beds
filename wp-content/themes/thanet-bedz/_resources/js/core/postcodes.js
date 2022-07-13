@@ -8,6 +8,13 @@
         // --------------------------------------------------------------------------------------------------
 		// Forms
 		// --------------------------------------------------------------------------------------------------
+        // function setCookie(cname, cvalue, exdays) {
+        //     const d = new Date();
+        //     d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        //     let expires = "expires="+ d.toUTCString();
+        //     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        // }
+
         var postcodeField = $('#postcode');
         var postcodeSubmit = $('#postcodeSubmit');
         var addButton = $('.single_variation_wrap button[type="submit"]');
@@ -15,6 +22,7 @@
         
         function updatePostcode() {
             var postcode = postcodeField.val().toLowerCase().replace(/\s/g, '');
+            var start = postcode.slice(0,-3);
             var checkoutForm = $("#cartWrapper");
             var success = $("#success");
             var error = $("#error");
@@ -26,9 +34,9 @@
                     $.each( data, function( key, val ) {
                         var loc = val.location_code.toLowerCase();
 
-                        if( loc && loc.indexOf(postcode) >= 0 ) {
+                        if( loc && loc.indexOf(start) >= 0 ) {
                             delivery = true;
-                            console.log('success');
+                            console.log(start);
                         }
                     });
                     if(delivery) {
