@@ -129,9 +129,9 @@ add_action('wp_enqueue_scripts', function () {
         wp_enqueue_script('video-popup', get_theme_file_uri() . '/_resources/js/addon/video-popup.js','', '', true);
     }
     
-    if(is_product()) {
-        wp_enqueue_script('postcode-checker', get_theme_file_uri() . '/dist/production-postcode-checker.js', '', '', true);
-    }
+    // if(is_product()) {
+    //     wp_enqueue_script('postcode-checker', get_theme_file_uri() . '/dist/production-postcode-checker.js', '', '', true);
+    // }
 
     // Localize the themeURL to our production file so we can use it to complete file paths
     wp_localize_script('production', 'themeURL', array(
