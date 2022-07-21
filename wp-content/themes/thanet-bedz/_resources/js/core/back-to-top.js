@@ -12,12 +12,12 @@ if ("IntersectionObserver" in window) {
   var observer = new IntersectionObserver((entries) => {
     if (entries[0].boundingClientRect.y < 0) {
       // Add the opacity class to bring in the
-      backToTopBtn.classList.add("opacity-25");
+      backToTopBtn.classList.add("opacity-30");
       backToTopBtn.classList.remove("opacity-0");
       // Bring it into the viewport (removing from the viewport means it isn't clickable)
       backToTopBtn.classList.remove("-mb-20");
     } else {
-      backToTopBtn.classList.remove("opacity-25");
+      backToTopBtn.classList.remove("opacity-30");
       backToTopBtn.classList.add("opacity-0");
       // Move it back out of the viewport
       backToTopBtn.classList.add("-mb-20");
