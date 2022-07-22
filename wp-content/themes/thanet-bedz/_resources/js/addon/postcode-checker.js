@@ -49,7 +49,6 @@ function getCookie(postcode) {
 
 function checkPostcode() {
     var postcodeCookie = getCookie("postcodeCookie");
-    // console.log(postcodeCookie);
     
     if(postcodeCookie){
         var request = new XMLHttpRequest();
@@ -60,8 +59,9 @@ function checkPostcode() {
                 var data = JSON.parse(request.responseText);
                 data.forEach(function( val ) {
                     var loc = val.location_code.toLowerCase();
+                    loc = loc.replace('*','');
 
-                    if( loc && loc.indexOf(postcodeCookie) >= 0 ) {
+                    if( loc === postcodeCookie ) {
                         delivery = true;
                     }
                 });
