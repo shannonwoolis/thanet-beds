@@ -11,6 +11,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
+    {% if 'adtrak.agency' in site.url %}
+      <meta name="robots" content="noindex">
+      <meta name="googlebot" content="noindex">
+    {% endif %}
+
     {% block htmlheader %}
 		<style>
 			{{source("/dist/main.min.css")}}
